@@ -9,7 +9,7 @@ class DecodeReporter extends Decoder {
         return '/^([A-Z]+)/';
     }
 
-    public function parse($report) {
+    public function parse($report, &$decoded) {
         $result = $this->match_chunk($report);
         $match = $result['match'];
         $report = $result['report'];
@@ -23,6 +23,7 @@ class DecodeReporter extends Decoder {
                 throw new DecoderException($report, $result['report'], 'Bad format for reporter information', $this);
             }
 
+            $decoded->setReporter($match[0]);
             $result = $match[0];
         }
 

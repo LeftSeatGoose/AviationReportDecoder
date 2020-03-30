@@ -8,7 +8,7 @@ class DecodeICAO extends Decoder {
         return '/^([A-Z0-9]{4})/';
     }
 
-    public function parse($report) {
+    public function parse($report, &$decoded) {
         $result = $this->match_chunk($report);
         $match = $result['match'];
         $report = $result['report'];
@@ -16,6 +16,7 @@ class DecodeICAO extends Decoder {
         if(!$match) {
             $result = null;
         } else {
+            $decoded->setIcao($match[0]);
             $result = $match[0];
         }
 

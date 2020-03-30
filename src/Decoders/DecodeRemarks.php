@@ -8,7 +8,7 @@ class DecodeRemarks extends Decoder {
         return '/RMK.*/';
     }
 
-    public function parse($report) {
+    public function parse($report, &$decoded) {
         $result = $this->match_chunk($report);
         $match = $result['match'];
         $report = $result['report'];
@@ -16,6 +16,7 @@ class DecodeRemarks extends Decoder {
         if(!$match) {
             $result = null;
         } else {
+            $decoded->setRemarks($match[0]);
             $result = $match[0];
         }
 

@@ -9,7 +9,7 @@ class DecodeType extends Decoder {
         return '/^((METAR|TAF|SPECI)( (COR|AMD)){0,1})|((PROV TAF))/';
     }
 
-    public function parse($report) {
+    public function parse($report, &$decoded) {
         $result = $this->match_chunk($report);
         $match = $result['match'];
         $report = $result['report'];
@@ -18,6 +18,7 @@ class DecodeType extends Decoder {
             $result = null;
         } else {
             $result = $match[0];
+            $decoded->setType($match[0]);
         }
 
         return array(

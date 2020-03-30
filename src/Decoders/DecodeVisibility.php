@@ -2,6 +2,7 @@
 namespace ReportDecoder\Decoders;
 
 use ReportDecoder\Decoders\Decoder;
+use ReportDecoder\Entity\EntityVisibility;
 use ReportDecoder\Exceptions\DecoderException;
 
 class DecodeVisibility extends Decoder {
@@ -9,7 +10,7 @@ class DecodeVisibility extends Decoder {
         return '/^(CAVOK|([0-9]{4})(NDV)?|M?([0-9]{0,2}) ?(([1357])\/(2|4|8|16))?SM|( ([0-9]{4})(N|NE|E|SE|S|SW|W|NW)?)?|([0-9][05])(KM)?(NDV)?)/';
     }
 
-    public function parse($report) {
+    public function parse($report, &$decoded) {
         $result = $this->match_chunk($report);
         $match = $result['match'];
         $report = $result['report'];
@@ -23,11 +24,14 @@ class DecodeVisibility extends Decoder {
                 $result = array(
                     'cavok' => true
                 );
+
+                $decoded->setCavok(true);
             } else {
                 $result = array(
-                    'cavok' => false,
-                    'distance' => $match[0]
+                    'cavok' => false
                 );
+
+                $decoded->setVisibility($match[0]);
             }
         }
 

@@ -15,7 +15,7 @@ class DecodeQNH extends Decoder {
         return '/^(Q|A)([0-9]{4})/';
     }
 
-    public function parse($report) {
+    public function parse($report, &$decoded) {
         $result = $this->match_chunk($report);
         $match = $result['match'];
         $report = $result['report'];
@@ -29,11 +29,9 @@ class DecodeQNH extends Decoder {
                 $pressure = $pressure / 100;
             }
 
-            $result = array(
-                'text' => $match[0],
-                'unit' => Value::toInt($match[1]),
-                'pressure' => $pressure
-            );
+            $decoded->setPressure($pressure . self::$units[$match[1]]);
+
+            $result = $match[0];
         }
 
         return array(

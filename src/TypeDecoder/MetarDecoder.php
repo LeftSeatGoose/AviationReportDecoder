@@ -15,11 +15,12 @@ use ReportDecoder\Decoders\DecodeRemarks;
 
 class MetarDecoder {
 
-    protected $decoder = null;
-    
-    private $cavok = false;
+    private $decoder = null;
+    private $decoded_metar = null;
 
-    public function __construct() {
+    public function __construct($decoded_metar) {
+        $this->decoded_metar = $decoded_metar;
+
         $this->decoder = array(
             new DecodeICAO(),
             new DecodeDateTime(),
@@ -37,12 +38,11 @@ class MetarDecoder {
 
     public function consume($report) {
         foreach($this->decoder as $chunk) {
-            $parse_attempt = $chunk->parse($report);
+            $parse_attempt = $chunk->parse($report, $this->decoded_metar);
             
             if(is_null($parse_attempt['result'])) continue;
 
             if($chunk instanceof DecodeVisibility && $parse_attempt['result']['cavok'] !== false) {
-                $this->cavok = true;
                 $this->report_chunks['visibility'] = 'cavok';
             } else {
                 $this->report_chunks[$parse_attempt['name']] = $parse_attempt['result'];
@@ -55,7 +55,7 @@ class MetarDecoder {
             }
         }
         
-        return $this->report_chunks;
+        return $this->decoded_metar;
     }
 }
 ?>

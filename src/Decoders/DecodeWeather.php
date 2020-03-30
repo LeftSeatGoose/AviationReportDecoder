@@ -26,7 +26,7 @@ class DecodeWeather extends Decoder {
         return "/^($pw_regexp )?($pw_regexp )?($pw_regexp )?/";
     }
 
-    public function parse($report) {
+    public function parse($report, &$decoded) {
         $result = $this->match_chunk($report);
         $match = $result['match'];
         $report = $result['report'];
@@ -35,6 +35,7 @@ class DecodeWeather extends Decoder {
             $result = null;
         } else {
             $result = $match[0];
+            $decoded->setPresentWeather($match[0]);
         }
 
         return array(

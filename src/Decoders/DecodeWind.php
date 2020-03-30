@@ -2,6 +2,7 @@
 namespace ReportDecoder\Decoders;
 
 use ReportDecoder\Decoders\Decoder;
+use ReportDecoder\Entity\EntityWind;
 use ReportDecoder\Exceptions\DecoderException;
 
 class DecodeWind extends Decoder {
@@ -9,7 +10,7 @@ class DecodeWind extends Decoder {
         return '/^([0-9]{3}|VRB)?([0-9]{2,3})(G?([0-9]{2,3}))?(KT|MPH|MPS|KPH)( ([0-9]{3})V([0-9]{3}))?/';
     }
 
-    public function parse($report) {
+    public function parse($report, &$decoded) {
         $result = $this->match_chunk($report);
         $match = $result['match'];
         $report = $result['report'];
@@ -26,6 +27,8 @@ class DecodeWind extends Decoder {
                 'gust' => $match[4],
                 'unit' => $match[5]
             );
+
+            $decoded->setSurfaceWind(new EntityWind($result));
         }
 
         return array(

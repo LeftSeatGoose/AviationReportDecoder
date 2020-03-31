@@ -1,25 +1,63 @@
 <?php
+
+/**
+ * EntityDateTime.php
+ *
+ * PHP version 7.2
+ *
+ * @category Metar
+ * @package  ReportDecoder\Entity
+ * @author   Jamie Thirkell <jamie@jamieco.ca>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
+ * @link     https://github.com/TipsyAviator/AviationReportDecoder
+ */
+
 namespace ReportDecoder\Entity;
 
-class EntityDateTime {
+/**
+ * DateTime information
+ *
+ * @category Metar
+ * @package  ReportDecoder\Entity
+ * @author   Jamie Thirkell <jamie@jamieco.ca>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
+ * @link     https://github.com/TipsyAviator/AviationReportDecoder
+ */
+class EntityDateTime
+{
 
-    private $datetime = null;
-    private $day = null;
-    private $time = null;
+    private $_datetime = null;
 
-    public function __construct($day, $time) {
-        $this->day = $day;
-        $this->time = $time;
-        
+    /**
+     * Construct
+     * 
+     * @param Int $day  Day of observation
+     * @param Int $time Time of observation
+     */
+    public function __construct($day, $time)
+    {
+
         $now = new \DateTime();
-        $datetime = sprintf('%s-%s-%s %sZ', $now->format('Y'), $now->format('m'), $day, $time);
-        $this->datetime = new \DateTime($datetime);
-        $this->datetime->setTimezone(new \DateTimeZone('UTC'));
+        $datetime = sprintf(
+            '%s-%s-%s %sZ',
+            $now->format('Y'),
+            $now->format('m'),
+            $day,
+            $time
+        );
+        $this->_datetime = new \DateTime($datetime);
+        $this->_datetime->setTimezone(new \DateTimeZone('UTC'));
     }
 
-    public function datetime() {
-        return $this->datetime->format('Y-m-d H:i:s T');
+    /**
+     * Gets and formats the DateTime
+     * 
+     * @param String $format Output format
+     * 
+     * @return String
+     */
+    public function value($format = 'Y-m-d H:i:s')
+    {
+        return $this->datetime->format($format);
     }
-
 }
-?>

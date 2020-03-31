@@ -1,40 +1,99 @@
 <?php
+
+/**
+ * EntityWind.php
+ *
+ * PHP version 7.2
+ *
+ * @category Metar
+ * @package  ReportDecoder\Entity
+ * @author   Jamie Thirkell <jamie@jamieco.ca>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
+ * @link     https://github.com/TipsyAviator/AviationReportDecoder
+ */
+
 namespace ReportDecoder\Entity;
 
-class EntityWind {
+use ReportDecoder\Entity\Value;
 
-    private $wind = null;
-    private $direction = null;
-    private $speed = null;
-    private $gust = null;
-    private $unit = null;
+/**
+ * Wind information
+ *
+ * @category Metar
+ * @package  ReportDecoder\Entity
+ * @author   Jamie Thirkell <jamie@jamieco.ca>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
+ * @link     https://github.com/TipsyAviator/AviationReportDecoder
+ */
+class EntityWind
+{
 
-    public function __construct($wind) {
-        $this->wind = $wind['text'];
-        $this->direction = $wind['direction'];
-        $this->speed = $wind['speed'];
-        $this->gust = $wind['gust'];
-        $this->unit = $wind['unit'];
+    private $_wind = null;
+    private $_direction = null;
+    private $_speed = null;
+    private $_gust = null;
+
+    /**
+     * Construct
+     * 
+     * @param Array $wind Wind information
+     */
+    public function __construct($wind)
+    {
+        $this->_wind = $wind['text'];
+        $this->_direction = $wind['direction'];
+
+        $multiplier = 1;
+        if ($wind['unit'] != Value::UNIT_KT) {
+            if ($wind['unit'] == Value::UNIT_KPH) {
+                $multiplier = 0.539957;
+            }
+            if ($wind['unit'] == Value::UNIT_MPH) {
+                $multiplier = 0.868976;
+            }
+        }
+
+        $this->_speed = $wind['speed'] * $multiplier;
+        $this->_gust = $wind['gust'] * $multiplier;
     }
 
-    public function wind() {
+    /**
+     * Gets the wind text
+     * 
+     * @return String
+     */
+    public function getWind()
+    {
         return $this->wind;
     }
 
-    public function direction() {
+    /**
+     * Gets the wind direction
+     * 
+     * @return String
+     */
+    public function getDirection()
+    {
         return $this->direction;
     }
 
-    public function speed() {
+    /**
+     * Gets the wind speed
+     * 
+     * @return Int
+     */
+    public function getSpeed()
+    {
         return $this->speed;
     }
 
-    public function gust() {
+    /**
+     * Gets the gust speed
+     * 
+     * @return Int
+     */
+    public function getGust()
+    {
         return $this->gust;
     }
-
-    public function unit() {
-        return $this->unit;
-    }
 }
-?>

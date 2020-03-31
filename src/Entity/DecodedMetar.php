@@ -1,175 +1,431 @@
 <?php
+
+/**
+ * DecodedMetar.php
+ *
+ * PHP version 7.2
+ *
+ * @category Metar
+ * @package  ReportDecoder\Entity
+ * @author   Jamie Thirkell <jamie@jamieco.ca>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
+ * @link     https://github.com/TipsyAviator/AviationReportDecoder
+ */
+
 namespace ReportDecoder\Entity;
 
-class DecodedMetar {
-    private $raw_metar;
+/**
+ * Decoded metar information
+ *
+ * @category Metar
+ * @package  ReportDecoder\Entity
+ * @author   Jamie Thirkell <jamie@jamieco.ca>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
+ * @link     https://github.com/TipsyAviator/AviationReportDecoder
+ */
+class DecodedMetar
+{
+    private $_raw_metar;
 
-    private $decoding_exceptions = array();
+    private $_decoding_exceptions = array();
 
-    private $type;
+    private $_type;
 
-    private $icao;
+    private $_icao;
 
-    private $datetime;
+    private $_datetime;
 
-    private $reporter;
+    private $_reporter;
 
-    private $surface_wind;
+    private $_surface_wind;
 
-    private $visibility;
-    private $cavok;
+    private $_visibility;
+    private $_cavok;
 
-    private $runways_visual_range;
+    private $_runways_visual_range;
 
-    private $present_weather;
+    private $_present_weather;
 
-    private $clouds;
+    private $_clouds;
 
-    private $air_temperature;
-    private $dew_point_temperature;
+    private $_air_temperature;
+    private $_dew_point_temperature;
 
-    private $pressure;
-    
-    private $remarks;
+    private $_pressure;
 
-    public function __construct($raw_metar) {
-        $this->raw_metar = $raw_metar;
+    private $_remarks;
 
-        $this->cavok = false;
+    /**
+     * Construct
+     * 
+     * @param String $raw_metar The raw metar
+     */
+    public function __construct($raw_metar)
+    {
+        $this->_raw_metar = $raw_metar;
 
-        $this->decoding_exceptions = array();
+        $this->_cavok = false;
+
+        $this->_decoding_exceptions = array();
     }
 
-    public function isValid() {
-        return count($this->decoding_exceptions) == 0;
+    /**
+     * Checks if decoding was successful
+     * 
+     * @return Boolean
+     */
+    public function isValid()
+    {
+        return count($this->_decoding_exceptions) == 0;
     }
 
-    public function addDecodingException($exception) {
-        $this->decoding_exceptions[] = $exception;
+    /**
+     * Adds a decoding exception
+     * 
+     * @param DecoderException $exception Exception object
+     * 
+     * @return null
+     */
+    public function addDecodingException($exception)
+    {
+        $this->_decoding_exceptions[] = $exception;
     }
 
-    public function getDecodingExceptions() {
-        return $this->decoding_exceptions;
+    /**
+     * Gets decoding exceptions
+     * 
+     * @return Array
+     */
+    public function getDecodingExceptions()
+    {
+        return $this->_decoding_exceptions;
     }
 
-    public function resetDecodingExceptions() {
-        $this->decoding_exceptions = array();
+    /**
+     * Resets the decoding exception
+     * 
+     * @return null
+     */
+    public function resetDecodingExceptions()
+    {
+        $this->_decoding_exceptions = array();
     }
 
-    public function getRawMetar() {
-        return trim($this->raw_metar);
+    /**
+     * Gets the raw metar
+     * 
+     * @return String
+     */
+    public function getRawMetar()
+    {
+        return trim($this->_raw_metar);
     }
 
-    public function setType($type) {
-        $this->type = $type;
+    /**
+     * Sets the type
+     * 
+     * @param String $type Metar type
+     * 
+     * @return null
+     */
+    public function setType($type)
+    {
+        $this->_type = $type;
     }
 
-    public function getType() {
-        return $this->type;
+    /**
+     * Gets the metar type
+     * 
+     * @return String
+     */
+    public function getType()
+    {
+        return $this->_type;
     }
 
-    public function setIcao($icao) {
-        $this->icao = $icao;
+    /**
+     * Sets the ICAO
+     * 
+     * @param String $icao ICAO
+     * 
+     * @return null
+     */
+    public function setIcao($icao)
+    {
+        $this->_icao = $icao;
     }
 
-    public function getIcao() {
-        return $this->icao;
+    /**
+     * Gets the station icao
+     * 
+     * @return String
+     */
+    public function getIcao()
+    {
+        return $this->_icao;
     }
 
-    public function setDateTime($datetime) {
-        $this->datetime = $datetime;
+    /**
+     * Sets the DateTime
+     * 
+     * @param String $datetime DateTime
+     * 
+     * @return null
+     */
+    public function setDateTime($datetime)
+    {
+        $this->_datetime = $datetime;
     }
 
-    public function getDateTime() {
-        return $this->datetime;
+    /**
+     * Gets the observation time
+     * 
+     * @return String
+     */
+    public function getDateTime()
+    {
+        return $this->_datetime;
     }
 
-    public function setReporter($reporter) {
-        $this->reporter = $reporter;
+    /**
+     * Sets the Reporter
+     * 
+     * @param String $reporter Metar reporter
+     * 
+     * @return null
+     */
+    public function setReporter($reporter)
+    {
+        $this->_reporter = $reporter;
     }
 
-    public function getReporter() {
-        return $this->reporter;
+    /**
+     * Gets the reporter
+     * 
+     * @return String
+     */
+    public function getReporter()
+    {
+        return $this->_reporter;
     }
 
-    public function setSurfaceWind(EntityWind $surface_wind) {
-        $this->surface_wind = $surface_wind;
+    /**
+     * Sets the surface wind
+     * 
+     * @param EntityWind $wind Surface wind
+     * 
+     * @return null
+     */
+    public function setSurfaceWind(EntityWind $wind)
+    {
+        $this->_surface_wind = $wind;
     }
 
-    public function getSurfaceWind() {
-        return $this->surface_wind;
+    /**
+     * Gets the surface wind
+     * 
+     * @return String
+     */
+    public function getSurfaceWind()
+    {
+        return $this->_surface_wind;
     }
 
-    public function setVisibility($visibility) {
-        $this->visibility = $visibility;
+    /**
+     * Sets the Visibility
+     * 
+     * @param EntityVisibility $visibility Visiblity
+     * 
+     * @return null
+     */
+    public function setVisibility(EntityVisibility $visibility)
+    {
+        $this->_visibility = $visibility;
     }
 
-    public function getVisibility() {
-        return $this->visibility;
+    /**
+     * Gets the visibility
+     * 
+     * @return String
+     */
+    public function getVisibility()
+    {
+        return $this->_visibility;
     }
 
-    public function setCavok($cavok) {
-        $this->cavok = $cavok;
+    /**
+     * Sets if station is CAVOK
+     * 
+     * @param Boolean $cavok Cavok
+     * 
+     * @return null
+     */
+    public function setCavok($cavok)
+    {
+        $this->_cavok = $cavok;
     }
 
-    public function getCavok() {
-        return $this->cavok;
+    /**
+     * Gets if the station is CAVOK
+     * 
+     * @return String
+     */
+    public function getCavok()
+    {
+        return $this->_cavok;
     }
 
-    public function getRunwaysVisualRange() {
-        return $this->runways_visual_range;
+    /**
+     * Gets the runways visual range
+     * 
+     * @return String
+     */
+    public function getRunwaysVisualRange()
+    {
+        return $this->_runways_visual_range;
     }
 
-    public function setRunwaysVisualRange(array $runways) {
-        $this->runways_visual_range = $runways;
+    /**
+     * Sets the Runway Visual Range
+     * 
+     * @param Array $runways Runways Visual Range
+     * 
+     * @return null
+     */
+    public function setRunwaysVisualRange(array $runways)
+    {
+        $this->_runways_visual_range = $runways;
     }
 
-    public function getPresentWeather() {
-        return $this->present_weather;
+    /**
+     * Gets present weather
+     * 
+     * @return String
+     */
+    public function getPresentWeather()
+    {
+        return $this->_present_weather;
     }
 
-    public function setPresentWeather($weather) {
-        $this->present_weather = $weather;
+    /**
+     * Sets the Present Weather
+     * 
+     * @param String $weather Present Weather
+     * 
+     * @return null
+     */
+    public function setPresentWeather($weather)
+    {
+        $this->_present_weather = $weather;
     }
 
-    public function getClouds() {
-        return $this->clouds;
+    /**
+     * Gets the clouds
+     * 
+     * @return String
+     */
+    public function getClouds()
+    {
+        return $this->_clouds;
     }
 
-    public function setClouds(array $clouds) {
-        $this->clouds = $clouds;
+    /**
+     * Sets the Clouds
+     * 
+     * @param Array $clouds clouds
+     * 
+     * @return null
+     */
+    public function setClouds(array $clouds)
+    {
+        $this->_clouds = $clouds;
     }
 
-    public function getAirTemperature() {
-        return $this->air_temperature;
+    /**
+     * Gets the air temperature
+     * 
+     * @return String
+     */
+    public function getAirTemperature()
+    {
+        return $this->_air_temperature;
     }
 
-    public function setAirTemperature($temperature) {
-        $this->air_temperature = $temperature;
+    /**
+     * Sets the Air temperature
+     * 
+     * @param String $temperature Temperature
+     * 
+     * @return null
+     */
+    public function setAirTemperature($temperature)
+    {
+        $this->_air_temperature = $temperature;
     }
 
-    public function getDewPointTemperature() {
-        return $this->dew_point_temperature;
+    /**
+     * Gets the dew point
+     * 
+     * @return String
+     */
+    public function getDewPointTemperature()
+    {
+        return $this->_dew_point_temperature;
     }
 
-    public function setDewPointTemperature($temperature) {
-        $this->dew_point_temperature = $temperature;
+    /**
+     * Sets the Dew Point
+     * 
+     * @param String $temperature Dew Point
+     * 
+     * @return null
+     */
+    public function setDewPointTemperature($temperature)
+    {
+        $this->_dew_point_temperature = $temperature;
     }
 
-    public function getPressure() {
-        return $this->pressure;
+    /**
+     * Gets the pressure
+     * 
+     * @return String
+     */
+    public function getPressure()
+    {
+        return $this->_pressure;
     }
 
-    public function setPressure($pressure) {
-        $this->pressure = $pressure;
+    /**
+     * Sets the Pressure
+     * 
+     * @param double $pressure Pressure
+     * 
+     * @return null
+     */
+    public function setPressure($pressure)
+    {
+        $this->_pressure = $pressure;
     }
 
-    public function getRemarks() {
-        return $this->remarks;
+    /**
+     * Gets the remarks
+     * 
+     * @return String
+     */
+    public function getRemarks()
+    {
+        return $this->_remarks;
     }
 
-    public function setRemarks($remarks) {
-        $this->remarks = $remarks;
+    /**
+     * Sets the Remarks
+     * 
+     * @param String $remarks Remarks
+     * 
+     * @return null
+     */
+    public function setRemarks($remarks)
+    {
+        $this->_remarks = $remarks;
     }
 }
-?>

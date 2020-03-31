@@ -1,4 +1,17 @@
 <?php
+
+/**
+ * ReportDecoder.php
+ *
+ * PHP version 7.2
+ *
+ * @category ReportDecoder
+ * @package  ReportDecoder
+ * @author   Jamie Thirkell <jamie@jamieco.ca>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
+ * @link     https://github.com/TipsyAviator/AviationReportDecoder
+ */
+
 namespace ReportDecoder;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
@@ -8,49 +21,60 @@ use ReportDecoder\TypeDecoder\TafDecoder;
 use ReportDecoder\Decoders\DecodeType;
 use ReportDecoder\Entity\DecodedMetar;
 
-$i = new ReportDecoder();
-$i->parse('METAR AMD CYBW 270100Z AUTO 28014G19KT 180V250 9SM R17L/M1000VM2600FT/U +TSRA BR BKN010 OVC005 03/M09 A2948 RMK SLP036');
+/**
+ * Decodes a Report
+ *
+ * @category ReportDecoder
+ * @package  ReportDecoder
+ * @author   Jamie Thirkell <jamie@jamieco.ca>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
+ * @link     https://github.com/TipsyAviator/AviationReportDecoder
+ */
+class ReportDecoder
+{
+    private $_decoded = null;
+    private $_report_type = 'metar'; // Assume metar by default
 
-class ReportDecoder {
+    /**
+     * Gets the decoded report
+     * 
+     * @param String $report      Raw report
+     * @param String $report_type The type of report to be decoded (optional)
+     * 
+     * @return DecodedMetar|DecodedTaf
+     */
+    public function getDecodedReport($report, $report_type = null)
+    {
+        $this->_decoded = new DecodedMetar($report);
 
-    private $error_reporting = true;
-
-    private $decoder = null;
-    private $decoded = null;
-    private $raw_report = null;
-    private $clean_report = null;
-
-    private $report_type = 'metar'; // Assume metar by default
-    
-    public function parse($raw_report) {
-        $this->raw_report = $raw_report;
-        $this->decoded = new DecodedMetar($raw_report);
-
-        $clean_report = trim(strtoupper($raw_report));
+        $clean_report = trim(strtoupper($report));
         $clean_report = preg_replace('#=$#', '', $clean_report);
-        $clean_report = preg_replace('#[ ]{2,}#', ' ', $clean_report).' ';
-        $this->clean_report = $clean_report;
+        $clean_report = preg_replace('#[ ]{2,}#', ' ', $clean_report) . ' ';
 
         $type_decoder = new DecodeType();
 
-        $parse_attempt = $type_decoder->parse($clean_report, $this->decoded);
-        if(!is_null($parse_attempt['result'])) {
-            $this->report_chunks['type'] = $parse_attempt['result'];
-            $clean_report = $parse_attempt['report'];
-            
-            if(strpos(strtolower($parse_attempt['result']), 'taf') !== false) {
-                $this->report_type = 'taf';
+        if (is_null($report_type)) {
+            $parse_attempt = $type_decoder->parse($clean_report, $this->_decoded);
+            if (!is_null($parse_attempt['result'])) {
+                $this->report_chunks['type'] = $parse_attempt['result'];
+                $clean_report = $parse_attempt['report'];
+
+                if (strpos(strtolower($parse_attempt['result']), 'taf') !== false) {
+                    $this->_report_type = 'taf';
+                }
             }
-        }
-
-        if($this->report_type == 'metar') {
-            $metar = new MetarDecoder($this->decoded);
-            $this->decoder = $metar->consume($clean_report);
         } else {
-            $taf = new TafDecoder($this->decoded);
-            $this->decoder = $taf->consume($clean_report);
+            $this->_report_type = $report_type;
         }
-    }
 
+        if ($this->_report_type == 'metar') {
+            $metar = new MetarDecoder($this->_decoded);
+            $metar->consume($clean_report);
+        } else {
+            $taf = new TafDecoder($this->_decoded);
+            $taf->consume($clean_report);
+        }
+
+        return $this->_decoded;
+    }
 }
-?>

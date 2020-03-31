@@ -1,30 +1,77 @@
 <?php
+
+/**
+ * DecodeReporter.php
+ *
+ * PHP version 7.2
+ *
+ * @category Metar
+ * @package  ReportDecoder\Decoders
+ * @author   Jamie Thirkell <jamie@jamieco.ca>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
+ * @link     https://github.com/TipsyAviator/AviationReportDecoder
+ */
+
 namespace ReportDecoder\Decoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Exceptions\DecoderException;
 
-class DecodeReporter extends Decoder {
-    public function getExpression() {
+/**
+ * Decodes Reporter chunk
+ *
+ * @category Metar
+ * @package  ReportDecoder\Decoders
+ * @author   Jamie Thirkell <jamie@jamieco.ca>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
+ * @link     https://github.com/TipsyAviator/AviationReportDecoder
+ */
+class DecodeReporter extends Decoder
+{
+    /**
+     * Returns the expression for matching the chunk
+     * 
+     * @return String
+     */
+    public function getExpression()
+    {
         return '/^([A-Z]+)/';
     }
 
-    public function parse($report, &$decoded) {
-        $result = $this->match_chunk($report);
+    /**
+     * Parses the chunk using the expression
+     * 
+     * @param String       $report  Remaining report string
+     * @param DecodedMetar $decoded DecodedMetar object
+     * 
+     * @return Array
+     */
+    public function parse($report, &$decoded)
+    {
+        $result = $this->matchChunk($report);
         $match = $result['match'];
         $report = $result['report'];
-        
-        if(!$match) {
+
+        if (!$match) {
             $result = null;
         } else {
             $reporter = $match[0];
 
-            if(strlen($reporter) > 3 && strtolower($reporter) !== 'auto') {
-                throw new DecoderException($report, $result['report'], 'Bad format for reporter information', $this);
+            if (strlen($reporter) > 3 && strtolower($reporter) !== 'auto') {
+                throw new DecoderException(
+                    $report,
+                    $result['report'],
+                    'Bad format for reporter information',
+                    $this
+                );
             }
 
             $decoded->setReporter($match[0]);
-            $result = $match[0];
+            $result = array(
+                'reporter' => $match[0],
+                'tip' => strtolower($match[0]) == 'auto' ? 'Automated report'
+                    : 'Non-automated report'
+            );
         }
 
         return array(
@@ -34,4 +81,3 @@ class DecodeReporter extends Decoder {
         );
     }
 }
-?>

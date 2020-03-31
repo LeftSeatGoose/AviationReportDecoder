@@ -1,6 +1,20 @@
 <?php
+
+/**
+ * MetarDecoder.php
+ *
+ * PHP version 7.2
+ *
+ * @category Metar
+ * @package  ReportDecoder\TypeDecoder
+ * @author   Jamie Thirkell <jamie@jamieco.ca>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
+ * @link     https://github.com/TipsyAviator/AviationReportDecoder
+ */
+
 namespace ReportDecoder\TypeDecoder;
 
+use ReportDecoder\Decoders\DecodeType;
 use ReportDecoder\Decoders\DecodeICAO;
 use ReportDecoder\Decoders\DecodeDateTime;
 use ReportDecoder\Decoders\DecodeReporter;
@@ -13,15 +27,32 @@ use ReportDecoder\Decoders\DecodeTemp;
 use ReportDecoder\Decoders\DecodeQNH;
 use ReportDecoder\Decoders\DecodeRemarks;
 
-class MetarDecoder {
+/**
+ * Includes the decoder chain for decoding a metar string
+ *
+ * @category Metar
+ * @package  ReportDecoder\TypeDecoder
+ * @author   Jamie Thirkell <jamie@jamieco.ca>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
+ * @link     https://github.com/TipsyAviator/AviationReportDecoder
+ */
+class MetarDecoder
+{
 
-    private $decoder = null;
-    private $decoded_metar = null;
+    private $_decoder = null;
+    private $_decoded_metar = null;
 
-    public function __construct($decoded_metar) {
+    /**
+     * Constructor
+     * 
+     * @param DecodedMetar $decoded_metar Object decoded data is stored in
+     */
+    public function __construct($decoded_metar)
+    {
         $this->decoded_metar = $decoded_metar;
 
-        $this->decoder = array(
+        $this->_decoder = array(
+            new DecodeType(),
             new DecodeICAO(),
             new DecodeDateTime(),
             new DecodeReporter(),
@@ -36,26 +67,29 @@ class MetarDecoder {
         );
     }
 
-    public function consume($report) {
-        foreach($this->decoder as $chunk) {
+    /**
+     * Consume a chunk
+     * 
+     * @param String $report Metar to decode
+     * 
+     * @return DecodedMetar
+     */
+    public function consume($report)
+    {
+        foreach ($this->_decoder as $chunk) {
             $parse_attempt = $chunk->parse($report, $this->decoded_metar);
-            
-            if(is_null($parse_attempt['result'])) continue;
 
-            if($chunk instanceof DecodeVisibility && $parse_attempt['result']['cavok'] !== false) {
-                $this->report_chunks['visibility'] = 'cavok';
-            } else {
-                $this->report_chunks[$parse_attempt['name']] = $parse_attempt['result'];
+            if (is_null($parse_attempt['result'])) {
+                continue;
             }
-            
-            if(!empty($parse_attempt['report'])) {
+
+            if (!empty($parse_attempt['report'])) {
                 $report = $parse_attempt['report'];
             } else {
                 break;
             }
         }
-        
+
         return $this->decoded_metar;
     }
 }
-?>

@@ -1,24 +1,62 @@
 <?php
+
+/**
+ * DecodeDateTime.php
+ *
+ * PHP version 7.2
+ *
+ * @category Metar
+ * @package  ReportDecoder\Decoders
+ * @author   Jamie Thirkell <jamie@jamieco.ca>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
+ * @link     https://github.com/TipsyAviator/AviationReportDecoder
+ */
+
 namespace ReportDecoder\Decoders;
 
 use ReportDecoder\Decoders\Decoder;
-use ReportDecoder\Entity\EntityRVR;
 use ReportDecoder\Entity\Value;
 
-class DecodeRVR extends Decoder {
-    public function getExpression() {
-        return '/^R([0-9]{2}[LCR]?)\/(([PM]?([0-9]{4}))V)?([PM]?([0-9]{4}))(FT)?\/?([UDN]?)/';
+/**
+ * Decodes DateTime chunk
+ *
+ * @category Metar
+ * @package  ReportDecoder\Decoders
+ * @author   Jamie Thirkell <jamie@jamieco.ca>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
+ * @link     https://github.com/TipsyAviator/AviationReportDecoder
+ */
+class DecodeRVR extends Decoder
+{
+    /**
+     * Returns the expression for matching the chunk
+     * 
+     * @return String
+     */
+    public function getExpression()
+    {
+        return '/^R([0-9]{2}[LCR]?)\/(([PM]?([0-9]{4}))V)'
+            . '?([PM]?([0-9]{4}))(FT)?\/?([UDN]?)/';
     }
 
-    public function parse($report, &$decoded) {
-        $result = $this->match_chunk($report);
+    /**
+     * Parses the chunk using the expression
+     * 
+     * @param String       $report  Remaining report string
+     * @param DecodedMetar $decoded DecodedMetar object
+     * 
+     * @return Array
+     */
+    public function parse($report, &$decoded)
+    {
+        $result = $this->matchChunk($report);
         $match = $result['match'];
         $report = $result['report'];
 
-        if(!$match) {
+        if (!$match) {
             $result = null;
         } else {
-            if(empty($match[2])) {
+            if (empty($match[2])) {
                 $result = array(
                     'runway' => Value::toInt($match[5]),
                     'unit' => $match[7],
@@ -36,7 +74,10 @@ class DecodeRVR extends Decoder {
             }
 
             $decoded->setRunwaysVisualRange($result);
-            $result = $match[0];
+            $result = array(
+                'rvr' => $match[0],
+                'tip' => 'Runways visual range'
+            );
         }
 
         return array(
@@ -46,4 +87,3 @@ class DecodeRVR extends Decoder {
         );
     }
 }
-?>

@@ -76,11 +76,11 @@ class DecodeWind extends Decoder
             );
 
             $result = array(
-                'wind' => $match[0],
-                'tip' => 'Wind direction: ' . $match[1] . '\nWind speed: '
-                    . Value::toInt($match[2]) . $match[5] . '\n'
-                    . !empty(Value::toInt($match[4])) ? 'Wind gust: '
-                    . Value::toInt($match[4]) . $match[5] : ''
+                'text' => $match[0],
+                'tip' => 'Wind direction: ' . $match[1] . ' Wind speed: '
+                    . Value::toInt($match[2]) . $match[5] . ' '
+                    . (!empty(Value::toInt($match[4])) ? ' Wind gust: '
+                        . Value::toInt($match[4]) . $match[5] : '')
             );
         }
 

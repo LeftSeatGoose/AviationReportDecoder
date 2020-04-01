@@ -75,7 +75,7 @@ class DecodeRVR extends Decoder
 
             $decoded->setRunwaysVisualRange($result);
             $result = array(
-                'rvr' => $match[0],
+                'text' => $match[0],
                 'tip' => 'Runways visual range'
             );
         }

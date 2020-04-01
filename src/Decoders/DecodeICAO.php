@@ -56,7 +56,7 @@ class DecodeICAO extends Decoder
         } else {
             $decoded->setIcao($match[0]);
             $result = array(
-                'icao' => $match[0],
+                'text' => $match[0],
                 'tip' => 'The stations identifier'
             );
         }

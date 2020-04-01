@@ -15,6 +15,7 @@
 namespace ReportDecoder\Decoders;
 
 use ReportDecoder\Decoders\Decoder;
+use ReportDecoder\Entity\Value;
 
 /**
  * Decodes Weather chunk
@@ -73,8 +74,8 @@ class DecodeWeather extends Decoder
         } else {
             $decoded->setPresentWeather($match[0]);
             $result = array(
-                'weather' => $match[0],
-                'tip' => 'TODO'
+                'text' => $match[0],
+                'tip' => Value::weatherCodeToText($match[0])
             );
         }
 

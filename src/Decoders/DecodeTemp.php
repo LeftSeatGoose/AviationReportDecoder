@@ -59,9 +59,9 @@ class DecodeTemp extends Decoder
             $decoded->setDewPointTemperature(Value::toInt($match[2]));
 
             $result = array(
-                'temp' => $match[0],
+                'text' => $match[0],
                 'tip' => 'Temperature is ' . Value::toInt($match[1])
-                    . ' and due point is ' . Value::toInt($match[2])
+                    . ' and dew point is ' . Value::toInt($match[2])
             );
         }
 

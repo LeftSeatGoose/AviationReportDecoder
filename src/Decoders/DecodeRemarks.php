@@ -56,7 +56,7 @@ class DecodeRemarks extends Decoder
         } else {
             $decoded->setRemarks($match[0]);
             $result = array(
-                'remarks' => $match[0],
+                'text' => $match[0],
                 'tip' => 'Remarks'
             );
         }

@@ -15,6 +15,7 @@
 namespace ReportDecoder\Decoders;
 
 use ReportDecoder\Decoders\Decoder;
+use ReportDecoder\Entity\Value;
 use ReportDecoder\Exceptions\DecoderException;
 
 /**
@@ -65,21 +66,24 @@ class DecodeCloud extends Decoder
             );
         } else {
             $clouds = array();
+            $tips = array();
+
             for ($i = 4; $i <= sizeof($match); $i += 3) {
                 if (empty($match[$i])) {
                     continue;
                 }
 
-                $clouds[] = array(
-                    'cloud' => $match[$i],
-                    'alititude' => $match[++$i],
-                    'tip' => $match[$i] . ' ' . $match[++$i] . 'ft AGL'
-                );
+                $clouds[] = $match[$i] . ' ' . $match[$i + 1];
+                $tips[] = $match[$i] . ' ' . Value::toInt($match[$i + 1])
+                    . '00ft AGL';
+
+                ++$i;
             }
 
             $decoded->setClouds($clouds);
             $result = array(
-                'cloud' => $match[0]
+                'text' => $clouds,
+                'tip' => $tips
             );
         }
 

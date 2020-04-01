@@ -68,7 +68,7 @@ class DecodeReporter extends Decoder
 
             $decoded->setReporter($match[0]);
             $result = array(
-                'reporter' => $match[0],
+                'text' => $match[0],
                 'tip' => strtolower($match[0]) == 'auto' ? 'Automated report'
                     : 'Non-automated report'
             );

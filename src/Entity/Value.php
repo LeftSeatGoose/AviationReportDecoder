@@ -25,6 +25,42 @@ namespace ReportDecoder\Entity;
  */
 abstract class Value
 {
+    private const WEATHER_TEXT = array(
+        'P' => 'More than',
+        'M' => 'Less than',
+        'B' => 'Began',
+        'E' => 'Ended',
+        'TS' => 'Thunderstorm',
+        'FZ' => 'Freezing',
+        'SH' => 'Showering',
+        'BL' => 'Blowing',
+        'DR' => 'Low Drifting',
+        'MI' => 'Shallow',
+        'PR' => 'Partial',
+        'DZ' => 'Drizzle',
+        'RA' => 'Rain',
+        'SN' => 'Snow',
+        'SG' => 'Snow Grains',
+        'PL' => 'Ice Pellets',
+        'DS' => 'Dust storm',
+        'GR' => 'Hail (>5mm)',
+        'GS' => 'Small Hail / Snow Pellets (<5mm)',
+        'UP' => 'Unknown Precipitation',
+        'IC' => 'Ice Crystals',
+        'FG' => 'Fog',
+        'BR' => 'Mist',
+        'SA' => 'Sand',
+        'DU' => 'Dust',
+        'HZ' => 'Haze',
+        'FU' => 'Smoke',
+        'VA' => 'Volcanic Ash',
+        'PY' => 'Spray',
+        'PO' => 'Well-Developed Dust/Sand',
+        'SQ' => 'Squalls Moderate',
+        'FC' => 'Funnel Cloud',
+        'DS' => 'Sandstorm'
+    );
+
     public const UNIT_HPA = 'hPa';
     public const UNIT_INHG = 'inHg';
     public const UNIT_SM = 'SM';
@@ -52,5 +88,39 @@ abstract class Value
         } else {
             return;
         }
+    }
+
+    /**
+     * Converts weather code to readable text
+     * 
+     * @param String $weather The weather code to be converted
+     * 
+     * @return String|Boolean
+     */
+    public static function weatherCodeToText($weather)
+    {
+        $exp = implode('|', array_keys(self::WEATHER_TEXT));
+        $pw_regexp = "/^([-+]|VC)?($exp)?($exp)?($exp)?($exp)?/";
+
+        if (!preg_match($pw_regexp, $weather, $match)) {
+            return false;
+        }
+
+        unset($match[0]);
+
+        $match[1] = str_replace('+', 'Heavy', $match[1]);
+        $match[1] = str_replace('-', 'Light', $match[1]);
+        $match[1] = str_replace('VC', 'In the vicinity', $match[1]);
+
+        $output = $match[1] . ' ';
+        $i = 0;
+        foreach ($match as $code) {
+            if (++$i == 1) {
+                continue;
+            }
+            $output .= self::WEATHER_TEXT[$code] . ' ';
+        }
+
+        return trim($output);
     }
 }

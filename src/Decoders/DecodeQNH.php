@@ -76,7 +76,7 @@ class DecodeQNH extends Decoder
             $decoded->setPressure($pressure . self::$_units[$match[1]]);
 
             $result = array(
-                'pressure' => $match[0],
+                'text' => $match[0],
                 'tip' => 'Pressure is ' . $pressure . ' ' . self::$_units[$match[1]]
             );
         }

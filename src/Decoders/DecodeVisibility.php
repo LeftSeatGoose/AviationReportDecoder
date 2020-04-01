@@ -84,7 +84,7 @@ class DecodeVisibility extends Decoder
                 $decoded->setVisibility($visiblity);
 
                 $result = array(
-                    'visibility' => $match[0],
+                    'text' => $match[0],
                     'tip' => 'Ground visibility is ' . $match[0]
                 );
             }

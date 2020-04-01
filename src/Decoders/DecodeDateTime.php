@@ -63,8 +63,8 @@ class DecodeDateTime extends Decoder
             );
 
             $result = array(
-                'datetime' => $match[0],
-                'tip' => 'Time of observation'
+                'text' => $match[0],
+                'tip' => 'Weather observed ' . date('Y-m-d H:i:s', strtotime($match[0])) . ' UTC'
             );
         }
 

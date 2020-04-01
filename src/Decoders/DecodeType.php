@@ -57,7 +57,7 @@ class DecodeType extends Decoder
             $decoded->setType($match[0]);
 
             $result = array(
-                'type' => $match[0],
+                'text' => $match[0],
                 'tip' => 'Type of report'
             );
         }

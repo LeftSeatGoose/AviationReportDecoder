@@ -49,7 +49,7 @@ class MetarDecoder
      */
     public function __construct($decoded_metar)
     {
-        $this->decoded_metar = $decoded_metar;
+        $this->_decoded_metar = $decoded_metar;
 
         $this->_decoder = array(
             new DecodeType(),
@@ -77,11 +77,13 @@ class MetarDecoder
     public function consume($report)
     {
         foreach ($this->_decoder as $chunk) {
-            $parse_attempt = $chunk->parse($report, $this->decoded_metar);
+            $parse_attempt = $chunk->parse($report, $this->_decoded_metar);
 
             if (is_null($parse_attempt['result'])) {
                 continue;
             }
+
+            $this->_decoded_metar->addMetarChunk($parse_attempt['result']);
 
             if (!empty($parse_attempt['report'])) {
                 $report = $parse_attempt['report'];
@@ -90,6 +92,6 @@ class MetarDecoder
             }
         }
 
-        return $this->decoded_metar;
+        return $this->_decoded_metar;
     }
 }

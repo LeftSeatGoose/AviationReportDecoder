@@ -25,6 +25,8 @@ namespace ReportDecoder\Entity;
  */
 class DecodedMetar
 {
+    private $metar_chunks = array();
+
     private $_raw_metar;
 
     private $_decoding_exceptions = array();
@@ -67,6 +69,28 @@ class DecodedMetar
         $this->_cavok = false;
 
         $this->_decoding_exceptions = array();
+    }
+
+    /**
+     * Gets the metar chunks
+     * 
+     * @return Array
+     */
+    public function getMetarChunks()
+    {
+        return $this->metar_chunks;
+    }
+
+    /**
+     * Adds metar chunk
+     * 
+     * @param Array $chunk Metar chunk
+     * 
+     * @return null
+     */
+    public function addMetarChunk($chunk)
+    {
+        $this->metar_chunks[] = $chunk;
     }
 
     /**

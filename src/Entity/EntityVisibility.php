@@ -44,7 +44,7 @@ class EntityVisibility
             }
         }
 
-        $this->_distance = $visibility['distance'] * $multiplier;
+        $this->_distance = $visibility['visibility'] * $multiplier;
     }
 
     /**

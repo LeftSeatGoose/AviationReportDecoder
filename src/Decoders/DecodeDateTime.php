@@ -62,9 +62,11 @@ class DecodeDateTime extends Decoder
                 )
             );
 
+            $date = new \DateTime($match[2] . ':' . $match[3]);
             $result = array(
                 'text' => $match[0],
-                'tip' => 'Weather observed ' . date('Y-m-d H:i:s', strtotime($match[0])) . ' UTC'
+                'tip' => 'Weather observed '
+                    . $date->format('Y-m-d H:i') . ' UTC'
             );
         }
 

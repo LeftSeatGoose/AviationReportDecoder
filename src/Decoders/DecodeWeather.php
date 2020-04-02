@@ -69,7 +69,7 @@ class DecodeWeather extends Decoder
         $match = $result['match'];
         $report = $result['report'];
 
-        if (!$match) {
+        if (!$match || (isset($match[0]) && $match[0] == '')) {
             $result = null;
         } else {
             $decoded->setPresentWeather($match[0]);

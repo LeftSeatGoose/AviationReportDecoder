@@ -25,7 +25,7 @@ namespace ReportDecoder\Entity;
  */
 class DecodedMetar
 {
-    private $metar_chunks = array();
+    private $_metar_chunks = array();
 
     private $_raw_metar;
 
@@ -78,7 +78,7 @@ class DecodedMetar
      */
     public function getMetarChunks()
     {
-        return $this->metar_chunks;
+        return $this->_metar_chunks;
     }
 
     /**
@@ -90,7 +90,7 @@ class DecodedMetar
      */
     public function addMetarChunk($chunk)
     {
-        $this->metar_chunks[] = $chunk;
+        $this->_metar_chunks[] = $chunk;
     }
 
     /**

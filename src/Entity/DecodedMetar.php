@@ -86,7 +86,7 @@ class DecodedMetar
      * 
      * @param Array $chunk Metar chunk
      * 
-     * @return null
+     * @return Void
      */
     public function addMetarChunk($chunk)
     {
@@ -108,7 +108,7 @@ class DecodedMetar
      * 
      * @param DecoderException $exception Exception object
      * 
-     * @return null
+     * @return Void
      */
     public function addDecodingException($exception)
     {
@@ -128,7 +128,7 @@ class DecodedMetar
     /**
      * Resets the decoding exception
      * 
-     * @return null
+     * @return Void
      */
     public function resetDecodingExceptions()
     {
@@ -150,7 +150,7 @@ class DecodedMetar
      * 
      * @param String $type Metar type
      * 
-     * @return null
+     * @return Void
      */
     public function setType($type)
     {
@@ -172,7 +172,7 @@ class DecodedMetar
      * 
      * @param String $icao ICAO
      * 
-     * @return null
+     * @return Void
      */
     public function setIcao($icao)
     {
@@ -194,7 +194,7 @@ class DecodedMetar
      * 
      * @param String $datetime DateTime
      * 
-     * @return null
+     * @return Void
      */
     public function setDateTime($datetime)
     {
@@ -216,7 +216,7 @@ class DecodedMetar
      * 
      * @param String $reporter Metar reporter
      * 
-     * @return null
+     * @return Void
      */
     public function setReporter($reporter)
     {
@@ -238,7 +238,7 @@ class DecodedMetar
      * 
      * @param EntityWind $wind Surface wind
      * 
-     * @return null
+     * @return Void
      */
     public function setSurfaceWind(EntityWind $wind)
     {
@@ -260,7 +260,7 @@ class DecodedMetar
      * 
      * @param EntityVisibility $visibility Visiblity
      * 
-     * @return null
+     * @return Void
      */
     public function setVisibility(EntityVisibility $visibility)
     {
@@ -282,7 +282,7 @@ class DecodedMetar
      * 
      * @param Boolean $cavok Cavok
      * 
-     * @return null
+     * @return Void
      */
     public function setCavok($cavok)
     {
@@ -314,7 +314,7 @@ class DecodedMetar
      * 
      * @param Array $runways Runways Visual Range
      * 
-     * @return null
+     * @return Void
      */
     public function setRunwaysVisualRange(array $runways)
     {
@@ -336,7 +336,7 @@ class DecodedMetar
      * 
      * @param String $weather Present Weather
      * 
-     * @return null
+     * @return Void
      */
     public function setPresentWeather($weather)
     {
@@ -358,7 +358,7 @@ class DecodedMetar
      * 
      * @param Array $clouds clouds
      * 
-     * @return null
+     * @return Void
      */
     public function setClouds(array $clouds)
     {
@@ -380,7 +380,7 @@ class DecodedMetar
      * 
      * @param String $temperature Temperature
      * 
-     * @return null
+     * @return Void
      */
     public function setAirTemperature($temperature)
     {
@@ -402,7 +402,7 @@ class DecodedMetar
      * 
      * @param String $temperature Dew Point
      * 
-     * @return null
+     * @return Void
      */
     public function setDewPointTemperature($temperature)
     {
@@ -424,7 +424,7 @@ class DecodedMetar
      * 
      * @param double $pressure Pressure
      * 
-     * @return null
+     * @return Void
      */
     public function setPressure($pressure)
     {
@@ -446,7 +446,7 @@ class DecodedMetar
      * 
      * @param String $remarks Remarks
      * 
-     * @return null
+     * @return Void
      */
     public function setRemarks($remarks)
     {

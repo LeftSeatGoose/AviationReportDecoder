@@ -192,19 +192,19 @@ class DecodedMetar
     /**
      * Sets the DateTime
      * 
-     * @param String $datetime DateTime
+     * @param EntityDateTime $datetime DateTime
      * 
      * @return Void
      */
-    public function setDateTime($datetime)
+    public function setDateTime(EntityDateTime $datetime)
     {
         $this->_datetime = $datetime;
     }
 
     /**
-     * Gets the observation time
+     * Gets the DateTime entity
      * 
-     * @return String
+     * @return EntityDateTime
      */
     public function getDateTime()
     {
@@ -246,9 +246,9 @@ class DecodedMetar
     }
 
     /**
-     * Gets the surface wind
+     * Gets the surface wind entity
      * 
-     * @return String
+     * @return EntityWind
      */
     public function getSurfaceWind()
     {
@@ -268,9 +268,9 @@ class DecodedMetar
     }
 
     /**
-     * Gets the visibility
+     * Gets the visibility entity
      * 
-     * @return String
+     * @return EntityVisibility
      */
     public function getVisibility()
     {

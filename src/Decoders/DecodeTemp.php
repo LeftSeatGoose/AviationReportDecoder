@@ -61,7 +61,7 @@ class DecodeTemp extends Decoder
             $result = array(
                 'text' => $match[0],
                 'tip' => 'Temperature is ' . Value::toInt($match[1])
-                    . ' and dew point is ' . Value::toInt($match[2])
+                    . '°C and dew point is ' . Value::toInt($match[2]) . '°C'
             );
         }
 

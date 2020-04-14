@@ -73,7 +73,7 @@ class DecodeCloud extends Decoder
                     continue;
                 }
 
-                $clouds[] = $match[$i] . ' ' . $match[$i + 1];
+                $clouds[] = $match[$i] . $match[$i + 1];
                 $tips[] = $match[$i] . ' ' . Value::toInt($match[$i + 1])
                     . '00ft AGL';
 

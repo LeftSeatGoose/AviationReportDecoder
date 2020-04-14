@@ -32,6 +32,10 @@ class EntityWind
     private $_direction = null;
     private $_speed = null;
     private $_gust = null;
+    private $_unit = null;
+    private $_variable = null;
+    private $_var_from = null;
+    private $_var_to = null;
 
     /**
      * Construct
@@ -42,19 +46,12 @@ class EntityWind
     {
         $this->_wind = $wind['text'];
         $this->_direction = $wind['direction'];
-
-        $multiplier = 1;
-        if ($wind['unit'] != Value::UNIT_KT) {
-            if ($wind['unit'] == Value::UNIT_KPH) {
-                $multiplier = 0.539957;
-            }
-            if ($wind['unit'] == Value::UNIT_MPH) {
-                $multiplier = 0.868976;
-            }
-        }
-
-        $this->_speed = $wind['speed'] * $multiplier;
-        $this->_gust = $wind['gust'] * $multiplier;
+        $this->_speed = $wind['speed'];
+        $this->_gust = $wind['gust'];
+        $this->_unit = $wind['unit'];
+        $this->_variable = $wind['variable'];
+        $this->_var_from = $wind['var_from'];
+        $this->_var_to = $wind['var_to'];
     }
 
     /**
@@ -64,7 +61,7 @@ class EntityWind
      */
     public function getWind()
     {
-        return $this->wind;
+        return $this->_wind;
     }
 
     /**
@@ -74,7 +71,7 @@ class EntityWind
      */
     public function getDirection()
     {
-        return $this->direction;
+        return $this->_direction;
     }
 
     /**
@@ -84,7 +81,7 @@ class EntityWind
      */
     public function getSpeed()
     {
-        return $this->speed;
+        return $this->_speed;
     }
 
     /**
@@ -94,6 +91,46 @@ class EntityWind
      */
     public function getGust()
     {
-        return $this->gust;
+        return $this->_gust;
+    }
+
+    /**
+     * Gets the speed unit
+     * 
+     * @return String
+     */
+    public function getUnit()
+    {
+        return $this->_unit;
+    }
+
+    /**
+     * Gets if the wind is variable
+     * 
+     * @return String
+     */
+    public function getVariable()
+    {
+        return $this->_variable;
+    }
+
+    /**
+     * Gets the start variable direction
+     * 
+     * @return String
+     */
+    public function getVarFrom()
+    {
+        return $this->_var_from;
+    }
+
+    /**
+     * Gets the end variable direction
+     * 
+     * @return String
+     */
+    public function getVarTo()
+    {
+        return $this->_var_to;
     }
 }

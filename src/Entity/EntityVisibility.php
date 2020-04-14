@@ -29,6 +29,7 @@ class EntityVisibility
 {
 
     private $_distance = null;
+    private $_unit = null;
 
     /**
      * Construct
@@ -37,14 +38,8 @@ class EntityVisibility
      */
     public function __construct($visibility)
     {
-        $multiplier = 1;
-        if ($visibility['unit'] != Value::UNIT_SM) {
-            if ($visibility['unit'] == Value::UNIT_KM) {
-                $multiplier = 0.621371;
-            }
-        }
-
-        $this->_distance = $visibility['visibility'] * $multiplier;
+        $this->_distance = $visibility['visibility'];
+        $this->_unit = $visibility['unit'];
     }
 
     /**
@@ -55,5 +50,15 @@ class EntityVisibility
     public function getDistance()
     {
         return $this->_distance;
+    }
+
+    /**
+     * Gets the distance unit
+     * 
+     * @return Int
+     */
+    public function getUnit()
+    {
+        return $this->_unit;
     }
 }

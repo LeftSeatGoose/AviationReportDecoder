@@ -70,17 +70,26 @@ class DecodeWind extends Decoder
                         'direction' => $match[1],
                         'speed' => Value::toInt($match[2]),
                         'gust' => Value::toInt($match[4]),
-                        'unit' => $match[5]
+                        'unit' => $match[5],
+                        'variable' => isset($match[6]),
+                        'var_from' => isset($match[6]) ? $match[7] : 0,
+                        'var_to' => isset($match[6]) ? $match[8] : 0
                     )
                 )
             );
 
+            $tip = 'Wind direction: ' . trim($match[1]) . '°, ';
+            if (isset($match[6])) {
+                $tip .= 'Variable from ' . $match[7] . '° to ' . $match[8] . '°, ';
+            }
+            $tip .= 'Wind speed: ' . Value::toInt($match[2]) . $match[5];
+            if (!empty(Value::toInt($match[4]))) {
+                $tip .=  ', Wind gust: ' . Value::toInt($match[4]) . $match[5];
+            }
+
             $result = array(
                 'text' => $match[0],
-                'tip' => 'Wind direction: ' . $match[1] . ' Wind speed: '
-                    . Value::toInt($match[2]) . $match[5] . ' '
-                    . (!empty(Value::toInt($match[4])) ? ' Wind gust: '
-                        . Value::toInt($match[4]) . $match[5] : '')
+                'tip' => $tip
             );
         }
 

@@ -58,6 +58,6 @@ class EntityDateTime
      */
     public function value($format = 'Y-m-d H:i:s')
     {
-        return $this->datetime->format($format);
+        return $this->_datetime->format($format);
     }
 }

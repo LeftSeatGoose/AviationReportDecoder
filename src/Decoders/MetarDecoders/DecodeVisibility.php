@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DecodeWind.php
+ * DecodeVisibility.php
  *
  * PHP version 7.2
  *
@@ -12,15 +12,15 @@
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Decoders;
+namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
-use ReportDecoder\Entity\EntityWind;
+use ReportDecoder\Entity\MetarEntities\EntityVisibility;
 use ReportDecoder\Entity\Value;
 use ReportDecoder\Exceptions\DecoderException;
 
 /**
- * Decodes Wind chunk
+ * Decodes Visibility chunk
  *
  * @category Metar
  * @package  ReportDecoder\Decoders
@@ -28,7 +28,7 @@ use ReportDecoder\Exceptions\DecoderException;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeWind extends Decoder
+class DecodeVisibility extends Decoder
 {
     /**
      * Returns the expression for matching the chunk
@@ -37,10 +37,9 @@ class DecodeWind extends Decoder
      */
     public function getExpression()
     {
-        return '/^([0-9]{3}|VRB)?([0-9]{2,3})(G?([0-9]{2,3}))'
-            . '?(KT|MPH|KPH)( ([0-9]{3})V([0-9]{3}))?/';
+        return '/^(CAVOK|([0-9]{4})(NDV)?|M?([0-9]{0,2}) ?(([1357])\/(2|4|8|16))?'
+            . '(SM)|( ([0-9]{4})(N|NE|E|SE|S|SW|W|NW)?)|([0-9][05])(KM)?(NDV)?)/';
     }
-
     /**
      * Parses the chunk using the expression
      * 
@@ -59,42 +58,41 @@ class DecodeWind extends Decoder
             throw new DecoderException(
                 $report,
                 $result['report'],
-                'Bad format for wind information',
+                'Bad format for visiblity information',
                 $this
             );
         } else {
-            $decoded->setSurfaceWind(
-                new EntityWind(
+            $cavok = false;
+
+            if (strtolower($match[0]) == 'cavok') {
+                $decoded->setCavok(true);
+            } else {
+                $decoded->setCavok(false);
+                $unit = Value::UNIT_SM;
+                $distance = $match[4];
+
+                if (isset($match[13])) {
+                    $unit = Value::UNIT_KM;
+                    $distance = $match[12];
+                }
+
+                $visiblity = new EntityVisibility(
                     array(
-                        'text' => $match[0],
-                        'direction' => $match[1],
-                        'speed' => Value::toInt($match[2]),
-                        'gust' => Value::toInt($match[4]),
-                        'unit' => $match[5],
-                        'variable' => isset($match[6]),
-                        'var_from' => isset($match[6]) ? $match[7] : 0,
-                        'var_to' => isset($match[6]) ? $match[8] : 0
+                        'visibility' => Value::toInt($distance),
+                        'unit' => $unit
                     )
-                )
-            );
+                );
+                $decoded->setVisibility($visiblity);
 
-            $tip = 'Wind direction: ' . trim($match[1]) . '°, ';
-            if (isset($match[6])) {
-                $tip .= 'Variable from ' . $match[7] . '° to ' . $match[8] . '°, ';
+                $result = array(
+                    'text' => $match[0],
+                    'tip' => 'Ground visibility is ' . $match[0]
+                );
             }
-            $tip .= 'Wind speed: ' . Value::toInt($match[2]) . $match[5];
-            if (!empty(Value::toInt($match[4]))) {
-                $tip .=  ', Wind gust: ' . Value::toInt($match[4]) . $match[5];
-            }
-
-            $result = array(
-                'text' => $match[0],
-                'tip' => $tip
-            );
         }
 
         return array(
-            'name' => 'wind',
+            'name' => 'visibility',
             'result' => $result,
             'report' => $report,
         );

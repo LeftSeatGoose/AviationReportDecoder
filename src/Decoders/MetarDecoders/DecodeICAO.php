@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DecodeReporter.php
+ * DecodeICAO.php
  *
  * PHP version 7.2
  *
@@ -12,13 +12,12 @@
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Decoders;
+namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
-use ReportDecoder\Exceptions\DecoderException;
 
 /**
- * Decodes Reporter chunk
+ * Decodes ICAO chunk
  *
  * @category Metar
  * @package  ReportDecoder\Decoders
@@ -26,7 +25,7 @@ use ReportDecoder\Exceptions\DecoderException;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeReporter extends Decoder
+class DecodeICAO extends Decoder
 {
     /**
      * Returns the expression for matching the chunk
@@ -35,7 +34,7 @@ class DecodeReporter extends Decoder
      */
     public function getExpression()
     {
-        return '/^([A-Z]+)/';
+        return '/^([A-Z0-9]{4})/';
     }
 
     /**
@@ -55,27 +54,15 @@ class DecodeReporter extends Decoder
         if (!$match) {
             $result = null;
         } else {
-            $reporter = $match[0];
-
-            if (strlen($reporter) > 3 && strtolower($reporter) !== 'auto') {
-                throw new DecoderException(
-                    $report,
-                    $result['report'],
-                    'Bad format for reporter information',
-                    $this
-                );
-            }
-
-            $decoded->setReporter($match[0]);
+            $decoded->setIcao($match[0]);
             $result = array(
                 'text' => $match[0],
-                'tip' => strtolower($match[0]) == 'auto' ? 'Automated report'
-                    : 'Non-automated report'
+                'tip' => 'The stations identifier'
             );
         }
 
         return array(
-            'name' => 'reporter',
+            'name' => 'icao',
             'result' => $result,
             'report' => $report,
         );

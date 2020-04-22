@@ -12,9 +12,7 @@
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Entity;
-
-use ReportDecoder\Entity\Value;
+namespace ReportDecoder\Entity\MetarEntities;
 
 /**
  * Wind information

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DecodeQNH.php
+ * DecodeDateTime.php
  *
  * PHP version 7.2
  *
@@ -12,14 +12,13 @@
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Decoders;
+namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
-use ReportDecoder\Entity\Value;
-use ReportDecoder\Exceptions\DecoderException;
+use ReportDecoder\Entity\MetarEntities\EntityDateTime;
 
 /**
- * Decodes QNH chunk
+ * Decodes DateTime chunk
  *
  * @category Metar
  * @package  ReportDecoder\Decoders
@@ -27,14 +26,8 @@ use ReportDecoder\Exceptions\DecoderException;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeQNH extends Decoder
+class DecodeDateTime extends Decoder
 {
-
-    private static $_units = array(
-        'A' => Value::UNIT_INHG,
-        'Q' => Value::UNIT_HPA
-    );
-
     /**
      * Returns the expression for matching the chunk
      * 
@@ -42,7 +35,7 @@ class DecodeQNH extends Decoder
      */
     public function getExpression()
     {
-        return '/^(Q|A)([0-9]{4})/';
+        return '/^([0-9]{2})([0-9]{2})([0-9]{2})Z/';
     }
 
     /**
@@ -60,31 +53,27 @@ class DecodeQNH extends Decoder
         $report = $result['report'];
 
         if (!$match) {
-            throw new DecoderException(
-                $report,
-                $result['report'],
-                'Bad format for pressure information',
-                $this
-            );
+            $result = null;
         } else {
-            $pressure = $match[2];
+            $decoded->setDateTime(
+                new EntityDateTime(
+                    $match[2],
+                    $match[2] . ':' . $match[3]
+                )
+            );
 
-            if ($match[1] == 'A') {
-                $pressure = $pressure / 100;
-            }
-
-            $decoded->setPressure($pressure . self::$_units[$match[1]]);
-
+            $date = new \DateTime($match[2] . ':' . $match[3]);
             $result = array(
                 'text' => $match[0],
-                'tip' => 'Pressure is ' . $pressure . ' ' . self::$_units[$match[1]]
+                'tip' => 'Weather observed '
+                    . $date->format('Y-m-d H:i') . ' UTC'
             );
         }
 
         return array(
-            'name' => 'pressure',
+            'name' => 'datetime',
             'result' => $result,
-            'report' => $report,
+            'report' => $report
         );
     }
 }

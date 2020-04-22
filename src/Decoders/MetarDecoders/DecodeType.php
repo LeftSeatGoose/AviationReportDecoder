@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DecodeRemarks.php
+ * DecodeType.php
  *
  * PHP version 7.2
  *
@@ -12,12 +12,12 @@
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Decoders;
+namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 
 /**
- * Decodes Remarks chunk
+ * Decodes Type chunk
  *
  * @category Metar
  * @package  ReportDecoder\Decoders
@@ -25,7 +25,7 @@ use ReportDecoder\Decoders\Decoder;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeRemarks extends Decoder
+class DecodeType extends Decoder
 {
     /**
      * Returns the expression for matching the chunk
@@ -34,7 +34,7 @@ class DecodeRemarks extends Decoder
      */
     public function getExpression()
     {
-        return '/RMK.*/';
+        return '/^((METAR|TAF|SPECI)( (COR|AMD)){0,1})|(PROV TAF)/';
     }
 
     /**
@@ -54,15 +54,16 @@ class DecodeRemarks extends Decoder
         if (!$match) {
             $result = null;
         } else {
-            $decoded->setRemarks($match[0]);
+            $decoded->setType($match[0]);
+
             $result = array(
                 'text' => $match[0],
-                'tip' => 'Remarks'
+                'tip' => 'Type of report'
             );
         }
 
         return array(
-            'name' => 'remarks',
+            'name' => 'type',
             'result' => $result,
             'report' => $report,
         );

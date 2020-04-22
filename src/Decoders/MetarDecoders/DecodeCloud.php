@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DecodeVisibility.php
+ * DecodeCloud.php
  *
  * PHP version 7.2
  *
@@ -12,15 +12,14 @@
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Decoders;
+namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
-use ReportDecoder\Entity\EntityVisibility;
 use ReportDecoder\Entity\Value;
 use ReportDecoder\Exceptions\DecoderException;
 
 /**
- * Decodes Visibility chunk
+ * Decodes Cloud chunk
  *
  * @category Metar
  * @package  ReportDecoder\Decoders
@@ -28,7 +27,7 @@ use ReportDecoder\Exceptions\DecoderException;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeVisibility extends Decoder
+class DecodeCloud extends Decoder
 {
     /**
      * Returns the expression for matching the chunk
@@ -37,9 +36,13 @@ class DecodeVisibility extends Decoder
      */
     public function getExpression()
     {
-        return '/^(CAVOK|([0-9]{4})(NDV)?|M?([0-9]{0,2}) ?(([1357])\/(2|4|8|16))?'
-            . '(SM)|( ([0-9]{4})(N|NE|E|SE|S|SW|W|NW)?)|([0-9][05])(KM)?(NDV)?)/';
+        $no_cloud = '(NSC|NCD|CLR|SKC)';
+        $layer = '(VV|FEW|SCT|BKN|OVC)([0-9]{3})(CB|TCU)?';
+
+        return "/^($no_cloud|($layer)( $layer)?( $layer)?( "
+            . "$layer)?( $layer)?( $layer)?)( )/";
     }
+
     /**
      * Parses the chunk using the expression
      * 
@@ -51,47 +54,41 @@ class DecodeVisibility extends Decoder
     public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
-        $match = $result['match'];
+        $match = array_map('trim', $result['match']);
         $report = $result['report'];
 
         if (!$match) {
             throw new DecoderException(
                 $report,
                 $result['report'],
-                'Bad format for visiblity information',
+                'Bad format for cloud information',
                 $this
             );
         } else {
-            $cavok = false;
+            $clouds = array();
+            $tips = array();
 
-            if (strtolower($match[0]) == 'cavok') {
-                $decoded->setCavok(true);
-            } else {
-                $unit = Value::UNIT_SM;
-                $distance = $match[4];
-
-                if (isset($match[13])) {
-                    $unit = Value::UNIT_KM;
-                    $distance = $match[12];
+            for ($i = 4; $i <= sizeof($match); $i += 3) {
+                if (empty($match[$i])) {
+                    continue;
                 }
 
-                $visiblity = new EntityVisibility(
-                    array(
-                        'visibility' => Value::toInt($distance),
-                        'unit' => $unit
-                    )
-                );
-                $decoded->setVisibility($visiblity);
+                $clouds[] = $match[$i] . $match[$i + 1];
+                $tips[] = $match[$i] . ' ' . Value::toInt($match[$i + 1])
+                    . '00ft AGL';
 
-                $result = array(
-                    'text' => $match[0],
-                    'tip' => 'Ground visibility is ' . $match[0]
-                );
+                ++$i;
             }
+
+            $decoded->setClouds($clouds);
+            $result = array(
+                'text' => $clouds,
+                'tip' => $tips
+            );
         }
 
         return array(
-            'name' => 'visibility',
+            'name' => 'clouds',
             'result' => $result,
             'report' => $report,
         );

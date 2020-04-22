@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DecodeType.php
+ * DecodeReporter.php
  *
  * PHP version 7.2
  *
@@ -12,12 +12,13 @@
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Decoders;
+namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
+use ReportDecoder\Exceptions\DecoderException;
 
 /**
- * Decodes Type chunk
+ * Decodes Reporter chunk
  *
  * @category Metar
  * @package  ReportDecoder\Decoders
@@ -25,7 +26,7 @@ use ReportDecoder\Decoders\Decoder;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeType extends Decoder
+class DecodeReporter extends Decoder
 {
     /**
      * Returns the expression for matching the chunk
@@ -34,7 +35,7 @@ class DecodeType extends Decoder
      */
     public function getExpression()
     {
-        return '/^((METAR|TAF|SPECI)( (COR|AMD)){0,1})|((PROV TAF))/';
+        return '/^([A-Z]+)/';
     }
 
     /**
@@ -54,16 +55,27 @@ class DecodeType extends Decoder
         if (!$match) {
             $result = null;
         } else {
-            $decoded->setType($match[0]);
+            $reporter = $match[0];
 
+            if (strlen($reporter) > 3 && strtolower($reporter) !== 'auto') {
+                throw new DecoderException(
+                    $report,
+                    $result['report'],
+                    'Bad format for reporter information',
+                    $this
+                );
+            }
+
+            $decoded->setReporter($match[0]);
             $result = array(
                 'text' => $match[0],
-                'tip' => 'Type of report'
+                'tip' => strtolower($match[0]) == 'auto' ? 'Automated report'
+                    : 'Non-automated report'
             );
         }
 
         return array(
-            'name' => 'type',
+            'name' => 'reporter',
             'result' => $result,
             'report' => $report,
         );

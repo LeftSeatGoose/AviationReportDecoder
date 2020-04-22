@@ -12,20 +12,21 @@
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\TypeDecoder;
+namespace ReportDecoder\ReportTypes;
 
-use ReportDecoder\Decoders\DecodeType;
-use ReportDecoder\Decoders\DecodeICAO;
-use ReportDecoder\Decoders\DecodeDateTime;
-use ReportDecoder\Decoders\DecodeReporter;
-use ReportDecoder\Decoders\DecodeWind;
-use ReportDecoder\Decoders\DecodeVisibility;
-use ReportDecoder\Decoders\DecodeRVR;
-use ReportDecoder\Decoders\DecodeWeather;
-use ReportDecoder\Decoders\DecodeCloud;
-use ReportDecoder\Decoders\DecodeTemp;
-use ReportDecoder\Decoders\DecodeQNH;
-use ReportDecoder\Decoders\DecodeRemarks;
+use ReportDecoder\Decoders\MetarDecoders\DecodeType;
+use ReportDecoder\Decoders\MetarDecoders\DecodeICAO;
+use ReportDecoder\Decoders\MetarDecoders\DecodeDateTime;
+use ReportDecoder\Decoders\MetarDecoders\DecodeReporter;
+use ReportDecoder\Decoders\MetarDecoders\DecodeWind;
+use ReportDecoder\Decoders\MetarDecoders\DecodeVisibility;
+use ReportDecoder\Decoders\MetarDecoders\DecodeRVR;
+use ReportDecoder\Decoders\MetarDecoders\DecodeWeather;
+use ReportDecoder\Decoders\MetarDecoders\DecodeCloud;
+use ReportDecoder\Decoders\MetarDecoders\DecodeTemp;
+use ReportDecoder\Decoders\MetarDecoders\DecodeQNH;
+use ReportDecoder\Decoders\MetarDecoders\DecodeRemarks;
+use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Includes the decoder chain for decoding a metar string
@@ -77,13 +78,17 @@ class MetarDecoder
     public function consume($report)
     {
         foreach ($this->_decoder as $chunk) {
-            $parse_attempt = $chunk->parse($report, $this->_decoded_metar);
+            try {
+                $parse_attempt = $chunk->parse($report, $this->_decoded_metar);
+            } catch (DecoderException $ex) {
+                $this->decoder->addDecodingException($ex);
+            }
 
             if (is_null($parse_attempt['result'])) {
                 continue;
             }
 
-            $this->_decoded_metar->addMetarChunk($parse_attempt['result']);
+            $this->_decoded_metar->addReportChunk($parse_attempt['result']);
 
             if (!empty($parse_attempt['report'])) {
                 $report = $parse_attempt['report'];

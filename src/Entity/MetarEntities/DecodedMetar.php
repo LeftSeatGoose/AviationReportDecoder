@@ -12,7 +12,9 @@
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Entity;
+namespace ReportDecoder\Entity\MetarEntities;
+
+use ReportDecoder\Entity\DecodedReport;
 
 /**
  * Decoded metar information
@@ -23,16 +25,8 @@ namespace ReportDecoder\Entity;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodedMetar
+class DecodedMetar extends DecodedReport
 {
-    private $_metar_chunks = array();
-
-    private $_raw_metar;
-
-    private $_decoding_exceptions = array();
-
-    private $_type;
-
     private $_icao;
 
     private $_datetime;
@@ -56,116 +50,6 @@ class DecodedMetar
     private $_pressure;
 
     private $_remarks;
-
-    /**
-     * Construct
-     * 
-     * @param String $raw_metar The raw metar
-     */
-    public function __construct($raw_metar)
-    {
-        $this->_raw_metar = $raw_metar;
-
-        $this->_cavok = false;
-
-        $this->_decoding_exceptions = array();
-    }
-
-    /**
-     * Gets the metar chunks
-     * 
-     * @return Array
-     */
-    public function getMetarChunks()
-    {
-        return $this->_metar_chunks;
-    }
-
-    /**
-     * Adds metar chunk
-     * 
-     * @param Array $chunk Metar chunk
-     * 
-     * @return Void
-     */
-    public function addMetarChunk($chunk)
-    {
-        $this->_metar_chunks[] = $chunk;
-    }
-
-    /**
-     * Checks if decoding was successful
-     * 
-     * @return Boolean
-     */
-    public function isValid()
-    {
-        return count($this->_decoding_exceptions) == 0;
-    }
-
-    /**
-     * Adds a decoding exception
-     * 
-     * @param DecoderException $exception Exception object
-     * 
-     * @return Void
-     */
-    public function addDecodingException($exception)
-    {
-        $this->_decoding_exceptions[] = $exception;
-    }
-
-    /**
-     * Gets decoding exceptions
-     * 
-     * @return Array
-     */
-    public function getDecodingExceptions()
-    {
-        return $this->_decoding_exceptions;
-    }
-
-    /**
-     * Resets the decoding exception
-     * 
-     * @return Void
-     */
-    public function resetDecodingExceptions()
-    {
-        $this->_decoding_exceptions = array();
-    }
-
-    /**
-     * Gets the raw metar
-     * 
-     * @return String
-     */
-    public function getRawMetar()
-    {
-        return trim($this->_raw_metar);
-    }
-
-    /**
-     * Sets the type
-     * 
-     * @param String $type Metar type
-     * 
-     * @return Void
-     */
-    public function setType($type)
-    {
-        $this->_type = $type;
-    }
-
-    /**
-     * Gets the metar type
-     * 
-     * @return String
-     */
-    public function getType()
-    {
-        return $this->_type;
-    }
 
     /**
      * Sets the ICAO

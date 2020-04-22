@@ -16,10 +16,14 @@ namespace ReportDecoder;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
-use ReportDecoder\TypeDecoder\MetarDecoder;
-use ReportDecoder\TypeDecoder\TafDecoder;
-use ReportDecoder\Decoders\DecodeType;
-use ReportDecoder\Entity\DecodedMetar;
+use ReportDecoder\ReportTypes\MetarDecoder;
+use ReportDecoder\ReportTypes\TafDecoder;
+use ReportDecoder\Decoders\MetarDecoders\DecodeType;
+use ReportDecoder\Entity\MetarEntities\DecodedMetar;
+use ReportDecoder\Entity\TafEntities\DecodedTaf;
+
+$decoder = new ReportDecoder();
+var_dump($decoder->getDecodedReport('METAR CYBW 220000Z AUTO 26023KT 9SM CLR 15/M01 A2977 RMK SLP095 DENSITY ALT 5000FT'));
 
 /**
  * Decodes a Report
@@ -33,7 +37,7 @@ use ReportDecoder\Entity\DecodedMetar;
 class ReportDecoder
 {
     private $_decoded = null;
-    private $_report_type = 'metar'; // Assume metar by default
+    private $_report_type;
 
     /**
      * Gets the decoded report
@@ -45,32 +49,31 @@ class ReportDecoder
      */
     public function getDecodedReport($report, $report_type = null)
     {
-        $this->_decoded = new DecodedMetar($report);
-
         $clean_report = trim(strtoupper($report));
         $clean_report = preg_replace('#=$#', '', $clean_report);
         $clean_report = preg_replace('#[ ]{2,}#', ' ', $clean_report) . ' ';
 
-        $type_decoder = new DecodeType();
-
         if (is_null($report_type)) {
-            $parse_attempt = $type_decoder->parse($clean_report, $this->_decoded);
-            if (!is_null($parse_attempt['result'])) {
-                $this->report_chunks['type'] = $parse_attempt['result'];
-                $clean_report = $parse_attempt['report'];
+            // Get the report type to determine which decoder chain to use
+            $type_decoder = new DecodeType();
 
-                if (strpos(strtolower($parse_attempt['result']), 'taf') !== false) {
-                    $this->_report_type = 'taf';
-                }
+            if (!preg_match($type_decoder->getExpression(), $clean_report, $match) || is_null($match[2])) {
+                $this->_report_type = 'metar'; // Assume metar by default
+            } else {
+                $this->_report_type = strtolower($match[2]);
             }
         } else {
             $this->_report_type = $report_type;
         }
 
         if ($this->_report_type == 'metar') {
+            $this->_decoded = new DecodedMetar($report);
+
             $metar = new MetarDecoder($this->_decoded);
             $metar->consume($clean_report);
         } else {
+            $this->_decoded = new DecodedTaf($report);
+
             $taf = new TafDecoder($this->_decoded);
             $taf->consume($clean_report);
         }

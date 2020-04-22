@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DecodeDateTime.php
+ * DecodeRemarks.php
  *
  * PHP version 7.2
  *
@@ -12,13 +12,12 @@
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Decoders;
+namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
-use ReportDecoder\Entity\Value;
 
 /**
- * Decodes DateTime chunk
+ * Decodes Remarks chunk
  *
  * @category Metar
  * @package  ReportDecoder\Decoders
@@ -26,7 +25,7 @@ use ReportDecoder\Entity\Value;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeRVR extends Decoder
+class DecodeRemarks extends Decoder
 {
     /**
      * Returns the expression for matching the chunk
@@ -35,8 +34,7 @@ class DecodeRVR extends Decoder
      */
     public function getExpression()
     {
-        return '/^R([0-9]{2}[LCR]?)\/(([PM]?([0-9]{4}))V)'
-            . '?([PM]?([0-9]{4}))(FT)?\/?([UDN]?)/';
+        return '/RMK.*/';
     }
 
     /**
@@ -56,32 +54,15 @@ class DecodeRVR extends Decoder
         if (!$match) {
             $result = null;
         } else {
-            if (empty($match[2])) {
-                $result = array(
-                    'runway' => Value::toInt($match[5]),
-                    'unit' => $match[7],
-                    'trend' => $match[8]
-                );
-            } else {
-                $result = array(
-                    'variable' => array(
-                        'from' => Value::toInt($match[3]),
-                        'to' => Value::toInt($match[5])
-                    ),
-                    'unit' => $match[7],
-                    'trend' => $match[8]
-                );
-            }
-
-            $decoded->setRunwaysVisualRange($result);
+            $decoded->setRemarks($match[0]);
             $result = array(
                 'text' => $match[0],
-                'tip' => 'Runways visual range'
+                'tip' => 'Remarks'
             );
         }
 
         return array(
-            'name' => 'rvr',
+            'name' => 'remarks',
             'result' => $result,
             'report' => $report,
         );

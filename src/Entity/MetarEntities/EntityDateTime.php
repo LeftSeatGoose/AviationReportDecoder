@@ -12,7 +12,7 @@
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Entity;
+namespace ReportDecoder\Entity\MetarEntities;
 
 /**
  * DateTime information

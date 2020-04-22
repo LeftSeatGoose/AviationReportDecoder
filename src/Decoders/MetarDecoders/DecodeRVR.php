@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DecodeICAO.php
+ * DecodeDateTime.php
  *
  * PHP version 7.2
  *
@@ -12,12 +12,13 @@
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Decoders;
+namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
+use ReportDecoder\Entity\Value;
 
 /**
- * Decodes ICAO chunk
+ * Decodes DateTime chunk
  *
  * @category Metar
  * @package  ReportDecoder\Decoders
@@ -25,7 +26,7 @@ use ReportDecoder\Decoders\Decoder;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeICAO extends Decoder
+class DecodeRVR extends Decoder
 {
     /**
      * Returns the expression for matching the chunk
@@ -34,7 +35,8 @@ class DecodeICAO extends Decoder
      */
     public function getExpression()
     {
-        return '/^([A-Z0-9]{4})/';
+        return '/^R([0-9]{2}[LCR]?)\/(([PM]?([0-9]{4}))V)'
+            . '?([PM]?([0-9]{4}))(FT)?\/?([UDN]?)/';
     }
 
     /**
@@ -54,15 +56,32 @@ class DecodeICAO extends Decoder
         if (!$match) {
             $result = null;
         } else {
-            $decoded->setIcao($match[0]);
+            if (empty($match[2])) {
+                $result = array(
+                    'runway' => Value::toInt($match[5]),
+                    'unit' => $match[7],
+                    'trend' => $match[8]
+                );
+            } else {
+                $result = array(
+                    'variable' => array(
+                        'from' => Value::toInt($match[3]),
+                        'to' => Value::toInt($match[5])
+                    ),
+                    'unit' => $match[7],
+                    'trend' => $match[8]
+                );
+            }
+
+            $decoded->setRunwaysVisualRange($result);
             $result = array(
                 'text' => $match[0],
-                'tip' => 'The stations identifier'
+                'tip' => 'Runways visual range'
             );
         }
 
         return array(
-            'name' => 'icao',
+            'name' => 'rvr',
             'result' => $result,
             'report' => $report,
         );

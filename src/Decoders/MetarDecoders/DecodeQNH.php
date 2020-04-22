@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DecodeCloud.php
+ * DecodeQNH.php
  *
  * PHP version 7.2
  *
@@ -12,14 +12,14 @@
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Decoders;
+namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Entity\Value;
 use ReportDecoder\Exceptions\DecoderException;
 
 /**
- * Decodes Cloud chunk
+ * Decodes QNH chunk
  *
  * @category Metar
  * @package  ReportDecoder\Decoders
@@ -27,8 +27,14 @@ use ReportDecoder\Exceptions\DecoderException;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeCloud extends Decoder
+class DecodeQNH extends Decoder
 {
+
+    private static $_units = array(
+        'A' => Value::UNIT_INHG,
+        'Q' => Value::UNIT_HPA
+    );
+
     /**
      * Returns the expression for matching the chunk
      * 
@@ -36,11 +42,7 @@ class DecodeCloud extends Decoder
      */
     public function getExpression()
     {
-        $no_cloud = '(NSC|NCD|CLR|SKC)';
-        $layer = '(VV|FEW|SCT|BKN|OVC)([0-9]{3})(CB|TCU)?';
-
-        return "/^($no_cloud|($layer)( $layer)?( $layer)?( "
-            . "$layer)?( $layer)?( $layer)?)( )/";
+        return '/^(Q|A)([0-9]{4})/';
     }
 
     /**
@@ -54,41 +56,33 @@ class DecodeCloud extends Decoder
     public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
-        $match = array_map('trim', $result['match']);
+        $match = $result['match'];
         $report = $result['report'];
 
         if (!$match) {
             throw new DecoderException(
                 $report,
                 $result['report'],
-                'Bad format for cloud information',
+                'Bad format for pressure information',
                 $this
             );
         } else {
-            $clouds = array();
-            $tips = array();
+            $pressure = $match[2];
 
-            for ($i = 4; $i <= sizeof($match); $i += 3) {
-                if (empty($match[$i])) {
-                    continue;
-                }
-
-                $clouds[] = $match[$i] . $match[$i + 1];
-                $tips[] = $match[$i] . ' ' . Value::toInt($match[$i + 1])
-                    . '00ft AGL';
-
-                ++$i;
+            if ($match[1] == 'A') {
+                $pressure = $pressure / 100;
             }
 
-            $decoded->setClouds($clouds);
+            $decoded->setPressure($pressure . self::$_units[$match[1]]);
+
             $result = array(
-                'text' => $clouds,
-                'tip' => $tips
+                'text' => $match[0],
+                'tip' => 'Pressure is ' . $pressure . ' ' . self::$_units[$match[1]]
             );
         }
 
         return array(
-            'name' => 'clouds',
+            'name' => 'pressure',
             'result' => $result,
             'report' => $report,
         );

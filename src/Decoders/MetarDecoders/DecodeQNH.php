@@ -15,6 +15,7 @@
 namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
+use ReportDecoder\Decoders\DecoderInterface;
 use ReportDecoder\Entity\Value;
 use ReportDecoder\Exceptions\DecoderException;
 
@@ -27,7 +28,7 @@ use ReportDecoder\Exceptions\DecoderException;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeQNH extends Decoder
+class DecodeQNH extends Decoder implements DecoderInterface
 {
 
     private static $_units = array(

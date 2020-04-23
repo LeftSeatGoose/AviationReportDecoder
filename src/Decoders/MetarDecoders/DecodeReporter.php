@@ -15,6 +15,7 @@
 namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
+use ReportDecoder\Decoders\DecoderInterface;
 use ReportDecoder\Exceptions\DecoderException;
 
 /**
@@ -26,7 +27,7 @@ use ReportDecoder\Exceptions\DecoderException;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeReporter extends Decoder
+class DecodeReporter extends Decoder implements DecoderInterface
 {
     /**
      * Returns the expression for matching the chunk

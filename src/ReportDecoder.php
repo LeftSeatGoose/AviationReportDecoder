@@ -22,9 +22,6 @@ use ReportDecoder\Decoders\MetarDecoders\DecodeType;
 use ReportDecoder\Entity\MetarEntities\DecodedMetar;
 use ReportDecoder\Entity\TafEntities\DecodedTaf;
 
-$decoder = new ReportDecoder();
-var_dump($decoder->getDecodedReport('METAR CYBW 220000Z AUTO 26023KT 9SM CLR 15/M01 A2977 RMK SLP095 DENSITY ALT 5000FT'));
-
 /**
  * Decodes a Report
  *

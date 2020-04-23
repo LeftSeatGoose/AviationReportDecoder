@@ -32,6 +32,7 @@ abstract class Decoder
      */
     public function getExpression()
     {
+        return '';
     }
 
     /**

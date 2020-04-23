@@ -14,6 +14,8 @@
 
 namespace ReportDecoder\ReportTypes;
 
+use ReportDecoder\Exceptions\DecoderException;
+
 /**
  * Includes the decoder chain for decoding a taf string
  *
@@ -50,13 +52,17 @@ class TafDecoder
     public function consume($report)
     {
         foreach ($this->_decoder as $chunk) {
-            $parse_attempt = $chunk->parse($report, $this->_decoded_taf);
+            try {
+                $parse_attempt = $chunk->parse($report, $this->_decoded_taf);
+            } catch (DecoderException $ex) {
+                $this->decoder->addDecodingException($ex);
+            }
 
             if (is_null($parse_attempt['result'])) {
                 continue;
             }
 
-            $this->_decoded_taf->addTafChunk($parse_attempt['result']);
+            $this->_decoded_taf->addReportChunk($parse_attempt['result']);
 
             if (!empty($parse_attempt['report'])) {
                 $report = $parse_attempt['report'];

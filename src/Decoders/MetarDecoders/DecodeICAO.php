@@ -15,6 +15,7 @@
 namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
+use ReportDecoder\Decoders\DecoderInterface;
 
 /**
  * Decodes ICAO chunk
@@ -25,7 +26,7 @@ use ReportDecoder\Decoders\Decoder;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeICAO extends Decoder
+class DecodeICAO extends Decoder implements DecoderInterface
 {
     /**
      * Returns the expression for matching the chunk

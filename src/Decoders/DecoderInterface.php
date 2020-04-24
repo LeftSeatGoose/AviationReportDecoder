@@ -35,8 +35,8 @@ interface DecoderInterface
     /**
      * Parses the chunk using the expression
      * 
-     * @param String       $report  Remaining report string
-     * @param DecodedMetar $decoded DecodedMetar object
+     * @param String  $report  Remaining report string
+     * @param Decoded $decoded Decoded report object
      * 
      * @return Array
      */

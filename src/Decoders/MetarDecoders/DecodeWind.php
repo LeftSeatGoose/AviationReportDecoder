@@ -6,7 +6,7 @@
  * PHP version 7.2
  *
  * @category Metar
- * @package  ReportDecoder\Decoders
+ * @package  ReportDecoder\Decoders\MetarDecoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
@@ -16,7 +16,7 @@ namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
-use ReportDecoder\Entity\MetarEntities\EntityWind;
+use ReportDecoder\Entity\EntityWind;
 use ReportDecoder\Entity\Value;
 use ReportDecoder\Exceptions\DecoderException;
 
@@ -24,7 +24,7 @@ use ReportDecoder\Exceptions\DecoderException;
  * Decodes Wind chunk
  *
  * @category Metar
- * @package  ReportDecoder\Decoders
+ * @package  ReportDecoder\Decoders\MetarDecoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder

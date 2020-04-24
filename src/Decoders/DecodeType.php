@@ -1,33 +1,32 @@
 <?php
 
 /**
- * DecodeDateTime.php
+ * DecodeType.php
  *
  * PHP version 7.2
  *
  * @category Metar
- * @package  ReportDecoder\Decoders\MetarDecoders
+ * @package  ReportDecoder\Decoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Decoders\MetarDecoders;
+namespace ReportDecoder\Decoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
-use ReportDecoder\Entity\EntityDateTime;
 
 /**
- * Decodes DateTime chunk
+ * Decodes Type chunk
  *
  * @category Metar
- * @package  ReportDecoder\Decoders\MetarDecoders
+ * @package  ReportDecoder\Decoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeDateTime extends Decoder implements DecoderInterface
+class DecodeType extends Decoder implements DecoderInterface
 {
     /**
      * Returns the expression for matching the chunk
@@ -36,7 +35,7 @@ class DecodeDateTime extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        return '/^([0-9]{2})([0-9]{2})([0-9]{2})Z/';
+        return '/^((METAR|TAF|SPECI)( (COR|AMD)){0,1})|(PROV TAF)/';
     }
 
     /**
@@ -56,20 +55,18 @@ class DecodeDateTime extends Decoder implements DecoderInterface
         if (!$match) {
             $result = null;
         } else {
-            $datetime = new EntityDateTime($match[2], $match[2] . ':' . $match[3]);
-            $decoded->setDateTime(datetime);
+            $decoded->setType($match[0]);
 
             $result = array(
                 'text' => $match[0],
-                'tip' => 'Weather observed '
-                    . $datetime->value() . ' UTC'
+                'tip' => 'Type of report'
             );
         }
 
         return array(
-            'name' => 'datetime',
+            'name' => 'type',
             'result' => $result,
-            'report' => $report
+            'report' => $report,
         );
     }
 }

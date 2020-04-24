@@ -18,9 +18,13 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 
 use ReportDecoder\ReportTypes\MetarDecoder;
 use ReportDecoder\ReportTypes\TafDecoder;
-use ReportDecoder\Decoders\MetarDecoders\DecodeType;
-use ReportDecoder\Entity\MetarEntities\DecodedMetar;
-use ReportDecoder\Entity\TafEntities\DecodedTaf;
+use ReportDecoder\Decoders\DecodeType;
+use ReportDecoder\Entity\Value;
+use ReportDecoder\Entity\DecodedMetar;
+use ReportDecoder\Entity\DecodedTaf;
+
+$decoder = new ReportDecoder();
+var_dump($decoder->getDecodedReport('TAF CYBW 212338Z 091212 26020G30KT P6SM SCT100 TEMPO 2200/2202 BKN100 BECMG 2200/2202 30015KT FM220200 30015KT P6SM SKC RMK FCST BASED ON AUTO OBS. NXT FCST WILL BE ISSUED AT 221145Z'));
 
 /**
  * Decodes a Report
@@ -34,7 +38,7 @@ use ReportDecoder\Entity\TafEntities\DecodedTaf;
 class ReportDecoder
 {
     private $_decoded = null;
-    private $_report_type;
+    private $_report_type = Value::REPORT_METAR;
 
     /**
      * Gets the decoded report
@@ -54,27 +58,22 @@ class ReportDecoder
             // Get the report type to determine which decoder chain to use
             $type_decoder = new DecodeType();
 
-            if (!preg_match($type_decoder->getExpression(), $clean_report, $match) || is_null($match[2])) {
-                $this->_report_type = 'metar'; // Assume metar by default
-            } else {
+            if (preg_match($type_decoder->getExpression(), $clean_report, $match) && !is_null($match[2])) {
                 $this->_report_type = strtolower($match[2]);
             }
         } else {
             $this->_report_type = $report_type;
         }
 
-        if ($this->_report_type == 'metar') {
+        if ($this->_report_type == Value::REPORT_METAR) {
             $this->_decoded = new DecodedMetar($report);
-
-            $metar = new MetarDecoder($this->_decoded);
-            $metar->consume($clean_report);
+            $decoder = new MetarDecoder($this->_decoded);
         } else {
             $this->_decoded = new DecodedTaf($report);
-
-            $taf = new TafDecoder($this->_decoded);
-            $taf->consume($clean_report);
+            $decoder = new TafDecoder($this->_decoded);
         }
 
+        $decoder->consume($clean_report);
         return $this->_decoded;
     }
 }

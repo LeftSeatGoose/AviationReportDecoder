@@ -6,7 +6,7 @@
  * PHP version 7.2
  *
  * @category Metar
- * @package  ReportDecoder\TypeDecoder
+ * @package  ReportDecoder\ReportTypes
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
@@ -14,7 +14,7 @@
 
 namespace ReportDecoder\ReportTypes;
 
-use ReportDecoder\Decoders\MetarDecoders\DecodeType;
+use ReportDecoder\Decoders\DecodeType;
 use ReportDecoder\Decoders\MetarDecoders\DecodeICAO;
 use ReportDecoder\Decoders\MetarDecoders\DecodeDateTime;
 use ReportDecoder\Decoders\MetarDecoders\DecodeReporter;
@@ -32,7 +32,7 @@ use ReportDecoder\Exceptions\DecoderException;
  * Includes the decoder chain for decoding a metar string
  *
  * @category Metar
- * @package  ReportDecoder\TypeDecoder
+ * @package  ReportDecoder\ReportTypes
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder

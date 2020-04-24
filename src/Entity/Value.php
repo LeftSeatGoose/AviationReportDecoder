@@ -25,6 +25,17 @@ namespace ReportDecoder\Entity;
  */
 abstract class Value
 {
+    public const REPORT_METAR = 'metar';
+    public const REPORT_TAF = 'taf';
+
+    public const UNIT_HPA = 'hPa';
+    public const UNIT_INHG = 'inHg';
+    public const UNIT_SM = 'SM';
+    public const UNIT_KM = 'KM';
+    public const UNIT_KT = 'KT';
+    public const UNIT_MPH = 'MPH';
+    public const UNIT_KPH = 'KPH';
+
     private const WEATHER_TEXT = array(
         'P' => 'More than',
         'M' => 'Less than',
@@ -61,16 +72,8 @@ abstract class Value
         'DS' => 'Sandstorm'
     );
 
-    public const UNIT_HPA = 'hPa';
-    public const UNIT_INHG = 'inHg';
-    public const UNIT_SM = 'SM';
-    public const UNIT_KM = 'KM';
-    public const UNIT_KT = 'KT';
-    public const UNIT_MPH = 'MPH';
-    public const UNIT_KPH = 'KPH';
-
     /**
-     * Formats a metar int as a php int
+     * Formats a report int as a php int
      * 
      * @param String $value Int to format
      * 

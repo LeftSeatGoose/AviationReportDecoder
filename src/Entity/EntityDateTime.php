@@ -5,19 +5,19 @@
  *
  * PHP version 7.2
  *
- * @category Metar
+ * @category Entity
  * @package  ReportDecoder\Entity
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Entity\MetarEntities;
+namespace ReportDecoder\Entity;
 
 /**
  * DateTime information
  *
- * @category Metar
+ * @category Entity
  * @package  ReportDecoder\Entity
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
@@ -56,7 +56,7 @@ class EntityDateTime
      * 
      * @return String
      */
-    public function value($format = 'Y-m-d H:i:s')
+    public function value($format = 'Y-m-d H:i')
     {
         return $this->_datetime->format($format);
     }

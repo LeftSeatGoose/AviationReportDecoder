@@ -1,11 +1,11 @@
 <?php
 
 /**
- * DecodeVisibility.php
+ * DecodeWind.php
  *
  * PHP version 7.2
  *
- * @category Metar
+ * @category Taf
  * @package  ReportDecoder\Decoders\MetarDecoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
@@ -16,20 +16,20 @@ namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
-use ReportDecoder\Entity\EntityVisibility;
+use ReportDecoder\Entity\EntityWind;
 use ReportDecoder\Entity\Value;
 use ReportDecoder\Exceptions\DecoderException;
 
 /**
- * Decodes Visibility chunk
+ * Decodes Wind chunk
  *
- * @category Metar
+ * @category Taf
  * @package  ReportDecoder\Decoders\MetarDecoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeVisibility extends Decoder implements DecoderInterface
+class DecodeWind extends Decoder implements DecoderInterface
 {
     /**
      * Returns the expression for matching the chunk
@@ -38,9 +38,10 @@ class DecodeVisibility extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        return '/^(CAVOK|([0-9]{4})(NDV)?|M?([0-9]{0,2}) ?(([1357])\/(2|4|8|16))?'
-            . '(SM)|( ([0-9]{4})(N|NE|E|SE|S|SW|W|NW)?)|([0-9][05])(KM)?(NDV)?)/';
+        return '/^([0-9]{3}|VRB)?([0-9]{2,3})(G?([0-9]{2,3}))'
+            . '?(KT|MPH|KPH)( ([0-9]{3})V([0-9]{3}))?/';
     }
+
     /**
      * Parses the chunk using the expression
      * 
@@ -59,41 +60,42 @@ class DecodeVisibility extends Decoder implements DecoderInterface
             throw new DecoderException(
                 $report,
                 $result['report'],
-                'Bad format for visiblity information',
+                'Bad format for wind information',
                 $this
             );
         } else {
-            $cavok = false;
-
-            if (strtolower($match[0]) == 'cavok') {
-                $decoded->setCavok(true);
-            } else {
-                $decoded->setCavok(false);
-                $unit = Value::UNIT_SM;
-                $distance = $match[4];
-
-                if (isset($match[13])) {
-                    $unit = Value::UNIT_KM;
-                    $distance = $match[12];
-                }
-
-                $visiblity = new EntityVisibility(
+            $decoded->setSurfaceWind(
+                new EntityWind(
                     array(
-                        'visibility' => Value::toInt($distance),
-                        'unit' => $unit
+                        'text' => $match[0],
+                        'direction' => $match[1],
+                        'speed' => Value::toInt($match[2]),
+                        'gust' => Value::toInt($match[4]),
+                        'unit' => $match[5],
+                        'variable' => isset($match[6]),
+                        'var_from' => isset($match[6]) ? $match[7] : 0,
+                        'var_to' => isset($match[6]) ? $match[8] : 0
                     )
-                );
-                $decoded->setVisibility($visiblity);
+                )
+            );
 
-                $result = array(
-                    'text' => $match[0],
-                    'tip' => 'Ground visibility is ' . $match[0]
-                );
+            $tip = 'Wind direction: ' . trim($match[1]) . '°, ';
+            if (isset($match[6])) {
+                $tip .= 'Variable from ' . $match[7] . '° to ' . $match[8] . '°, ';
             }
+            $tip .= 'Wind speed: ' . Value::toInt($match[2]) . $match[5];
+            if (!empty(Value::toInt($match[4]))) {
+                $tip .=  ', Wind gust: ' . Value::toInt($match[4]) . $match[5];
+            }
+
+            $result = array(
+                'text' => $match[0],
+                'tip' => $tip
+            );
         }
 
         return array(
-            'name' => 'visibility',
+            'name' => 'wind',
             'result' => $result,
             'report' => $report,
         );

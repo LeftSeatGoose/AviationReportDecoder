@@ -5,19 +5,19 @@
  *
  * PHP version 7.2
  *
- * @category Metar
+ * @category Entity
  * @package  ReportDecoder\Entity
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Entity\MetarEntities;
+namespace ReportDecoder\Entity;
 
 /**
  * Visibility information
  *
- * @category Metar
+ * @category Entity
  * @package  ReportDecoder\Entity
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0

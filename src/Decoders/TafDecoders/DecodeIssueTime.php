@@ -5,29 +5,29 @@
  *
  * PHP version 7.2
  *
- * @category Metar
- * @package  ReportDecoder\Decoders\MetarDecoders
+ * @category Taf
+ * @package  ReportDecoder\Decoders\TafDecoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Decoders\MetarDecoders;
+namespace ReportDecoder\Decoders\TafDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
 use ReportDecoder\Entity\EntityDateTime;
 
 /**
- * Decodes DateTime chunk
+ * Decodes IssueTime chunk
  *
- * @category Metar
- * @package  ReportDecoder\Decoders\MetarDecoders
+ * @category Taf
+ * @package  ReportDecoder\Decoders\TafDecoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeDateTime extends Decoder implements DecoderInterface
+class DecodeIssueTime extends Decoder implements DecoderInterface
 {
     /**
      * Returns the expression for matching the chunk
@@ -42,8 +42,8 @@ class DecodeDateTime extends Decoder implements DecoderInterface
     /**
      * Parses the chunk using the expression
      * 
-     * @param String       $report  Remaining report string
-     * @param DecodedMetar $decoded DecodedMetar object
+     * @param String     $report  Remaining report string
+     * @param DecodedTaf $decoded DecodedTaf object
      * 
      * @return Array
      */
@@ -56,18 +56,23 @@ class DecodeDateTime extends Decoder implements DecoderInterface
         if (!$match) {
             $result = null;
         } else {
-            $datetime = new EntityDateTime($match[2], $match[2] . ':' . $match[3]);
-            $decoded->setDateTime(datetime);
+            $decoded->setIssueTime(
+                new EntityDateTime(
+                    $match[2],
+                    $match[2] . ':' . $match[3]
+                )
+            );
 
+            $date = new \DateTime($match[2] . ':' . $match[3]);
             $result = array(
                 'text' => $match[0],
-                'tip' => 'Weather observed '
-                    . $datetime->value() . ' UTC'
+                'tip' => 'Report issued at '
+                    . $date->format('Y-m-d H:i') . ' UTC'
             );
         }
 
         return array(
-            'name' => 'datetime',
+            'name' => 'issuetime',
             'result' => $result,
             'report' => $report
         );

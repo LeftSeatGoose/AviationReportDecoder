@@ -5,7 +5,7 @@
  *
  * PHP version 7.2
  *
- * @category Metar
+ * @category Exceptions
  * @package  ReportDecoder\Exceptions
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
@@ -17,7 +17,7 @@ namespace ReportDecoder\Exceptions;
 /**
  * Decodes Weather chunk
  *
- * @category Metar
+ * @category Exceptions
  * @package  ReportDecoder\Exceptions
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0

@@ -5,7 +5,7 @@
  *
  * PHP version 7.2
  *
- * @category Metar
+ * @category Decoders
  * @package  ReportDecoder\Decoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
@@ -20,7 +20,7 @@ use ReportDecoder\Decoders\DecoderInterface;
 /**
  * Decodes Type chunk
  *
- * @category Metar
+ * @category Decoders
  * @package  ReportDecoder\Decoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
@@ -41,8 +41,8 @@ class DecodeType extends Decoder implements DecoderInterface
     /**
      * Parses the chunk using the expression
      * 
-     * @param String       $report  Remaining report string
-     * @param DecodedMetar $decoded DecodedMetar object
+     * @param String        $report  Remaining report string
+     * @param DecodedReport $decoded DecodedReport object
      * 
      * @return Array
      */

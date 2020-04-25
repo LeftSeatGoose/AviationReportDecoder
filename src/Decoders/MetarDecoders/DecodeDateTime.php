@@ -57,7 +57,7 @@ class DecodeDateTime extends Decoder implements DecoderInterface
             $result = null;
         } else {
             $datetime = new EntityDateTime($match[2], $match[2] . ':' . $match[3]);
-            $decoded->setDateTime(datetime);
+            $decoded->setDateTime($datetime);
 
             $result = array(
                 'text' => $match[0],

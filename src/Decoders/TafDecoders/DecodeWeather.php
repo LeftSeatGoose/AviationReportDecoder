@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DecodeDateTime.php
+ * DecodeWeather.php
  *
  * PHP version 7.2
  *
@@ -16,10 +16,10 @@ namespace ReportDecoder\Decoders\TafDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
-use ReportDecoder\Entity\EntityDateTime;
+use ReportDecoder\Entity\Value;
 
 /**
- * Decodes IssueTime chunk
+ * Decodes Weather chunk
  *
  * @category Taf
  * @package  ReportDecoder\Decoders\TafDecoders
@@ -27,8 +27,21 @@ use ReportDecoder\Entity\EntityDateTime;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeIssueTime extends Decoder implements DecoderInterface
+class DecodeWeather extends Decoder implements DecoderInterface
 {
+    private static $_carac_dic = array(
+        'TS', 'FZ', 'SH', 'BL', 'DR', 'MI', 'BC', 'PR',
+    );
+
+    private static $_type_dic = array(
+        'DZ', 'RA', 'SN', 'SG',
+        'PL', 'DS', 'GR', 'GS',
+        'UP', 'IC', 'FG', 'BR',
+        'SA', 'DU', 'HZ', 'FU',
+        'VA', 'PY', 'DU', 'PO',
+        'SQ', 'FC', 'DS', 'SS'
+    );
+
     /**
      * Returns the expression for matching the chunk
      * 
@@ -36,9 +49,13 @@ class DecodeIssueTime extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        return '/^([0-9]{2})([0-9]{2})([0-9]{2})Z/';
-    }
+        $carac_regexp = implode('|', self::$_carac_dic);
+        $type_regexp = implode('|', self::$_type_dic);
+        $pw_regexp = "([-+]|VC)?($carac_regexp)?($type_regexp)"
+            . "?($type_regexp)?($type_regexp)?";
 
+        return "/^($pw_regexp )?($pw_regexp )?($pw_regexp )?/";
+    }
     /**
      * Parses the chunk using the expression
      * 
@@ -53,23 +70,20 @@ class DecodeIssueTime extends Decoder implements DecoderInterface
         $match = $result['match'];
         $report = $result['report'];
 
-        if (!$match) {
+        if (!$match || (isset($match[0]) && $match[0] == '')) {
             $result = null;
         } else {
-            $datetime = new EntityDateTime($match[2], $match[2] . ':' . $match[3]);
-            $decoded->setIssueTime($datetime);
-
+            $decoded->setPresentWeather($match[0]);
             $result = array(
                 'text' => $match[0],
-                'tip' => 'Report issued at '
-                    . $datetime->value() . ' UTC'
+                'tip' => Value::weatherCodeToText($match[0])
             );
         }
 
         return array(
-            'name' => 'issuetime',
+            'name' => 'weather',
             'result' => $result,
-            'report' => $report
+            'report' => $report,
         );
     }
 }

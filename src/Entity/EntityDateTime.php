@@ -31,8 +31,8 @@ class EntityDateTime
     /**
      * Construct
      * 
-     * @param Int $day  Day of observation
-     * @param Int $time Time of observation
+     * @param String $day  Day of observation
+     * @param String $time Time of observation
      */
     public function __construct($day, $time)
     {

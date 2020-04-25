@@ -35,6 +35,14 @@ class DecodedTaf extends DecodedReport
 
     private $_surface_wind;
 
+    private $_cavok;
+
+    private $_visibility;
+
+    private $_present_weather;
+
+    private $_clouds;
+
     /**
      * Sets the ICAO
      * 
@@ -121,5 +129,93 @@ class DecodedTaf extends DecodedReport
     public function getSurfaceWind()
     {
         return $this->_surface_wind;
+    }
+
+    /**
+     * Sets the Visibility
+     * 
+     * @param EntityVisibility $visibility Visiblity
+     * 
+     * @return Void
+     */
+    public function setVisibility(EntityVisibility $visibility)
+    {
+        $this->_visibility = $visibility;
+    }
+
+    /**
+     * Gets the visibility entity
+     * 
+     * @return EntityVisibility
+     */
+    public function getVisibility()
+    {
+        return $this->_visibility;
+    }
+
+    /**
+     * Sets if station is CAVOK
+     * 
+     * @param Boolean $cavok Cavok
+     * 
+     * @return Void
+     */
+    public function setCavok($cavok)
+    {
+        $this->_cavok = $cavok;
+    }
+
+    /**
+     * Gets if the station is CAVOK
+     * 
+     * @return String
+     */
+    public function getCavok()
+    {
+        return $this->_cavok;
+    }
+
+    /**
+     * Gets present weather
+     * 
+     * @return String
+     */
+    public function getPresentWeather()
+    {
+        return $this->_present_weather;
+    }
+
+    /**
+     * Sets the Present Weather
+     * 
+     * @param String $weather Present Weather
+     * 
+     * @return Void
+     */
+    public function setPresentWeather($weather)
+    {
+        $this->_present_weather = $weather;
+    }
+
+    /**
+     * Gets the clouds
+     * 
+     * @return String
+     */
+    public function getClouds()
+    {
+        return $this->_clouds;
+    }
+
+    /**
+     * Sets the Clouds
+     * 
+     * @param Array $clouds clouds
+     * 
+     * @return Void
+     */
+    public function setClouds(array $clouds)
+    {
+        $this->_clouds = $clouds;
     }
 }

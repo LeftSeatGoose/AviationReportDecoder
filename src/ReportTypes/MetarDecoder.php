@@ -26,7 +26,7 @@ use ReportDecoder\Decoders\MetarDecoders\DecodeCloud;
 use ReportDecoder\Decoders\MetarDecoders\DecodeTemp;
 use ReportDecoder\Decoders\MetarDecoders\DecodeQNH;
 use ReportDecoder\Decoders\MetarDecoders\DecodeRemarks;
-use ReportDecoder\Exceptions\DecoderException;
+use ReportDecoder\ReportTypes\TypeDecoderInterface;
 
 /**
  * Includes the decoder chain for decoding a metar string
@@ -37,20 +37,20 @@ use ReportDecoder\Exceptions\DecoderException;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class MetarDecoder
+class MetarDecoder extends TypeDecoder implements TypeDecoderInterface
 {
 
-    private $_decoder = null;
-    private $_decoded_metar = null;
+    protected $_decoder = null;
+    protected $_decoded_report = null;
 
     /**
      * Constructor
      * 
      * @param DecodedMetar $decoded_metar Object decoded data is stored in
      */
-    public function __construct($decoded_metar)
+    public function __construct($decoded_report)
     {
-        $this->_decoded_metar = $decoded_metar;
+        $this->_decoded_report = $decoded_report;
 
         $this->_decoder = array(
             new DecodeType(),
@@ -66,37 +66,5 @@ class MetarDecoder
             new DecodeQNH(),
             new DecodeRemarks()
         );
-    }
-
-    /**
-     * Consume a chunk
-     * 
-     * @param String $report Metar to decode
-     * 
-     * @return DecodedMetar
-     */
-    public function consume($report)
-    {
-        foreach ($this->_decoder as $chunk) {
-            try {
-                $parse_attempt = $chunk->parse($report, $this->_decoded_metar);
-            } catch (DecoderException $ex) {
-                $this->decoder->addDecodingException($ex);
-            }
-
-            if (is_null($parse_attempt['result'])) {
-                continue;
-            }
-
-            $this->_decoded_metar->addReportChunk($parse_attempt['result']);
-
-            if (!empty($parse_attempt['report'])) {
-                $report = $parse_attempt['report'];
-            } else {
-                break;
-            }
-        }
-
-        return $this->_decoded_metar;
     }
 }

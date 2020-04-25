@@ -5,14 +5,14 @@
  *
  * PHP version 7.2
  *
- * @category Metar
- * @package  ReportDecoder\Decoders\MetarDecoders
+ * @category Taf
+ * @package  ReportDecoder\Decoders\TafDecoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
-namespace ReportDecoder\Decoders\MetarDecoders;
+namespace ReportDecoder\Decoders\TafDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
@@ -22,8 +22,8 @@ use ReportDecoder\Exceptions\DecoderException;
 /**
  * Decodes Cloud chunk
  *
- * @category Metar
- * @package  ReportDecoder\Decoders\MetarDecoders
+ * @category Taf
+ * @package  ReportDecoder\Decoders\TafDecoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
@@ -47,8 +47,8 @@ class DecodeCloud extends Decoder implements DecoderInterface
     /**
      * Parses the chunk using the expression
      * 
-     * @param String       $report  Remaining report string
-     * @param DecodedMetar $decoded DecodedMetar object
+     * @param String     $report  Remaining report string
+     * @param DecodedTaf $decoded DecodedTaf object
      * 
      * @return Array
      */

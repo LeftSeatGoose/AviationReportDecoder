@@ -46,8 +46,6 @@ class DecodeIssueTime extends Decoder implements DecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
-     * @throws DecoderException
-     * 
      * @return Array
      */
     public function parse($report, &$decoded)
@@ -57,14 +55,22 @@ class DecodeIssueTime extends Decoder implements DecoderInterface
         $report = $result['report'];
 
         if (!$match) {
-            throw new DecoderException(
-                $report,
-                $result['report'],
-                'Bad format for issue time information',
-                $this
-            );
+            $result = null;
         } else {
-            $datetime = new EntityDateTime($match[2], $match[2] . ':' . $match[3]);
+            try {
+                $datetime = new EntityDateTime(
+                    $match[2],
+                    $match[2] . ':' . $match[3]
+                );
+            } catch (\Exception $exception) {
+                throw new DecoderException(
+                    $match[0],
+                    $report,
+                    'Bad format for issue time decoding.',
+                    $decoded
+                );
+            }
+
             $decoded->setIssueTime($datetime);
 
             $result = array(

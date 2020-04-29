@@ -60,16 +60,14 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
-     * @throws DecoderException
-     * 
-     * @return Array
+     * @return Void
      */
     public function parse($report, &$decoded)
     {
         $this->decoded_report = $decoded;
 
         $evolution = new DecodeEvolution();
-        while (!empty($has_evolution = $evolution->parse($report, $decoded)['result'])) {
+        while (!empty($evolution->parse($report, $decoded)['result'])) {
             $report = $this->consume($report);
         }
     }

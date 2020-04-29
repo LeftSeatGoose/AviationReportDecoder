@@ -58,20 +58,24 @@ class DecodeForecastPeriod extends Decoder implements DecoderInterface
         $report = $result['report'];
 
         if (!$match) {
-            throw new DecoderException(
-                $report,
-                $result['report'],
-                'Bad format for forecast period information',
-                $this
-            );
+            $result = null;
         } else {
-            // DateTime format 1
-            if (isset($match[4]) && $match[4] == '/') {
-                $from = new EntityDateTime($match[2], $match[3] . ':00');
-                $to = new EntityDateTime($match[5], $match[6] . ':00');
-            } else { // DateTime format 2
-                $from = new EntityDateTime($match[8], $match[9] . ':00');
-                $to = new EntityDateTime($match[8] + 1, $match[10] . ':00');
+            try {
+                // DateTime format 1
+                if (isset($match[4]) && $match[4] == '/') {
+                    $from = new EntityDateTime($match[2], $match[3] . ':00');
+                    $to = new EntityDateTime($match[5], $match[6] . ':00');
+                } else { // DateTime format 2
+                    $from = new EntityDateTime($match[8], $match[9] . ':00');
+                    $to = new EntityDateTime($match[8] + 1, $match[10] . ':00');
+                }
+            } catch (\Exception $exception) {
+                throw new DecoderException(
+                    $match[0],
+                    $report,
+                    'Bad format for forecast period decoding.',
+                    $decoded
+                );
             }
 
             $decoded->setValidity($from, $to);

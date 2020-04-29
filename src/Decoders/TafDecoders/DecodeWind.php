@@ -48,8 +48,6 @@ class DecodeWind extends Decoder implements DecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
-     * @throws DecoderException
-     * 
      * @return Array
      */
     public function parse($report, &$decoded)
@@ -59,12 +57,7 @@ class DecodeWind extends Decoder implements DecoderInterface
         $report = $result['report'];
 
         if (!$match) {
-            throw new DecoderException(
-                $report,
-                $result['report'],
-                'Bad format for wind information',
-                $this
-            );
+            $result = null;
         } else {
             $decoded->setSurfaceWind(
                 new EntityWind(

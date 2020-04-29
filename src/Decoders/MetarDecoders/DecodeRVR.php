@@ -47,8 +47,6 @@ class DecodeRVR extends Decoder implements DecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
-     * @throws DecoderException
-     * 
      * @return Array
      */
     public function parse($report, &$decoded)
@@ -58,12 +56,7 @@ class DecodeRVR extends Decoder implements DecoderInterface
         $report = $result['report'];
 
         if (!$match) {
-            throw new DecoderException(
-                $report,
-                $result['report'],
-                'Bad format for rvr information',
-                $this
-            );
+            $result = null;
         } else {
             if (empty($match[2])) {
                 $result = array(

@@ -38,7 +38,7 @@ interface ChunkDecoderInterface
      * 
      * @throws DecoderException
      * 
-     * @return Array
+     * @return Void
      */
     public function parse($report, &$decoded);
 }

@@ -46,8 +46,6 @@ class DecodeEvolution extends Decoder implements DecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
-     * @throws DecoderException
-     * 
      * @return Array
      */
     public function parse($report, &$decoded)
@@ -57,12 +55,7 @@ class DecodeEvolution extends Decoder implements DecoderInterface
         $report = $result['report'];
 
         if (!$match) {
-            throw new DecoderException(
-                $report,
-                $result['report'],
-                'Bad format for evolution information',
-                $this
-            );
+            $result = null;
         } else {
             // If evolution is a probability
             if (isset($match[3])) {

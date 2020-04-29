@@ -45,8 +45,6 @@ class DecodeICAO extends Decoder implements DecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
-     * @throws DecoderException
-     * 
      * @return Array
      */
     public function parse($report, &$decoded)
@@ -56,12 +54,7 @@ class DecodeICAO extends Decoder implements DecoderInterface
         $report = $result['report'];
 
         if (!$match) {
-            throw new DecoderException(
-                $report,
-                $result['report'],
-                'Bad format for icao information',
-                $this
-            );
+            $result = null;
         } else {
             $decoded->setIcao($match[0]);
             $result = array(

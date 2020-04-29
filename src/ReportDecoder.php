@@ -23,9 +23,6 @@ use ReportDecoder\Entity\Value;
 use ReportDecoder\Entity\DecodedMetar;
 use ReportDecoder\Entity\DecodedTaf;
 
-$decoder = new ReportDecoder();
-var_dump($decoder->getDecodedReport('TAF CYBW 212338Z 091212 26020G30KT P6SM SCT100 BECMG 2200/2202 30015KT FM220200 30016KT P6SM SKC PROB40 0006 2SM TSRA OVC008CB TEMPO 2200/2202 BKN100 RMK FCST BASED ON AUTO OBS. NXT FCST WILL BE ISSUED AT 221145Z'));
-
 /**
  * Decodes a Report
  *

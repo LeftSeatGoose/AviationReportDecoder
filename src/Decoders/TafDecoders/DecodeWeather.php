@@ -64,8 +64,6 @@ class DecodeWeather extends Decoder implements DecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
-     * @throws DecoderException
-     * 
      * @return Array
      */
     public function parse($report, &$decoded)
@@ -75,12 +73,7 @@ class DecodeWeather extends Decoder implements DecoderInterface
         $report = $result['report'];
 
         if (!$match || (isset($match[0]) && $match[0] == '')) {
-            throw new DecoderException(
-                $report,
-                $result['report'],
-                'Bad format for weather information',
-                $this
-            );
+            $result = null;
         } else {
             $decoded->setPresentWeather($match[0]);
             $result = array(

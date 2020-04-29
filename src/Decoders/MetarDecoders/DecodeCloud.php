@@ -50,8 +50,6 @@ class DecodeCloud extends Decoder implements DecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
-     * @throws DecoderException
-     * 
      * @return Array
      */
     public function parse($report, &$decoded)
@@ -61,12 +59,7 @@ class DecodeCloud extends Decoder implements DecoderInterface
         $report = $result['report'];
 
         if (!$match) {
-            throw new DecoderException(
-                $report,
-                $result['report'],
-                'Bad format for cloud information',
-                $this
-            );
+            $result = null;
         } else {
             $match = array_map('trim', $match);
 

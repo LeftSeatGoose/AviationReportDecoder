@@ -16,6 +16,7 @@ namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
+use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes ICAO chunk
@@ -41,8 +42,10 @@ class DecodeICAO extends Decoder implements DecoderInterface
     /**
      * Parses the chunk using the expression
      * 
-     * @param String       $report  Remaining report string
-     * @param DecodedMetar $decoded DecodedMetar object
+     * @param String        $report  Remaining report string
+     * @param DecodedReport $decoded DecodedReport object
+     * 
+     * @throws DecoderException
      * 
      * @return Array
      */
@@ -53,7 +56,12 @@ class DecodeICAO extends Decoder implements DecoderInterface
         $report = $result['report'];
 
         if (!$match) {
-            $result = null;
+            throw new DecoderException(
+                $report,
+                $result['report'],
+                'Bad format for icao information',
+                $this
+            );
         } else {
             $decoded->setIcao($match[0]);
             $result = array(

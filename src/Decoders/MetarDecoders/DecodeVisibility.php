@@ -41,11 +41,14 @@ class DecodeVisibility extends Decoder implements DecoderInterface
         return '/^(CAVOK|([0-9]{4})(NDV)?|M?([0-9]{0,2}) ?(([1357])\/(2|4|8|16))?'
             . '(SM)|( ([0-9]{4})(N|NE|E|SE|S|SW|W|NW)?)|([0-9][05])(KM)?(NDV)?)/';
     }
+
     /**
      * Parses the chunk using the expression
      * 
-     * @param String       $report  Remaining report string
-     * @param DecodedMetar $decoded DecodedMetar object
+     * @param String        $report  Remaining report string
+     * @param DecodedReport $decoded DecodedReport object
+     * 
+     * @throws DecoderException
      * 
      * @return Array
      */

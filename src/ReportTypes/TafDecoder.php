@@ -17,12 +17,13 @@ namespace ReportDecoder\ReportTypes;
 use ReportDecoder\Decoders\DecodeType;
 use ReportDecoder\Decoders\TafDecoders\DecodeICAO;
 use ReportDecoder\Decoders\TafDecoders\DecodeIssueTime;
-use ReportDecoder\Decoders\TafDecoders\DecodeValidity;
+use ReportDecoder\Decoders\TafDecoders\DecodeForecastPeriod;
 use ReportDecoder\Decoders\TafDecoders\DecodeWind;
 use ReportDecoder\Decoders\TafDecoders\DecodeVisibility;
 use ReportDecoder\Decoders\TafDecoders\DecodeWeather;
 use ReportDecoder\Decoders\TafDecoders\DecodeCloud;
-use ReportDecoder\Decoders\TafDecoders\DecodeSigChangeChunk;
+use ReportDecoder\Decoders\TafDecoders\EvolutionDecoder;
+use ReportDecoder\Decoders\TafDecoders\DecodeRemarks;
 
 /**
  * Includes the decoder chain for decoding a taf string
@@ -38,22 +39,23 @@ class TafDecoder extends TypeDecoder implements TypeDecoderInterface
     /**
      * Constructor
      * 
-     * @param DecodedTaf $decoded_taf Object decoded data is stored in
+     * @param DecodedTaf $decoded_report Object decoded data is stored in
      */
     public function __construct($decoded_report)
     {
-        $this->_decoded_report = $decoded_report;
+        $this->decoded_report = $decoded_report;
 
-        $this->_decoder = array(
+        $this->decoder = array(
             new DecodeType(),
             new DecodeICAO(),
             new DecodeIssueTime(),
-            new DecodeValidity(),
+            new DecodeForecastPeriod(),
             new DecodeWind(),
             new DecodeVisibility(),
             new DecodeWeather(),
             new DecodeCloud(),
-            new DecodeSigChangeChunk()
+            new EvolutionDecoder(),
+            new DecodeRemarks()
         );
     }
 }

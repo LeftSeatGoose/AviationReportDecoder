@@ -40,19 +40,19 @@ use ReportDecoder\ReportTypes\TypeDecoderInterface;
 class MetarDecoder extends TypeDecoder implements TypeDecoderInterface
 {
 
-    protected $_decoder = null;
-    protected $_decoded_report = null;
+    protected $decoder = null;
+    protected $decoded_report = null;
 
     /**
      * Constructor
      * 
-     * @param DecodedMetar $decoded_metar Object decoded data is stored in
+     * @param DecodedMetar $decoded_report Object decoded data is stored in
      */
     public function __construct($decoded_report)
     {
-        $this->_decoded_report = $decoded_report;
+        $this->decoded_report = $decoded_report;
 
-        $this->_decoder = array(
+        $this->decoder = array(
             new DecodeType(),
             new DecodeICAO(),
             new DecodeDateTime(),

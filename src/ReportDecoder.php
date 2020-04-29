@@ -24,8 +24,7 @@ use ReportDecoder\Entity\DecodedMetar;
 use ReportDecoder\Entity\DecodedTaf;
 
 $decoder = new ReportDecoder();
-//var_dump($decoder->getDecodedReport('TAF CYBW 212338Z 091212 26020G30KT P6SM SCT100 PROB40 0006 2SM TSRA OVC008CB TEMPO 2200/2202 BKN100 BECMG 2200/2202 30015KT FM220200 30015KT P6SM SKC RMK FCST BASED ON AUTO OBS. NXT FCST WILL BE ISSUED AT 221145Z'));
-var_dump($decoder->getDecodedReport('CYYC 250600Z 08003KT 060V150 15SM 06/M08 A3002 RMK SLP189'));
+var_dump($decoder->getDecodedReport('TAF CYBW 212338Z 091212 26020G30KT P6SM SCT100 BECMG 2200/2202 30015KT FM220200 30016KT P6SM SKC PROB40 0006 2SM TSRA OVC008CB TEMPO 2200/2202 BKN100 RMK FCST BASED ON AUTO OBS. NXT FCST WILL BE ISSUED AT 221145Z'));
 
 /**
  * Decodes a Report
@@ -59,7 +58,10 @@ class ReportDecoder
             // Get the report type to determine which decoder chain to use
             $type_decoder = new DecodeType();
 
-            if (preg_match($type_decoder->getExpression(), $clean_report, $match) && !is_null($match[2])) {
+            if (
+                preg_match($type_decoder->getExpression(), $clean_report, $match)
+                && !is_null($match[2])
+            ) {
                 $this->_report_type = strtolower($match[2]);
             }
         } else {

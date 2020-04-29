@@ -1,11 +1,11 @@
 <?php
 
 /**
- * DecoderInterface.php
+ * ChunkDecoderInterface.php
  *
  * PHP version 7.2
  *
- * @category ReportDecoder
+ * @category Decoders
  * @package  ReportDecoder\Decoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
@@ -15,22 +15,20 @@
 namespace ReportDecoder\Decoders;
 
 /**
- * Interface for the decoding class
+ * Interface for chunk decoders
  *
- * @category ReportDecoder
+ * @category Decoders
  * @package  ReportDecoder\Decoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-interface DecoderInterface
+interface ChunkDecoderInterface
 {
     /**
-     * Returns the expression for matching the chunk
-     * 
-     * @return String
+     * Constructor
      */
-    public function getExpression();
+    public function __construct();
 
     /**
      * Parses the chunk using the expression

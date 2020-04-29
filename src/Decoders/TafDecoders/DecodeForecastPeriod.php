@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DecodeVisibility.php
+ * DecodeForecastPeriod.php
  *
  * PHP version 7.2
  *
@@ -14,15 +14,13 @@
 
 namespace ReportDecoder\Decoders\TafDecoders;
 
-use Exception;
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
-use ReportDecoder\Entity\EntityVisibility;
-use ReportDecoder\Entity\Value;
+use ReportDecoder\Entity\EntityDateTime;
 use ReportDecoder\Exceptions\DecoderException;
 
 /**
- * Decodes Visibility chunk
+ * Decodes Forecast Period chunk
  *
  * @category Taf
  * @package  ReportDecoder\Decoders\TafDecoders
@@ -30,7 +28,7 @@ use ReportDecoder\Exceptions\DecoderException;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeVisibility extends Decoder implements DecoderInterface
+class DecodeForecastPeriod extends Decoder implements DecoderInterface
 {
     /**
      * Returns the expression for matching the chunk
@@ -39,7 +37,8 @@ class DecodeVisibility extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        return "/^(CAVOK|([0-9]{4})|M?(P)?([0-9]{0,2}) ?(([1357])\/(2|4|8|16))?SM)/";
+        return '/^(([0-9]{2})([0-9]{2})(\/)([0-9]{2})'
+            . '([0-9]{2}))|(([0-9]{2})([0-9]{2})([0-9]{2}))(?!Z)/';
     }
 
     /**
@@ -62,43 +61,32 @@ class DecodeVisibility extends Decoder implements DecoderInterface
             throw new DecoderException(
                 $report,
                 $result['report'],
-                'Bad format for visibility information',
+                'Bad format for forecast period information',
                 $this
             );
         } else {
-            $cavok = false;
-
-            if (strtolower($match[0]) == 'cavok') {
-                $decoded->setCavok(true);
-            } else {
-                $decoded->setCavok(false);
-                $unit = Value::UNIT_SM;
-                $distance = $match[4];
-
-                if (isset($match[13])) {
-                    $unit = Value::UNIT_KM;
-                    $distance = $match[12];
-                }
-
-                $visiblity = new EntityVisibility(
-                    array(
-                        'visibility' => Value::toInt($distance),
-                        'unit' => $unit
-                    )
-                );
-                $decoded->setVisibility($visiblity);
-
-                $result = array(
-                    'text' => $match[0],
-                    'tip' => 'Ground visibility is ' . $match[0]
-                );
+            // DateTime format 1
+            if (isset($match[4]) && $match[4] == '/') {
+                $from = new EntityDateTime($match[2], $match[3] . ':00');
+                $to = new EntityDateTime($match[5], $match[6] . ':00');
+            } else { // DateTime format 2
+                $from = new EntityDateTime($match[8], $match[9] . ':00');
+                $to = new EntityDateTime($match[8] + 1, $match[10] . ':00');
             }
+
+            $decoded->setValidity($from, $to);
+            $result = array(
+                'text' => $match[0],
+                'tip' => 'Report valid from '
+                    . $from->value() . 'UTC to '
+                    . $to->value() . 'UTC'
+            );
         }
 
         return array(
-            'name' => 'visibility',
+            'name' => 'forecast_period',
             'result' => $result,
-            'report' => $report,
+            'report' => $report
         );
     }
 }

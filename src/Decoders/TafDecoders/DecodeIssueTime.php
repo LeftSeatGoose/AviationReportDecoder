@@ -17,6 +17,7 @@ namespace ReportDecoder\Decoders\TafDecoders;
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
 use ReportDecoder\Entity\EntityDateTime;
+use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes IssueTime chunk
@@ -42,8 +43,10 @@ class DecodeIssueTime extends Decoder implements DecoderInterface
     /**
      * Parses the chunk using the expression
      * 
-     * @param String     $report  Remaining report string
-     * @param DecodedTaf $decoded DecodedTaf object
+     * @param String        $report  Remaining report string
+     * @param DecodedReport $decoded DecodedReport object
+     * 
+     * @throws DecoderException
      * 
      * @return Array
      */
@@ -54,7 +57,12 @@ class DecodeIssueTime extends Decoder implements DecoderInterface
         $report = $result['report'];
 
         if (!$match) {
-            $result = null;
+            throw new DecoderException(
+                $report,
+                $result['report'],
+                'Bad format for issue time information',
+                $this
+            );
         } else {
             $datetime = new EntityDateTime($match[2], $match[2] . ':' . $match[3]);
             $decoded->setIssueTime($datetime);

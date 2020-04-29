@@ -49,8 +49,10 @@ class DecodeQNH extends Decoder implements DecoderInterface
     /**
      * Parses the chunk using the expression
      * 
-     * @param String       $report  Remaining report string
-     * @param DecodedMetar $decoded DecodedMetar object
+     * @param String        $report  Remaining report string
+     * @param DecodedReport $decoded DecodedReport object
+     * 
+     * @throws DecoderException
      * 
      * @return Array
      */

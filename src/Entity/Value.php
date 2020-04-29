@@ -36,6 +36,13 @@ abstract class Value
     public const UNIT_MPH = 'MPH';
     public const UNIT_KPH = 'KPH';
 
+    public const EVOLUTION_TEXT = array(
+        'BECMG' => 'Becoming',
+        'TEMPO' => 'Temporary',
+        'FM' => 'From',
+        'PROB' => 'Probability'
+    );
+
     private const WEATHER_TEXT = array(
         'P' => 'More than',
         'M' => 'Less than',

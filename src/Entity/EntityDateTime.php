@@ -36,7 +36,6 @@ class EntityDateTime
      */
     public function __construct($day, $time)
     {
-
         $now = new \DateTime();
         $datetime = sprintf(
             '%s-%s-%s %sZ',

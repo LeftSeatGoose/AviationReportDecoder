@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DecodeSigChangeChunk.php
+ * DecodePeriod.php
  *
  * PHP version 7.2
  *
@@ -16,10 +16,10 @@ namespace ReportDecoder\Decoders\TafDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
-use ReportDecoder\Decoders\TafDecoders\DecoderChunks\SigChange\SigChangeChunk;
+use ReportDecoder\Exceptions\DecoderException;
 
 /**
- * Decodes Signifigant Change chunk
+ * Decodes Period chunk
  *
  * @category Taf
  * @package  ReportDecoder\Decoders\TafDecoders
@@ -27,7 +27,7 @@ use ReportDecoder\Decoders\TafDecoders\DecoderChunks\SigChange\SigChangeChunk;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeSigChangeChunk extends Decoder implements DecoderInterface
+class DecodePeriod extends Decoder implements DecoderInterface
 {
     /**
      * Returns the expression for matching the chunk
@@ -36,38 +36,45 @@ class DecodeSigChangeChunk extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        return '/^PROB([0-9]{2})/';
+        return '/^(([0-9]{2})([0-9]{2}))(?: )/';
     }
 
     /**
      * Parses the chunk using the expression
      * 
-     * @param String     $report  Remaining report string
-     * @param DecodedTaf $decoded DecodedTaf object
+     * @param String        $report  Remaining report string
+     * @param DecodedReport $decoded DecodedReport object
+     * 
+     * @throws DecoderException
      * 
      * @return Array
      */
     public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
-        $match = array_map('trim', $result['match']);
+        $match = $result['match'];
         $report = $result['report'];
 
         if (!$match) {
-            $result = null;
+            throw new DecoderException(
+                $report,
+                $result['report'],
+                'Bad format for validity information',
+                $this
+            );
         } else {
-            // Decode the rest of this chunk
-
             $result = array(
-                'text' => $match[0],
-                'tip' => $match[1] . '% probability of significant change to mean conditions'
+                'text' => $match[1],
+                'tip' => 'Valid from '
+                    . $match[2] . 'UTC to '
+                    . $match[3] . 'UTC'
             );
         }
 
         return array(
-            'name' => 'significant_change',
+            'name' => 'period',
             'result' => $result,
-            'report' => $report,
+            'report' => $report
         );
     }
 }

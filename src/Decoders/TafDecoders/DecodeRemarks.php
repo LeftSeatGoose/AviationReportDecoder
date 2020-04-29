@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DecodeVisibility.php
+ * DecodeRemarks.php
  *
  * PHP version 7.2
  *
@@ -14,15 +14,12 @@
 
 namespace ReportDecoder\Decoders\TafDecoders;
 
-use Exception;
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
-use ReportDecoder\Entity\EntityVisibility;
-use ReportDecoder\Entity\Value;
 use ReportDecoder\Exceptions\DecoderException;
 
 /**
- * Decodes Visibility chunk
+ * Decodes Remarks chunk
  *
  * @category Taf
  * @package  ReportDecoder\Decoders\TafDecoders
@@ -30,7 +27,7 @@ use ReportDecoder\Exceptions\DecoderException;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodeVisibility extends Decoder implements DecoderInterface
+class DecodeRemarks extends Decoder implements DecoderInterface
 {
     /**
      * Returns the expression for matching the chunk
@@ -39,7 +36,7 @@ class DecodeVisibility extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        return "/^(CAVOK|([0-9]{4})|M?(P)?([0-9]{0,2}) ?(([1357])\/(2|4|8|16))?SM)/";
+        return '/RMK.*/';
     }
 
     /**
@@ -62,41 +59,19 @@ class DecodeVisibility extends Decoder implements DecoderInterface
             throw new DecoderException(
                 $report,
                 $result['report'],
-                'Bad format for visibility information',
+                'Bad format for remarks information',
                 $this
             );
         } else {
-            $cavok = false;
-
-            if (strtolower($match[0]) == 'cavok') {
-                $decoded->setCavok(true);
-            } else {
-                $decoded->setCavok(false);
-                $unit = Value::UNIT_SM;
-                $distance = $match[4];
-
-                if (isset($match[13])) {
-                    $unit = Value::UNIT_KM;
-                    $distance = $match[12];
-                }
-
-                $visiblity = new EntityVisibility(
-                    array(
-                        'visibility' => Value::toInt($distance),
-                        'unit' => $unit
-                    )
-                );
-                $decoded->setVisibility($visiblity);
-
-                $result = array(
-                    'text' => $match[0],
-                    'tip' => 'Ground visibility is ' . $match[0]
-                );
-            }
+            $decoded->setRemarks($match[0]);
+            $result = array(
+                'text' => $match[0],
+                'tip' => 'Remarks'
+            );
         }
 
         return array(
-            'name' => 'visibility',
+            'name' => 'remarks',
             'result' => $result,
             'report' => $report,
         );

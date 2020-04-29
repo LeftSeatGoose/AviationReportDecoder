@@ -1,11 +1,11 @@
 <?php
 
 /**
- * DecodedTaf.php
+ * EntityEvolution.php
  *
  * PHP version 7.2
  *
- * @category Taf
+ * @category Entity
  * @package  ReportDecoder\Entity
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
@@ -17,98 +17,137 @@ namespace ReportDecoder\Entity;
 use ReportDecoder\Entity\DecodedReport;
 
 /**
- * Decoded taf information
+ * Evolution entity
  *
- * @category Taf
+ * @category Entity
  * @package  ReportDecoder\Entity
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class DecodedTaf extends DecodedReport
+class EntityEvolution extends DecodedReport
 {
-    private $_icao;
-
-    private $_issuetime;
-
-    private $_validity;
-
+    private $_from_day;
+    private $_from_time;
+    private $_to_day;
+    private $_to_time;
+    private $_probability;
     private $_surface_wind;
-
-    private $_cavok;
-
     private $_visibility;
-
+    private $_cavok;
     private $_present_weather;
-
     private $_clouds;
 
-    private $_remarks;
-
     /**
-     * Sets the ICAO
+     * Set the evolution from date
      * 
-     * @param String $icao ICAO
+     * @param String $from_day From date
      * 
      * @return Void
      */
-    public function setIcao($icao)
+    public function setFromDay($from_day)
     {
-        $this->_icao = $icao;
+        $this->_from_day = $from_day;
     }
 
     /**
-     * Gets the station icao
+     * Get the evolution from date
      * 
      * @return String
      */
-    public function getIcao()
+    public function getFromDay()
     {
-        return $this->_icao;
+        return $this->_from_day;
     }
 
     /**
-     * Sets the IssueTime
+     * Set the evolution from time
      * 
-     * @param EntityDateTime $issuetime
+     * @param String $from_time From time
      * 
      * @return Void
      */
-    public function setIssueTime(EntityDateTime $issuetime)
+    public function setFromTime($from_time)
     {
-        $this->_issuetime = $issuetime;
+        $this->_from_time = $from_time;
     }
 
     /**
-     * Gets the EntityDateTime entity
+     * Get the evolution from time
      * 
-     * @return EntityDateTime
+     * @return String
      */
-    public function getIssueTime()
+    public function getFromTime()
     {
-        return $this->_issuetime;
+        return $this->_from_time;
     }
 
     /**
-     * Sets the Validity entity
+     * Set the evolution to date
      * 
-     * @param EntityDateTime $validity
+     * @param String $to_day To date
+     * 
+     * @return String
+     */
+    public function setToDay($to_day)
+    {
+        $this->_to_day = $to_day;
+
+        return $this;
+    }
+
+    /**
+     * Get the evolution to date
+     * 
+     * @return String
+     */
+    public function getToDay()
+    {
+        return $this->_to_day;
+    }
+
+    /**
+     * Set the evolution to time
+     * 
+     * @param String $to_time To time
      * 
      * @return Void
      */
-    public function setValidity(EntityDateTime $validity)
+    public function setToTime($to_time)
     {
-        $this->_validity = $validity;
+        $this->_to_time = $to_time;
     }
 
     /**
-     * Gets the Validity entity
+     * Get the evolution to time
      * 
-     * @return EntityDateTime
+     * @return String
      */
-    public function getValidity()
+    public function getToTime()
     {
-        return $this->_validity;
+        return $this->_to_time;
+    }
+
+    /**
+     * Set probability
+     * 
+     * @param EntityEvolution $probability Probability
+     * 
+     * @return Void
+     */
+    public function setProbability($probability)
+    {
+        $this->_probability = $probability;
+    }
+
+    /**
+     * Get probability
+     * 
+     * @return EntityEvolution
+     */
+    public function getProbability()
+    {
+        return $this->_probability;
     }
 
     /**
@@ -156,7 +195,7 @@ class DecodedTaf extends DecodedReport
     }
 
     /**
-     * Sets if station is CAVOK
+     * Set Cavok
      * 
      * @param Boolean $cavok Cavok
      * 
@@ -168,9 +207,9 @@ class DecodedTaf extends DecodedReport
     }
 
     /**
-     * Gets if the station is CAVOK
+     * Get Cavok
      * 
-     * @return String
+     * @return Boolean
      */
     public function getCavok()
     {
@@ -219,27 +258,5 @@ class DecodedTaf extends DecodedReport
     public function setClouds(array $clouds)
     {
         $this->_clouds = $clouds;
-    }
-
-    /**
-     * Gets the remarks
-     * 
-     * @return String
-     */
-    public function getRemarks()
-    {
-        return $this->_remarks;
-    }
-
-    /**
-     * Sets the Remarks
-     * 
-     * @param String $remarks Remarks
-     * 
-     * @return Void
-     */
-    public function setRemarks($remarks)
-    {
-        $this->_remarks = $remarks;
     }
 }

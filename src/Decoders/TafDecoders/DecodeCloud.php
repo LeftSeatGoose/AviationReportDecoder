@@ -37,18 +37,19 @@ class DecodeCloud extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        $no_cloud = '(NSC|NCD|CLR|SKC)';
-        $layer = '(VV|FEW|SCT|BKN|OVC)([0-9]{3})(CB|TCU)?';
-
-        return "/^($no_cloud|($layer)( $layer)?( $layer)?( "
-            . "$layer)?( $layer)?( $layer)?)( )/";
+        return '/^((NSC|NCD|CLR|SKC)|((VV|FEW|SCT|BKN|OVC)([0-9]{3})'
+            . '(CB|TCU)?)( (VV|FEW|SCT|BKN|OVC)([0-9]{3})(CB|TCU)?)?'
+            . '( (VV|FEW|SCT|BKN|OVC)([0-9]{3})(CB|TCU)?)?( (VV|FEW'
+            . '|SCT|BKN|OVC)([0-9]{3})(CB|TCU)?)?)/';
     }
 
     /**
      * Parses the chunk using the expression
      * 
-     * @param String     $report  Remaining report string
-     * @param DecodedTaf $decoded DecodedTaf object
+     * @param String        $report  Remaining report string
+     * @param DecodedReport $decoded DecodedReport object
+     * 
+     * @throws DecoderException
      * 
      * @return Array
      */
@@ -59,7 +60,12 @@ class DecodeCloud extends Decoder implements DecoderInterface
         $report = $result['report'];
 
         if (!$match) {
-            $result = null;
+            throw new DecoderException(
+                $report,
+                $result['report'],
+                'Bad format for cloud information',
+                $this
+            );
         } else {
             $match = array_map('trim', $match);
 

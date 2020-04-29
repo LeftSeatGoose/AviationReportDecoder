@@ -17,6 +17,7 @@ namespace ReportDecoder\Decoders\TafDecoders;
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
 use ReportDecoder\Entity\Value;
+use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes Weather chunk
@@ -56,11 +57,14 @@ class DecodeWeather extends Decoder implements DecoderInterface
 
         return "/^($pw_regexp )?($pw_regexp )?($pw_regexp )?/";
     }
+
     /**
      * Parses the chunk using the expression
      * 
-     * @param String     $report  Remaining report string
-     * @param DecodedTaf $decoded DecodedTaf object
+     * @param String        $report  Remaining report string
+     * @param DecodedReport $decoded DecodedReport object
+     * 
+     * @throws DecoderException
      * 
      * @return Array
      */
@@ -71,7 +75,12 @@ class DecodeWeather extends Decoder implements DecoderInterface
         $report = $result['report'];
 
         if (!$match || (isset($match[0]) && $match[0] == '')) {
-            $result = null;
+            throw new DecoderException(
+                $report,
+                $result['report'],
+                'Bad format for weather information',
+                $this
+            );
         } else {
             $decoded->setPresentWeather($match[0]);
             $result = array(

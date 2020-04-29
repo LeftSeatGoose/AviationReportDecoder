@@ -27,38 +27,41 @@ use ReportDecoder\Exceptions\DecoderException;
  */
 abstract class TypeDecoder
 {
-    protected $_decoder = null;
-    protected $_decoded_report = null;
+    protected $decoder = null;
+    protected $decoded_report = null;
 
     /**
      * Consume a chunk
      * 
-     * @param String $report Report to decode
+     * @param String  $report Report to decode
      * 
      * @return DecodedReport
      */
     public function consume($report)
     {
-        foreach ($this->_decoder as $chunk) {
+        foreach ($this->decoder as $chunk) {
             try {
-                $parse_attempt = $chunk->parse($report, $this->_decoded_report);
+                $parse_attempt = $chunk->parse($report, $this->decoded_report);
+
+                if (!($chunk instanceof TypeDecoder)) {
+                    if (is_null($parse_attempt['result'])) {
+                        continue;
+                    }
+
+                    $this->decoded_report->addReportChunk($parse_attempt['result']);
+
+                    $report = $parse_attempt['report'];
+                    if (!empty($report)) {
+                        $report = $parse_attempt['report'];
+                    } else {
+                        break;
+                    }
+                }
             } catch (DecoderException $ex) {
-                $this->_decoded_report->addDecodingException($ex);
-            }
-
-            if (is_null($parse_attempt['result'])) {
-                continue;
-            }
-
-            $this->_decoded_report->addReportChunk($parse_attempt['result']);
-
-            if (!empty($parse_attempt['report'])) {
-                $report = $parse_attempt['report'];
-            } else {
-                break;
+                $this->decoded_report->addDecodingException($ex);
             }
         }
 
-        return $this->_decoded_report;
+        return $this->decoded_report;
     }
 }

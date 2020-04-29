@@ -6,13 +6,11 @@
     "require": {
         "php": ">=5.3.0"
     },
-    "authors": [
-        {
-            "name": "James Thirkell",
-            "email": "jamie@jamieco.ca",
-            "role": "Developer"
-        }
-    ],
+    "authors": [{
+        "name": "James Thirkell",
+        "email": "jamie@jamieco.ca",
+        "role": "Developer"
+    }],
     "autoload": {
         "psr-4": {
             "ReportDecoder\\": "src/"

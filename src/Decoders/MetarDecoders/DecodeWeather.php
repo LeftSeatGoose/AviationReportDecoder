@@ -66,7 +66,7 @@ class DecodeWeather extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded)
+    public function parse($report, &$decoded, $edit_decoder = true)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -75,7 +75,9 @@ class DecodeWeather extends Decoder implements DecoderInterface
         if (!$match || (isset($match[0]) && $match[0] == '')) {
             $result = null;
         } else {
-            $decoded->setPresentWeather($match[0]);
+            if ($edit_decoder) {
+                $decoded->setPresentWeather($match[0]);
+            }
             $result = array(
                 'text' => $match[0],
                 'tip' => Value::weatherCodeToText($match[0])

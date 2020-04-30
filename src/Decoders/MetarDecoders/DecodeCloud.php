@@ -52,7 +52,7 @@ class DecodeCloud extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded)
+    public function parse($report, &$decoded, $edit_decoder = true)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -78,7 +78,9 @@ class DecodeCloud extends Decoder implements DecoderInterface
                 ++$i;
             }
 
-            $decoded->setClouds($clouds);
+            if ($edit_decoder) {
+                $decoded->setClouds($clouds);
+            }
             $result = array(
                 'text' => $clouds,
                 'tip' => $tips

@@ -50,7 +50,7 @@ class DecodeWind extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded)
+    public function parse($report, &$decoded, $edit_decoder = true)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -59,20 +59,22 @@ class DecodeWind extends Decoder implements DecoderInterface
         if (!$match) {
             $result = null;
         } else {
-            $decoded->setSurfaceWind(
-                new EntityWind(
-                    array(
-                        'text' => $match[0],
-                        'direction' => $match[1],
-                        'speed' => Value::toInt($match[2]),
-                        'gust' => Value::toInt($match[4]),
-                        'unit' => $match[5],
-                        'variable' => isset($match[6]),
-                        'var_from' => isset($match[6]) ? $match[7] : 0,
-                        'var_to' => isset($match[6]) ? $match[8] : 0
+            if ($edit_decoder) {
+                $decoded->setSurfaceWind(
+                    new EntityWind(
+                        array(
+                            'text' => $match[0],
+                            'direction' => $match[1],
+                            'speed' => Value::toInt($match[2]),
+                            'gust' => Value::toInt($match[4]),
+                            'unit' => $match[5],
+                            'variable' => isset($match[6]),
+                            'var_from' => isset($match[6]) ? $match[7] : 0,
+                            'var_to' => isset($match[6]) ? $match[8] : 0
+                        )
                     )
-                )
-            );
+                );
+            }
 
             $tip = 'Wind direction: ' . trim($match[1]) . '°, ';
             if (isset($match[6])) {

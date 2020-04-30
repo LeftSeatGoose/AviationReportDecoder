@@ -67,7 +67,7 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
         $this->decoded_report = $decoded;
 
         $evolution = new DecodeEvolution();
-        while (!empty($evolution->parse($report, $decoded)['result'])) {
+        while (!empty($evolution->parse($report, $decoded, false)['result'])) {
             $report = $this->consume($report);
         }
     }
@@ -83,7 +83,7 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
     {
         foreach ($this->decoder as $chunk) {
             try {
-                $parse_attempt = $chunk->parse($report, $this->decoded_report);
+                $parse_attempt = $chunk->parse($report, $this->decoded_report, false);
 
                 if (is_null($parse_attempt['result'])) {
                     continue;

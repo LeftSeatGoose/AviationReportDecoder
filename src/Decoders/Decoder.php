@@ -26,6 +26,14 @@ namespace ReportDecoder\Decoders;
 abstract class Decoder
 {
     /**
+     * Indicates whether the decoder classes should
+     * add their results to the decoded class
+     *
+     * @var bool
+     */
+    protected $edit_decoder = true;
+
+    /**
      * Returns the expression for matching the chunk
      * 
      * @return String

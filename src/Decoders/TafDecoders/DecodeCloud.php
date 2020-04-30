@@ -17,7 +17,6 @@ namespace ReportDecoder\Decoders\TafDecoders;
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
 use ReportDecoder\Entity\Value;
-use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes Cloud chunk
@@ -51,7 +50,7 @@ class DecodeCloud extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded)
+    public function parse($report, &$decoded, $edit_decoder = true)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -77,7 +76,9 @@ class DecodeCloud extends Decoder implements DecoderInterface
                 ++$i;
             }
 
-            $decoded->setClouds($clouds);
+            if ($edit_decoder) {
+                $decoded->setClouds($clouds);
+            }
             $result = array(
                 'text' => $clouds,
                 'tip' => $tips

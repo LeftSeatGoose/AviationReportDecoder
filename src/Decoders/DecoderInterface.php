@@ -37,10 +37,11 @@ interface DecoderInterface
      * 
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
+     * @param Boolean       $edit_decoder Whether the parser should add changes to the decoded class
      * 
      * @throws DecoderException
      * 
      * @return Array
      */
-    public function parse($report, &$decoded);
+    public function parse($report, &$decoded, $edit_decoder = true);
 }

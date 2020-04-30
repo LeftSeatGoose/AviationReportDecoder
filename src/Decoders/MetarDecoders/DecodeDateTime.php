@@ -48,7 +48,7 @@ class DecodeDateTime extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded)
+    public function parse($report, &$decoded, $edit_decoder = true)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -57,8 +57,10 @@ class DecodeDateTime extends Decoder implements DecoderInterface
         if (!$match) {
             $result = null;
         } else {
-            $datetime = new EntityDateTime($match[2], $match[2] . ':' . $match[3]);
-            $decoded->setDateTime($datetime);
+            if ($edit_decoder) {
+                $datetime = new EntityDateTime($match[2], $match[2] . ':' . $match[3]);
+                $decoded->setDateTime($datetime);
+            }
 
             $result = array(
                 'text' => $match[0],

@@ -41,7 +41,7 @@ abstract class TypeDecoder
     {
         foreach ($this->decoder as $chunk) {
             try {
-                $parse_attempt = $chunk->parse($report, $this->decoded_report);
+                $parse_attempt = $chunk->parse($report, $this->decoded_report, true);
 
                 if (!($chunk instanceof TypeDecoder)) {
                     if (is_null($parse_attempt['result'])) {

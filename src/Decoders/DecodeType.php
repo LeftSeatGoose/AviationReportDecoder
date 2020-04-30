@@ -48,7 +48,7 @@ class DecodeType extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded)
+    public function parse($report, &$decoded, $edit_decoder = true)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -57,7 +57,9 @@ class DecodeType extends Decoder implements DecoderInterface
         if (!$match) {
             $result = null;
         } else {
-            $decoded->setType($match[0]);
+            if ($edit_decoder) {
+                $decoded->setType($match[0]);
+            }
 
             $result = array(
                 'text' => $match[0],

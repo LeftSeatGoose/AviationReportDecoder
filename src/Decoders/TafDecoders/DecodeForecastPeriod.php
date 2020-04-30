@@ -51,7 +51,7 @@ class DecodeForecastPeriod extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded)
+    public function parse($report, &$decoded, $edit_decoder = true)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -78,7 +78,10 @@ class DecodeForecastPeriod extends Decoder implements DecoderInterface
                 );
             }
 
-            $decoded->setValidity($from, $to);
+            if ($edit_decoder) {
+                $decoded->setValidityFrom($from);
+                $decoded->setValidityTo($to);
+            }
             $result = array(
                 'text' => $match[0],
                 'tip' => 'Report valid from '

@@ -48,7 +48,7 @@ class DecodeIssueTime extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded)
+    public function parse($report, &$decoded, $edit_decoder = true)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -71,7 +71,9 @@ class DecodeIssueTime extends Decoder implements DecoderInterface
                 );
             }
 
-            $decoded->setIssueTime($datetime);
+            if ($edit_decoder) {
+                $decoded->setIssueTime($datetime);
+            }
 
             $result = array(
                 'text' => $match[0],

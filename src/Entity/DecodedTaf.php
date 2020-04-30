@@ -31,7 +31,8 @@ class DecodedTaf extends DecodedReport
 
     private $_issuetime;
 
-    private $_validity;
+    private $_validity_from;
+    private $_validity_to;
 
     private $_surface_wind;
 
@@ -90,25 +91,47 @@ class DecodedTaf extends DecodedReport
     }
 
     /**
-     * Sets the Validity entity
+     * Sets the Validity from entity
      * 
      * @param EntityDateTime $validity
      * 
      * @return Void
      */
-    public function setValidity(EntityDateTime $validity)
+    public function setValidityFrom(EntityDateTime $validity)
     {
-        $this->_validity = $validity;
+        $this->_validity_from = $validity;
     }
 
     /**
-     * Gets the Validity entity
+     * Gets the Validity from entity
      * 
      * @return EntityDateTime
      */
-    public function getValidity()
+    public function getValidityFrom()
     {
-        return $this->_validity;
+        return $this->_validity_from;
+    }
+
+    /**
+     * Sets the Validity to entity
+     * 
+     * @param EntityDateTime $validity
+     * 
+     * @return Void
+     */
+    public function setValidityTo(EntityDateTime $validity)
+    {
+        $this->_validity_to = $validity;
+    }
+
+    /**
+     * Gets the Validity to entity
+     * 
+     * @return EntityDateTime
+     */
+    public function getValidityTo()
+    {
+        return $this->_validity_to;
     }
 
     /**

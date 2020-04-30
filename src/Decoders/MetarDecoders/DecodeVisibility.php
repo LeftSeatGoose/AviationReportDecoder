@@ -66,6 +66,16 @@ class DecodeVisibility extends Decoder implements DecoderInterface
             } else {
                 $decoded->setCavok(false);
                 $unit = Value::UNIT_SM;
+
+                if (!isset($match[4])) {
+                    throw new DecoderException(
+                        $match[0],
+                        $report,
+                        'Bad format for deocoding visibility',
+                        $decoded
+                    );
+                }
+
                 $distance = $match[4];
 
                 if (isset($match[13])) {

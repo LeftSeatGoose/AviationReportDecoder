@@ -23,6 +23,9 @@ use ReportDecoder\Entity\Value;
 use ReportDecoder\Entity\DecodedMetar;
 use ReportDecoder\Entity\DecodedTaf;
 
+$decoder = new ReportDecoder();
+var_dump($decoder->getDecodedReport('TAF CYBW 292338Z 3000/3004 20012KT P6SM SCT090 OVC220 BECMG 3000/3002 20015G25KT RMK FCST BASED ON AUTO OBS. NXT FCST WILL BE ISSUED AT 301145Z '));
+
 /**
  * Decodes a Report
  *
@@ -35,7 +38,6 @@ use ReportDecoder\Entity\DecodedTaf;
 class ReportDecoder
 {
     private $_decoded = null;
-    private $_report_type = Value::REPORT_METAR;
 
     /**
      * Gets the decoded report
@@ -43,7 +45,7 @@ class ReportDecoder
      * @param String $report      Raw report
      * @param String $report_type The type of report to be decoded (optional)
      * 
-     * @return DecodedMetar|DecodedTaf
+     * @return DecodedMetar|DecodedTaf|Boolean
      */
     public function getDecodedReport($report, $report_type = null)
     {
@@ -55,25 +57,57 @@ class ReportDecoder
             // Get the report type to determine which decoder chain to use
             $type_decoder = new DecodeType();
 
+            // If the type is included in the report string, then use that to decode
             if (
                 preg_match($type_decoder->getExpression(), $clean_report, $match)
                 && !is_null($match[2])
             ) {
-                $this->_report_type = strtolower($match[2]);
+                $report_type = strtolower($match[2]);
+                if (!in_array($report_type, Value::REPORT_TYPES)) {
+                    return false; // Unsupported report type, decoding failed
+                }
+            } else {
+                // No type in report string so attempt decoding to determine type
+
+                $type = false;
+                foreach (Value::REPORT_TYPES as $report_type) {
+                    $decoder = $this->instantiateDecoder($report_type, $report)->consume($clean_report);
+                    if ($this->_decoded->isValid()) {
+                        $this->_decoded->setType($report_type);
+                        return $this->_decoded;
+                    }
+                }
+
+                return false; // Unable to determine type, decoding failed
             }
         } else {
-            $this->_report_type = $report_type;
+            $report_type = $report_type;
         }
 
-        if ($this->_report_type == Value::REPORT_METAR) {
-            $this->_decoded = new DecodedMetar($report);
-            $decoder = new MetarDecoder($this->_decoded);
-        } else {
-            $this->_decoded = new DecodedTaf($report);
-            $decoder = new TafDecoder($this->_decoded);
-        }
-
-        $decoder->consume($clean_report);
+        $this->instantiateDecoder($report_type, $report)->consume($clean_report);
+        $this->_decoded->setType($report_type);
         return $this->_decoded;
+    }
+
+
+    /**
+     * Insantiates the report decoder
+     *
+     * @param String $report_type The report type
+     * @param String $raw_report  The raw report string
+     * 
+     * @return TypeDecoder|Boolean
+     */
+    private function instantiateDecoder($report_type, $raw_report)
+    {
+        if ($report_type == Value::REPORT_METAR) {
+            $this->_decoded = new DecodedMetar($raw_report);
+            return new MetarDecoder($this->_decoded);
+        } else if ($report_type == Value::REPORT_TAF) {
+            $this->_decoded = new DecodedTaf($raw_report);
+            return new TafDecoder($this->_decoded);
+        } else {
+            return false;
+        }
     }
 }

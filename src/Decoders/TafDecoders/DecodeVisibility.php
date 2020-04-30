@@ -48,6 +48,8 @@ class DecodeVisibility extends Decoder implements DecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
+     * @throws DecodingException
+     * 
      * @return Array
      */
     public function parse($report, &$decoded)
@@ -66,6 +68,16 @@ class DecodeVisibility extends Decoder implements DecoderInterface
             } else {
                 $decoded->setCavok(false);
                 $unit = Value::UNIT_SM;
+
+                if (!isset($match[4])) {
+                    throw new DecoderException(
+                        $match[0],
+                        $report,
+                        'Bad format for deocoding visibility',
+                        $decoded
+                    );
+                }
+
                 $distance = $match[4];
 
                 if (isset($match[13])) {

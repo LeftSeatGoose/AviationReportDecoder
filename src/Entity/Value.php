@@ -27,6 +27,7 @@ abstract class Value
 {
     public const REPORT_METAR = 'metar';
     public const REPORT_TAF = 'taf';
+    public const REPORT_TYPES = array(self::REPORT_METAR, self::REPORT_TAF);
 
     public const UNIT_HPA = 'hPa';
     public const UNIT_INHG = 'inHg';

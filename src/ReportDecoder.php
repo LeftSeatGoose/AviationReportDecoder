@@ -14,8 +14,6 @@
 
 namespace ReportDecoder;
 
-require dirname(__DIR__) . '/vendor/autoload.php';
-
 use ReportDecoder\ReportTypes\MetarDecoder;
 use ReportDecoder\ReportTypes\TafDecoder;
 use ReportDecoder\Decoders\DecodeType;

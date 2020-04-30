@@ -23,9 +23,11 @@ Composer [composer](http://getcomposer.org)
 Setup
 -----
 
-- Enter project directory in CMD
+- Run command the command ```composer require tipsy-aviator/aviation-report-decoder:"dev-master"``` in your project root
 
-- Run command ```composer install```
+- Be sure to include the autoloader: ``` require_once '/path/to/your-project/vendor/autoload.php';```
+
+- Add the line ```use ReportDecoder\ReportDecoder;``` to the file you want to use the library in
 
 Usage
 -----

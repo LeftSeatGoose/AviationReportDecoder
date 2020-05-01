@@ -12,6 +12,7 @@
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
 
+
 namespace ReportDecoder;
 
 use ReportDecoder\ReportTypes\MetarDecoder;
@@ -66,7 +67,8 @@ class ReportDecoder
 
                 $type = false;
                 foreach (Value::REPORT_TYPES as $report_type) {
-                    $decoder = $this->instantiateDecoder($report_type, $report)->consume($clean_report);
+                    $decoder = $this->_instantiateDecoder($report_type, $report)
+                        ->consume($clean_report);
                     if ($this->_decoded->isValid()) {
                         $this->_decoded->setType($report_type);
                         return $this->_decoded;
@@ -79,7 +81,7 @@ class ReportDecoder
             $report_type = $report_type;
         }
 
-        $this->instantiateDecoder($report_type, $report)->consume($clean_report);
+        $this->_instantiateDecoder($report_type, $report)->consume($clean_report);
         $this->_decoded->setType($report_type);
         return $this->_decoded;
     }
@@ -93,7 +95,7 @@ class ReportDecoder
      * 
      * @return TypeDecoder|Boolean
      */
-    private function instantiateDecoder($report_type, $raw_report)
+    private function _instantiateDecoder($report_type, $raw_report)
     {
         if ($report_type == Value::REPORT_METAR) {
             $this->_decoded = new DecodedMetar($raw_report);

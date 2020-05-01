@@ -54,7 +54,7 @@ class DecodeQNH extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded, $edit_decoder = true)
+    public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -69,9 +69,7 @@ class DecodeQNH extends Decoder implements DecoderInterface
                 $pressure = $pressure / 100;
             }
 
-            if ($edit_decoder) {
-                $decoded->setPressure($pressure . self::$_units[$match[1]]);
-            }
+            $decoded->setPressure($pressure . self::$_units[$match[1]]);
 
             $result = array(
                 'text' => $match[0],

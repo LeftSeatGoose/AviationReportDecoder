@@ -38,7 +38,7 @@ abstract class DecodedReport
     /**
      * Construct
      * 
-     * @param String  $raw_report The raw report
+     * @param String $raw_report The raw report
      */
     public function __construct($raw_report)
     {

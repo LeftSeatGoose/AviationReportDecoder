@@ -27,11 +27,10 @@ use ReportDecoder\Entity\DecodedReport;
  */
 class EntityEvolution extends DecodedReport
 {
-    private $_from_day;
-    private $_from_time;
-    private $_to_day;
-    private $_to_time;
-    private $_probability;
+    private $_evolution_type;
+    private $_issue_time;
+    private $_validity_start;
+    private $_validity_end;
     private $_surface_wind;
     private $_visibility;
     private $_cavok;
@@ -39,115 +38,91 @@ class EntityEvolution extends DecodedReport
     private $_clouds;
 
     /**
-     * Set the evolution from date
+     * Set the evolution type
      * 
-     * @param String $from_day From date
-     * 
-     * @return Void
-     */
-    public function setFromDay($from_day)
-    {
-        $this->_from_day = $from_day;
-    }
-
-    /**
-     * Get the evolution from date
-     * 
-     * @return String
-     */
-    public function getFromDay()
-    {
-        return $this->_from_day;
-    }
-
-    /**
-     * Set the evolution from time
-     * 
-     * @param String $from_time From time
+     * @param String $evolution_type Evolution type
      * 
      * @return Void
      */
-    public function setFromTime($from_time)
+    public function setEvolutionType($evolution_type)
     {
-        $this->_from_time = $from_time;
+        $this->_evolution_type = $evolution_type;
     }
 
     /**
-     * Get the evolution from time
+     * Get the evolution type
      * 
      * @return String
      */
-    public function getFromTime()
+    public function getEvolutionType()
     {
-        return $this->_from_time;
+        return $this->_evolution_type;
     }
 
     /**
-     * Set the evolution to date
+     * Set the issue time
      * 
-     * @param String $to_day To date
-     * 
-     * @return String
-     */
-    public function setToDay($to_day)
-    {
-        $this->_to_day = $to_day;
-
-        return $this;
-    }
-
-    /**
-     * Get the evolution to date
-     * 
-     * @return String
-     */
-    public function getToDay()
-    {
-        return $this->_to_day;
-    }
-
-    /**
-     * Set the evolution to time
-     * 
-     * @param String $to_time To time
+     * @param EntityDateTime $issue_time Issue time
      * 
      * @return Void
      */
-    public function setToTime($to_time)
+    public function setIssueTime(EntityDateTime $issue_time)
     {
-        $this->_to_time = $to_time;
+        $this->_issue_time = $issue_time;
     }
 
     /**
-     * Get the evolution to time
+     * Get the issue time
      * 
-     * @return String
+     * @return EntityDateTime
      */
-    public function getToTime()
+    public function getIssueTime()
     {
-        return $this->_to_time;
+        return $this->_issue_time;
     }
 
     /**
-     * Set probability
+     * Set the evolution validity start
      * 
-     * @param EntityEvolution $probability Probability
+     * @param String $validity_start From date
      * 
      * @return Void
      */
-    public function setProbability($probability)
+    public function setValidityFrom($validity_start)
     {
-        $this->_probability = $probability;
+        $this->_validity_start = $validity_start;
     }
 
     /**
-     * Get probability
+     * Get the evolution validity start
      * 
-     * @return EntityEvolution
+     * @return String
      */
-    public function getProbability()
+    public function getValidityFrom()
     {
-        return $this->_probability;
+        return $this->_validity_start;
+    }
+
+    /**
+     * Set the evolution validity end
+     * 
+     * @param String $validity_end Validity end
+     * 
+     * @return Void
+     */
+    public function setValidityTo($validity_end)
+    {
+        $this->_validity_end = $validity_end;
+    }
+
+    /**
+     * Get the evolution validity end
+     * 
+     * @return String
+     */
+    public function getValidityTo()
+    {
+        return $this->_validity_end;
     }
 
     /**

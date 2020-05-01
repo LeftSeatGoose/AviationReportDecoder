@@ -5,8 +5,8 @@
  *
  * PHP version 7.2
  *
- * @category Metar
- * @package  ReportDecoder\Entity\
+ * @category Entity
+ * @package  ReportDecoder\Entity
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
@@ -19,8 +19,8 @@ use ReportDecoder\Entity\DecodedReport;
 /**
  * Decoded metar information
  *
- * @category Metar
- * @package  ReportDecoder\Entity\
+ * @category Entity
+ * @package  ReportDecoder\Entity
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder

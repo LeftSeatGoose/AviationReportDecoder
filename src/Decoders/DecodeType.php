@@ -44,11 +44,9 @@ class DecodeType extends Decoder implements DecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
-     * @throws DecoderException
-     * 
      * @return Array
      */
-    public function parse($report, &$decoded, $edit_decoder = true)
+    public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -57,9 +55,7 @@ class DecodeType extends Decoder implements DecoderInterface
         if (!$match) {
             $result = null;
         } else {
-            if ($edit_decoder) {
-                $decoded->setType($match[0]);
-            }
+            $decoded->setType($match[0]);
 
             $result = array(
                 'text' => $match[0],

@@ -5,7 +5,7 @@
  *
  * PHP version 7.2
  *
- * @category ReportDecoder
+ * @category Decoders
  * @package  ReportDecoder\Decoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
@@ -17,7 +17,7 @@ namespace ReportDecoder\Decoders;
 /**
  * Interface for the decoding class
  *
- * @category ReportDecoder
+ * @category Decoders
  * @package  ReportDecoder\Decoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
@@ -37,11 +37,10 @@ interface DecoderInterface
      * 
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
-     * @param Boolean       $edit_decoder Whether the parser should add changes to the decoded class
      * 
      * @throws DecoderException
      * 
      * @return Array
      */
-    public function parse($report, &$decoded, $edit_decoder = true);
+    public function parse($report, &$decoded);
 }

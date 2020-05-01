@@ -5,7 +5,7 @@
  *
  * PHP version 7.2
  *
- * @category Taf
+ * @category Entity
  * @package  ReportDecoder\Entity
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
@@ -19,7 +19,7 @@ use ReportDecoder\Entity\DecodedReport;
 /**
  * Decoded taf information
  *
- * @category Taf
+ * @category Entity
  * @package  ReportDecoder\Entity
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
@@ -43,6 +43,8 @@ class DecodedTaf extends DecodedReport
     private $_present_weather;
 
     private $_clouds;
+
+    private $_evolutions = array();
 
     private $_remarks;
 
@@ -71,7 +73,7 @@ class DecodedTaf extends DecodedReport
     /**
      * Sets the IssueTime
      * 
-     * @param EntityDateTime $issuetime
+     * @param EntityDateTime $issuetime Issue time entity
      * 
      * @return Void
      */
@@ -93,7 +95,7 @@ class DecodedTaf extends DecodedReport
     /**
      * Sets the Validity from entity
      * 
-     * @param EntityDateTime $validity
+     * @param EntityDateTime $validity Validity entity
      * 
      * @return Void
      */
@@ -115,7 +117,7 @@ class DecodedTaf extends DecodedReport
     /**
      * Sets the Validity to entity
      * 
-     * @param EntityDateTime $validity
+     * @param EntityDateTime $validity Validity entity
      * 
      * @return Void
      */
@@ -242,6 +244,28 @@ class DecodedTaf extends DecodedReport
     public function setClouds(array $clouds)
     {
         $this->_clouds = $clouds;
+    }
+
+    /**
+     * Gets the clouds
+     * 
+     * @return Array
+     */
+    public function getEvolutions()
+    {
+        return $this->_evolutions;
+    }
+
+    /**
+     * Sets an evolution
+     * 
+     * @param EntityEvolution $evolution Evolution entity
+     * 
+     * @return Void
+     */
+    public function setEvolution(EntityEvolution $evolution)
+    {
+        $this->_evolutions[] = $evolution;
     }
 
     /**

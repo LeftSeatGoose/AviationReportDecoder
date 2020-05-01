@@ -33,7 +33,7 @@ abstract class TypeDecoder
     /**
      * Consume a chunk
      * 
-     * @param String  $report Report to decode
+     * @param String $report Report to decode
      * 
      * @return DecodedReport
      */
@@ -41,7 +41,7 @@ abstract class TypeDecoder
     {
         foreach ($this->decoder as $chunk) {
             try {
-                $parse_attempt = $chunk->parse($report, $this->decoded_report, true);
+                $parse_attempt = $chunk->parse($report, $this->decoded_report);
 
                 if (!($chunk instanceof TypeDecoder)) {
                     if (is_null($parse_attempt['result'])) {

@@ -49,7 +49,7 @@ class DecodeRVR extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded, $edit_decoder = true)
+    public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -75,9 +75,8 @@ class DecodeRVR extends Decoder implements DecoderInterface
                 );
             }
 
-            if ($edit_decoder) {
-                $decoded->setRunwaysVisualRange($result);
-            }
+            $decoded->setRunwaysVisualRange($result);
+
             $result = array(
                 'text' => $match[0],
                 'tip' => 'Runways visual range'

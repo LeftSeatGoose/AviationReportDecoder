@@ -17,7 +17,6 @@ namespace ReportDecoder\Decoders\TafDecoders;
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
 use ReportDecoder\Entity\Value;
-use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes Evolution chunk
@@ -48,7 +47,7 @@ class DecodeEvolution extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded, $edit_decoder = true)
+    public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -60,8 +59,10 @@ class DecodeEvolution extends Decoder implements DecoderInterface
             // If evolution is a probability
             if (isset($match[3])) {
                 $tip = $match[3] . '% probability';
+                $decoded->setEvolutionType($match[3]);
             } else {
                 $tip = Value::EVOLUTION_TEXT[$match[1]];
+                $decoded->setEvolutionType($match[1]);
             }
 
             $result = array(

@@ -24,6 +24,7 @@ use ReportDecoder\Decoders\TafDecoders\DecodeWind;
 use ReportDecoder\Decoders\TafDecoders\DecodeVisibility;
 use ReportDecoder\Decoders\TafDecoders\DecodeWeather;
 use ReportDecoder\Decoders\TafDecoders\DecodeCloud;
+use ReportDecoder\Entity\EntityEvolution;
 use ReportDecoder\Exceptions\DecoderException;
 
 /**
@@ -64,12 +65,17 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
      */
     public function parse($report, &$decoded)
     {
-        $this->decoded_report = $decoded;
+        // Create evolution entity
+        $this->decoded_report = new EntityEvolution($report);
 
+        // Add data to evolution entity
         $evolution = new DecodeEvolution();
-        while (!empty($evolution->parse($report, $decoded, false)['result'])) {
+        while (!empty($evolution->parse($report, $this->decoded_report)['result'])) {
             $report = $this->consume($report);
         }
+
+        // Add evolution entity to decoded report object
+        $decoded->setEvolution($this->decoded_report);
     }
 
     /**
@@ -83,7 +89,7 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
     {
         foreach ($this->decoder as $chunk) {
             try {
-                $parse_attempt = $chunk->parse($report, $this->decoded_report, false);
+                $parse_attempt = $chunk->parse($report, $this->decoded_report);
 
                 if (is_null($parse_attempt['result'])) {
                     continue;

@@ -16,6 +16,7 @@ namespace ReportDecoder\Decoders\TafDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
+use ReportDecoder\Entity\EntityDateTime;
 use ReportDecoder\Exceptions\DecoderException;
 
 /**
@@ -47,7 +48,7 @@ class DecodePeriod extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded, $edit_decoder = true)
+    public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -62,6 +63,11 @@ class DecodePeriod extends Decoder implements DecoderInterface
                     . $match[2] . 'UTC to '
                     . $match[3] . 'UTC'
             );
+
+            $from = new EntityDateTime(null, $match[2]);
+            $to = new EntityDateTime(null, $match[3]);
+            $decoded->setValidityFrom($from);
+            $decoded->setValidityTo($to);
         }
 
         return array(

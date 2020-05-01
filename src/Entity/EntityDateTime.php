@@ -25,7 +25,6 @@ namespace ReportDecoder\Entity;
  */
 class EntityDateTime
 {
-
     private $_datetime = null;
 
     /**
@@ -34,15 +33,15 @@ class EntityDateTime
      * @param String $day  Day of observation
      * @param String $time Time of observation
      */
-    public function __construct($day, $time)
+    public function __construct($day = null, $time = null)
     {
         $now = new \DateTime();
         $datetime = sprintf(
             '%s-%s-%s %sZ',
             $now->format('Y'),
             $now->format('m'),
-            $day,
-            $time
+            is_null($day) ? $now->format('d') : $day,
+            is_null($time) ? $now->format('H:i') : $time
         );
         $this->_datetime = new \DateTime($datetime);
         $this->_datetime->setTimezone(new \DateTimeZone('UTC'));

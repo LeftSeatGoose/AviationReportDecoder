@@ -48,7 +48,7 @@ class DecodeTemp extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded, $edit_decoder = true)
+    public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -57,10 +57,8 @@ class DecodeTemp extends Decoder implements DecoderInterface
         if (!$match) {
             $result = null;
         } else {
-            if ($edit_decoder) {
-                $decoded->setAirTemperature(Value::toInt($match[1]));
-                $decoded->setDewPointTemperature(Value::toInt($match[2]));
-            }
+            $decoded->setAirTemperature(Value::toInt($match[1]));
+            $decoded->setDewPointTemperature(Value::toInt($match[2]));
 
             $result = array(
                 'text' => $match[0],

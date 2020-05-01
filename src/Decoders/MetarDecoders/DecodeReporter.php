@@ -47,7 +47,7 @@ class DecodeReporter extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded, $edit_decoder = true)
+    public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -67,9 +67,8 @@ class DecodeReporter extends Decoder implements DecoderInterface
                 );
             }
 
-            if ($edit_decoder) {
-                $decoded->setReporter($match[0]);
-            }
+            $decoded->setReporter($match[0]);
+
             $result = array(
                 'text' => $match[0],
                 'tip' => strtolower($match[0]) == 'auto' ? 'Automated report'

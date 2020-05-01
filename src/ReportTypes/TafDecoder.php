@@ -39,7 +39,7 @@ class TafDecoder extends TypeDecoder implements TypeDecoderInterface
     /**
      * Constructor
      * 
-     * @param DecodedTaf $decoded_report Object decoded data is stored in
+     * @param DecodedReport $decoded_report Object decoded data is stored in
      */
     public function __construct($decoded_report)
     {

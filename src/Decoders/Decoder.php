@@ -5,7 +5,7 @@
  *
  * PHP version 7.2
  *
- * @category ReportDecoder
+ * @category Decoders
  * @package  ReportDecoder\Decoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
@@ -17,7 +17,7 @@ namespace ReportDecoder\Decoders;
 /**
  * Parent class of decoding objects
  *
- * @category ReportDecoder
+ * @category Decoders
  * @package  ReportDecoder\Decoders
  * @author   Jamie Thirkell <jamie@jamieco.ca>
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
@@ -25,14 +25,6 @@ namespace ReportDecoder\Decoders;
  */
 abstract class Decoder
 {
-    /**
-     * Indicates whether the decoder classes should
-     * add their results to the decoded class
-     *
-     * @var bool
-     */
-    protected $edit_decoder = true;
-
     /**
      * Returns the expression for matching the chunk
      * 

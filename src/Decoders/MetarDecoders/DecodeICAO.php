@@ -47,7 +47,7 @@ class DecodeICAO extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded, $edit_decoder = true)
+    public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -56,9 +56,8 @@ class DecodeICAO extends Decoder implements DecoderInterface
         if (!$match) {
             $result = null;
         } else {
-            if ($edit_decoder) {
-                $decoded->setIcao($match[0]);
-            }
+            $decoded->setIcao($match[0]);
+
             $result = array(
                 'text' => $match[0],
                 'tip' => 'The stations identifier'

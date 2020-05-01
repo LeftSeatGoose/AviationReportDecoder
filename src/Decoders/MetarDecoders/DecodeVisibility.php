@@ -50,7 +50,7 @@ class DecodeVisibility extends Decoder implements DecoderInterface
      * 
      * @return Array
      */
-    public function parse($report, &$decoded, $edit_decoder = true)
+    public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
@@ -83,15 +83,13 @@ class DecodeVisibility extends Decoder implements DecoderInterface
                     $distance = $match[12];
                 }
 
-                if ($edit_decoder) {
-                    $visiblity = new EntityVisibility(
-                        array(
-                            'visibility' => Value::toInt($distance),
-                            'unit' => $unit
-                        )
-                    );
-                    $decoded->setVisibility($visiblity);
-                }
+                $visiblity = new EntityVisibility(
+                    array(
+                        'visibility' => Value::toInt($distance),
+                        'unit' => $unit
+                    )
+                );
+                $decoded->setVisibility($visiblity);
 
                 $result = array(
                     'text' => $match[0],

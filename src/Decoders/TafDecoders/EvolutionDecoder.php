@@ -75,7 +75,9 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
         }
 
         // Add evolution entity to decoded report object
-        $decoded->setEvolution($this->decoded_report);
+        if ($this->decoded_report->isValid()) {
+            $decoded->setEvolution($this->decoded_report);
+        }
     }
 
     /**

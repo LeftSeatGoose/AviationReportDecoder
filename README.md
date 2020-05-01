@@ -23,7 +23,7 @@ Composer [composer](http://getcomposer.org)
 Setup
 -----
 
-- Run command the command ```composer require tipsy-aviator/aviation-report-decoder:"dev-master"``` in your project root
+- Run the command ```composer require tipsy-aviator/aviation-report-decoder:"dev-master"``` in your project root
 
 - Be sure to include the autoloader: ``` require_once '/path/to/your-project/vendor/autoload.php';```
 

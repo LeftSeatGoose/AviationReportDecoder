@@ -88,7 +88,7 @@ class ReportDecoder
 
 
     /**
-     * Insantiates the report decoder
+     * Instantiates the report decoder
      *
      * @param String $report_type The report type
      * @param String $raw_report  The raw report string

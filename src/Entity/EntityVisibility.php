@@ -26,6 +26,7 @@ namespace ReportDecoder\Entity;
 class EntityVisibility
 {
 
+    private $_visibility = null;
     private $_distance = null;
     private $_unit = null;
 
@@ -36,8 +37,19 @@ class EntityVisibility
      */
     public function __construct($visibility)
     {
+        $this->_visibility = $visibility['text'];
         $this->_distance = $visibility['visibility'];
         $this->_unit = $visibility['unit'];
+    }
+
+    /**
+     * Gets the visibility text
+     * 
+     * @return Int
+     */
+    public function value()
+    {
+        return $this->_visibility;
     }
 
     /**

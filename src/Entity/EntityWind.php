@@ -57,7 +57,7 @@ class EntityWind
      * 
      * @return String
      */
-    public function getWind()
+    public function value()
     {
         return $this->_wind;
     }

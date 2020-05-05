@@ -87,6 +87,7 @@ class DecodeVisibility extends Decoder implements DecoderInterface
 
                 $visiblity = new EntityVisibility(
                     array(
+                        'text' => $match[0],
                         'visibility' => Value::toInt($distance),
                         'unit' => $unit
                     )

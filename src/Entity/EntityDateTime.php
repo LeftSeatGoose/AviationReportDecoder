@@ -43,8 +43,7 @@ class EntityDateTime
             is_null($day) ? $now->format('d') : $day,
             is_null($time) ? $now->format('H:i') : $time
         );
-        $this->_datetime = new \DateTime($datetime);
-        $this->_datetime->setTimezone(new \DateTimeZone('UTC'));
+        $this->_datetime = new \DateTime($datetime, new \DateTimeZone('UTC'));
     }
 
     /**
@@ -54,7 +53,7 @@ class EntityDateTime
      * 
      * @return String
      */
-    public function value($format = 'Y-m-d H:i')
+    public function value($format = 'Y-m-d H:i e')
     {
         return $this->_datetime->format($format);
     }

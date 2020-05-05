@@ -45,39 +45,39 @@ abstract class Value
     );
 
     private const WEATHER_TEXT = array(
-        'P' => 'More than',
-        'M' => 'Less than',
-        'B' => 'Began',
-        'E' => 'Ended',
-        'TS' => 'Thunderstorm',
-        'FZ' => 'Freezing',
-        'SH' => 'Showering',
-        'BL' => 'Blowing',
-        'DR' => 'Low Drifting',
-        'MI' => 'Shallow',
-        'PR' => 'Partial',
-        'DZ' => 'Drizzle',
-        'RA' => 'Rain',
-        'SN' => 'Snow',
-        'SG' => 'Snow Grains',
-        'PL' => 'Ice Pellets',
-        'DS' => 'Dust storm',
-        'GR' => 'Hail (>5mm)',
-        'GS' => 'Small Hail / Snow Pellets (<5mm)',
-        'UP' => 'Unknown Precipitation',
-        'IC' => 'Ice Crystals',
-        'FG' => 'Fog',
-        'BR' => 'Mist',
-        'SA' => 'Sand',
-        'DU' => 'Dust',
-        'HZ' => 'Haze',
-        'FU' => 'Smoke',
-        'VA' => 'Volcanic Ash',
-        'PY' => 'Spray',
-        'PO' => 'Well-Developed Dust/Sand',
-        'SQ' => 'Squalls Moderate',
-        'FC' => 'Funnel Cloud',
-        'DS' => 'Sandstorm'
+        'P' => 'more than',
+        'M' => 'less than',
+        'B' => 'began',
+        'E' => 'ended',
+        'TS' => 'thunderstorm',
+        'FZ' => 'freezing',
+        'SH' => 'showering',
+        'BL' => 'blowing',
+        'DR' => 'low drifting',
+        'MI' => 'shallow',
+        'PR' => 'partial',
+        'DZ' => 'drizzle',
+        'RA' => 'rain',
+        'SN' => 'snow',
+        'SG' => 'snow Grains',
+        'PL' => 'ice Pellets',
+        'DS' => 'dust storm',
+        'GR' => 'hail (>5mm)',
+        'GS' => 'small hail / snow pellets (<5mm)',
+        'UP' => 'unknown precipitation',
+        'IC' => 'ice crystals',
+        'FG' => 'fog',
+        'BR' => 'mist',
+        'SA' => 'sand',
+        'DU' => 'dust',
+        'HZ' => 'haze',
+        'FU' => 'smoke',
+        'VA' => 'volcanic ash',
+        'PY' => 'spray',
+        'PO' => 'well-developed dust/sand',
+        'SQ' => 'squalls moderate',
+        'FC' => 'funnel cloud',
+        'DS' => 'svfandstorm'
     );
 
     /**
@@ -119,11 +119,14 @@ abstract class Value
 
         unset($match[0]);
 
-        $match[1] = str_replace('+', 'Heavy', $match[1]);
-        $match[1] = str_replace('-', 'Light', $match[1]);
-        $match[1] = str_replace('VC', 'In the vicinity', $match[1]);
+        $match[1] = str_replace('VC', '', $match[1], $count);
+        if (!is_null($count)) {
+            $end = 'in the vicinity';
+        }
+        $start = str_replace('+', 'heavy', $match[1]);
+        $start = str_replace('-', 'light', $match[1]);
 
-        $output = $match[1] . ' ';
+        $output = $start . ' ';
         $i = 0;
         foreach ($match as $code) {
             if (++$i == 1) {
@@ -131,7 +134,8 @@ abstract class Value
             }
             $output .= self::WEATHER_TEXT[$code] . ' ';
         }
+        $output .= $end;
 
-        return trim($output);
+        return ucfirst(trim($output));
     }
 }

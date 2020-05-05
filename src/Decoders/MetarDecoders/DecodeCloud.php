@@ -63,27 +63,34 @@ class DecodeCloud extends Decoder implements DecoderInterface
         } else {
             $match = array_map('trim', $match);
 
-            $clouds = array();
-            $tips = array();
+            if ($match[0] == 'SKC') {
+                $result = array(
+                    'text' => 'SKC',
+                    'tip' => 'Sky clear'
+                );
+            } else {
+                $clouds = array();
+                $tips = array();
 
-            for ($i = 4; $i <= sizeof($match); $i += 3) {
-                if (empty($match[$i])) {
-                    continue;
+                for ($i = 4; $i <= sizeof($match); $i += 3) {
+                    if (empty($match[$i])) {
+                        continue;
+                    }
+
+                    $clouds[] = $match[$i] . $match[$i + 1];
+                    $tips[] = $match[$i] . ' ' . Value::toInt($match[$i + 1])
+                        . '00ft AGL';
+
+                    ++$i;
                 }
 
-                $clouds[] = $match[$i] . $match[$i + 1];
-                $tips[] = $match[$i] . ' ' . Value::toInt($match[$i + 1])
-                    . '00ft AGL';
+                $decoded->setClouds($clouds);
 
-                ++$i;
+                $result = array(
+                    'text' => $clouds,
+                    'tip' => $tips
+                );
             }
-
-            $decoded->setClouds($clouds);
-
-            $result = array(
-                'text' => $clouds,
-                'tip' => $tips
-            );
         }
 
         return array(

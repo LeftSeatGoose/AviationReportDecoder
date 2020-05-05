@@ -227,7 +227,7 @@ class DecodedTaf extends DecodedReport
     /**
      * Gets the clouds
      * 
-     * @return String
+     * @return Array
      */
     public function getClouds()
     {
@@ -237,7 +237,7 @@ class DecodedTaf extends DecodedReport
     /**
      * Sets the Clouds
      * 
-     * @param Array $clouds clouds
+     * @param Array $clouds Clouds
      * 
      * @return Void
      */

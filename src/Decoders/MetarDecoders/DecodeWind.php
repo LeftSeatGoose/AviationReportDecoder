@@ -18,7 +18,6 @@ use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
 use ReportDecoder\Entity\EntityWind;
 use ReportDecoder\Entity\Value;
-use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes Wind chunk
@@ -38,7 +37,7 @@ class DecodeWind extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        return '/^([0-9]{3}|VRB)?([0-9]{2,3})(G?([0-9]{2,3}))'
+        return '/^([0-9]{3}|VRB)?( )?([0-9]{2,3})(G?([0-9]{2,3}))'
             . '?(KT|MPH|KPH)( ([0-9]{3})V([0-9]{3}))?/';
     }
 
@@ -64,23 +63,23 @@ class DecodeWind extends Decoder implements DecoderInterface
                     array(
                         'text' => $match[0],
                         'direction' => $match[1],
-                        'speed' => Value::toInt($match[2]),
-                        'gust' => Value::toInt($match[4]),
-                        'unit' => $match[5],
-                        'variable' => isset($match[6]),
-                        'var_from' => isset($match[6]) ? $match[7] : 0,
-                        'var_to' => isset($match[6]) ? $match[8] : 0
+                        'speed' => Value::toInt($match[3]),
+                        'gust' => Value::toInt($match[5]),
+                        'unit' => $match[6],
+                        'variable' => isset($match[7]),
+                        'var_from' => isset($match[7]) ? $match[8] : 0,
+                        'var_to' => isset($match[7]) ? $match[9] : 0
                     )
                 )
             );
 
             $tip = 'Wind direction: ' . trim($match[1]) . '°, ';
-            if (isset($match[6])) {
-                $tip .= 'Variable from ' . $match[7] . '° to ' . $match[8] . '°, ';
+            if (isset($match[7])) {
+                $tip .= 'Variable from ' . $match[8] . '° to ' . $match[9] . '°, ';
             }
-            $tip .= 'Wind speed: ' . Value::toInt($match[2]) . $match[5];
-            if (!empty(Value::toInt($match[4]))) {
-                $tip .=  ', Wind gust: ' . Value::toInt($match[4]) . $match[5];
+            $tip .= 'Wind speed: ' . Value::toInt($match[3]) . $match[6];
+            if (!empty(Value::toInt($match[5]))) {
+                $tip .=  ', Wind gust: ' . Value::toInt($match[5]) . $match[6];
             }
 
             $result = array(

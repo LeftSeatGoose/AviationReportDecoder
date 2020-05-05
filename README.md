@@ -16,7 +16,7 @@ Currently Supported:
 Requirements
 ------------
 
-This library package requires PHP >= 7.2
+This library package requires PHP >= 5.3
 
 Composer [composer](http://getcomposer.org)
 

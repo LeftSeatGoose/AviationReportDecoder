@@ -36,7 +36,7 @@ class DecodeReporter extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        return '/^([A-Z]+)/';
+        return '/^(AUTO)/';
     }
 
     /**
@@ -56,23 +56,11 @@ class DecodeReporter extends Decoder implements DecoderInterface
         if (!$match) {
             $result = null;
         } else {
-            $reporter = $match[0];
-
-            if (strlen($reporter) > 3 && strtolower($reporter) !== 'auto') {
-                throw new DecoderException(
-                    $report,
-                    $result['report'],
-                    'Bad format for reporter information',
-                    $this
-                );
-            }
-
             $decoded->setReporter($match[0]);
 
             $result = array(
                 'text' => $match[0],
-                'tip' => strtolower($match[0]) == 'auto' ? 'Automated report'
-                    : 'Non-automated report'
+                'tip' => 'Automated report'
             );
         }
 

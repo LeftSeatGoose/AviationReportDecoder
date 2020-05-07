@@ -77,7 +77,7 @@ abstract class Value
         'PO' => 'well-developed dust/sand',
         'SQ' => 'squalls moderate',
         'FC' => 'funnel cloud',
-        'DS' => 'svfandstorm'
+        'DS' => 'sandstorm'
     );
 
     /**
@@ -120,7 +120,9 @@ abstract class Value
         unset($match[0]);
 
         $match[1] = str_replace('VC', '', $match[1], $count);
-        if (!is_null($count)) {
+
+        $end = '';
+        if ($count > 0) {
             $end = 'in the vicinity';
         }
         $start = str_replace('+', 'heavy', $match[1]);

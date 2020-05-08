@@ -75,12 +75,21 @@ class DecodeWeather extends Decoder implements DecoderInterface
         if (!$match || (isset($match[0]) && $match[0] == '')) {
             $result = null;
         } else {
-            $match = array_map('trim', $match);
-            $decoded->setPresentWeather($match[0]);
+            $weather = trim($match[0]);
+            $weather_components = explode(' ', $weather);
+
+            $decoded_weather = array();
+            foreach ($weather_components as $component) {
+                $decoded_weather[] = array(
+                    'code' => $component,
+                    'text' => Value::weatherCodeToText($component)
+                );
+            }
+            $decoded->setPresentWeather($decoded_weather);
 
             $result = array(
-                'text' => $match[0],
-                'tip' => Value::weatherCodeToText($match[0])
+                'text' => $weather,
+                'tip' => Value::weatherCodeToText($weather)
             );
         }
 

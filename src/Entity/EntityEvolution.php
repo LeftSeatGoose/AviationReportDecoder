@@ -192,19 +192,9 @@ class EntityEvolution extends DecodedReport
     }
 
     /**
-     * Gets present weather
-     * 
-     * @return String
-     */
-    public function getPresentWeather()
-    {
-        return $this->_present_weather;
-    }
-
-    /**
      * Sets the Present Weather
      * 
-     * @param String $weather Present Weather
+     * @param Array $weather Present weather
      * 
      * @return Void
      */
@@ -214,24 +204,34 @@ class EntityEvolution extends DecodedReport
     }
 
     /**
-     * Gets the clouds
+     * Gets present weather
      * 
-     * @return String
+     * @return Array
      */
-    public function getClouds()
+    public function getPresentWeather()
     {
-        return $this->_clouds;
+        return $this->_present_weather;
     }
 
     /**
      * Sets the Clouds
      * 
-     * @param Array $clouds clouds
+     * @param EntityCloud[] $clouds Clouds
      * 
-     * @return Void
+     * @return EntityCloud[]
      */
     public function setClouds(array $clouds)
     {
         $this->_clouds = $clouds;
+    }
+
+    /**
+     * Gets the clouds
+     * 
+     * @return Array
+     */
+    public function getClouds()
+    {
+        return $this->_clouds;
     }
 }

@@ -203,19 +203,9 @@ class DecodedTaf extends DecodedReport
     }
 
     /**
-     * Gets present weather
-     * 
-     * @return String
-     */
-    public function getPresentWeather()
-    {
-        return $this->_present_weather;
-    }
-
-    /**
      * Sets the Present Weather
      * 
-     * @param String $weather Present Weather
+     * @param Array $weather Present weather
      * 
      * @return Void
      */
@@ -225,21 +215,21 @@ class DecodedTaf extends DecodedReport
     }
 
     /**
-     * Gets the clouds
+     * Gets present weather
      * 
      * @return Array
      */
-    public function getClouds()
+    public function getPresentWeather()
     {
-        return $this->_clouds;
+        return $this->_present_weather;
     }
 
     /**
      * Sets the Clouds
      * 
-     * @param Array $clouds Clouds
+     * @param EntityCloud[] $clouds Clouds
      * 
-     * @return Void
+     * @return EntityCloud[]
      */
     public function setClouds(array $clouds)
     {
@@ -251,9 +241,9 @@ class DecodedTaf extends DecodedReport
      * 
      * @return Array
      */
-    public function getEvolutions()
+    public function getClouds()
     {
-        return $this->_evolutions;
+        return $this->_clouds;
     }
 
     /**
@@ -269,13 +259,13 @@ class DecodedTaf extends DecodedReport
     }
 
     /**
-     * Gets the remarks
+     * Gets the clouds
      * 
-     * @return String
+     * @return Array
      */
-    public function getRemarks()
+    public function getEvolutions()
     {
-        return $this->_remarks;
+        return $this->_evolutions;
     }
 
     /**
@@ -288,5 +278,15 @@ class DecodedTaf extends DecodedReport
     public function setRemarks($remarks)
     {
         $this->_remarks = $remarks;
+    }
+
+    /**
+     * Gets the remarks
+     * 
+     * @return String
+     */
+    public function getRemarks()
+    {
+        return $this->_remarks;
     }
 }

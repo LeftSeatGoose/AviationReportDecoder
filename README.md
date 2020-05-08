@@ -47,4 +47,4 @@ Example:
 
 - Output the wind speed for the given metar
 
-```echo $decoded_metar->getSurfaceWind()->getWind();```
+```echo $decoded_metar->getSurfaceWind()->getSpeed();```

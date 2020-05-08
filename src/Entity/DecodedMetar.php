@@ -176,7 +176,7 @@ class DecodedMetar extends DecodedReport
     /**
      * Gets if the station is CAVOK
      * 
-     * @return String
+     * @return Boolean
      */
     public function getCavok()
     {
@@ -184,9 +184,21 @@ class DecodedMetar extends DecodedReport
     }
 
     /**
+     * Sets the Runway Visual Range
+     * 
+     * @param EntityRVR $rvr Runways Visual Range
+     * 
+     * @return Void
+     */
+    public function setRunwaysVisualRange($rvr)
+    {
+        $this->_runways_visual_range = $rvr;
+    }
+
+    /**
      * Gets the runways visual range
      * 
-     * @return String
+     * @return EntityRVR
      */
     public function getRunwaysVisualRange()
     {
@@ -194,31 +206,9 @@ class DecodedMetar extends DecodedReport
     }
 
     /**
-     * Sets the Runway Visual Range
-     * 
-     * @param Array $runways Runways Visual Range
-     * 
-     * @return Void
-     */
-    public function setRunwaysVisualRange(array $runways)
-    {
-        $this->_runways_visual_range = $runways;
-    }
-
-    /**
-     * Gets present weather
-     * 
-     * @return String
-     */
-    public function getPresentWeather()
-    {
-        return $this->_present_weather;
-    }
-
-    /**
      * Sets the Present Weather
      * 
-     * @param String $weather Present Weather
+     * @param Array $weather Present weather
      * 
      * @return Void
      */
@@ -228,21 +218,21 @@ class DecodedMetar extends DecodedReport
     }
 
     /**
-     * Gets the clouds
+     * Gets present weather
      * 
-     * @return String
+     * @return Array
      */
-    public function getClouds()
+    public function getPresentWeather()
     {
-        return $this->_clouds;
+        return $this->_present_weather;
     }
 
     /**
      * Sets the Clouds
      * 
-     * @param Array $clouds clouds
+     * @param EntityCloud[] $clouds Clouds
      * 
-     * @return Void
+     * @return EntityCloud[]
      */
     public function setClouds(array $clouds)
     {
@@ -250,19 +240,19 @@ class DecodedMetar extends DecodedReport
     }
 
     /**
-     * Gets the air temperature
+     * Gets the clouds
      * 
-     * @return String
+     * @return Array
      */
-    public function getAirTemperature()
+    public function getClouds()
     {
-        return $this->_air_temperature;
+        return $this->_clouds;
     }
 
     /**
      * Sets the Air temperature
      * 
-     * @param String $temperature Temperature
+     * @param Int $temperature Temperature
      * 
      * @return Void
      */
@@ -272,19 +262,19 @@ class DecodedMetar extends DecodedReport
     }
 
     /**
-     * Gets the dew point
+     * Gets the air temperature
      * 
-     * @return String
+     * @return Int
      */
-    public function getDewPointTemperature()
+    public function getAirTemperature()
     {
-        return $this->_dew_point_temperature;
+        return $this->_air_temperature;
     }
 
     /**
      * Sets the Dew Point
      * 
-     * @param String $temperature Dew Point
+     * @param Int $temperature Dew Point
      * 
      * @return Void
      */
@@ -294,19 +284,19 @@ class DecodedMetar extends DecodedReport
     }
 
     /**
-     * Gets the pressure
+     * Gets the dew point
      * 
-     * @return String
+     * @return Int
      */
-    public function getPressure()
+    public function getDewPointTemperature()
     {
-        return $this->_pressure;
+        return $this->_dew_point_temperature;
     }
 
     /**
      * Sets the Pressure
      * 
-     * @param double $pressure Pressure
+     * @param Double $pressure Pressure
      * 
      * @return Void
      */
@@ -316,13 +306,13 @@ class DecodedMetar extends DecodedReport
     }
 
     /**
-     * Gets the remarks
+     * Gets the pressure
      * 
-     * @return String
+     * @return Double
      */
-    public function getRemarks()
+    public function getPressure()
     {
-        return $this->_remarks;
+        return $this->_pressure;
     }
 
     /**
@@ -335,5 +325,15 @@ class DecodedMetar extends DecodedReport
     public function setRemarks($remarks)
     {
         $this->_remarks = $remarks;
+    }
+
+    /**
+     * Gets the remarks
+     * 
+     * @return String
+     */
+    public function getRemarks()
+    {
+        return $this->_remarks;
     }
 }

@@ -16,8 +16,8 @@ namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
+use ReportDecoder\Entity\EntityQNH;
 use ReportDecoder\Entity\Value;
-use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes QNH chunk
@@ -69,7 +69,12 @@ class DecodeQNH extends Decoder implements DecoderInterface
                 $pressure = $pressure / 100;
             }
 
-            $decoded->setPressure($pressure . self::$_units[$match[1]]);
+            $decoded->setPressure(
+                new EntityQNH(
+                    $pressure,
+                    self::$_units[$match[1]]
+                )
+            );
 
             $result = array(
                 'text' => $match[0],

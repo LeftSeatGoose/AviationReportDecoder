@@ -16,8 +16,8 @@ namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
+use ReportDecoder\Entity\EntityCloud;
 use ReportDecoder\Entity\Value;
-use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes Cloud chunk
@@ -77,7 +77,11 @@ class DecodeCloud extends Decoder implements DecoderInterface
                         continue;
                     }
 
-                    $clouds[] = $match[$i] . $match[$i + 1];
+                    $clouds[] = new EntityCloud(
+                        $match[$i],
+                        Value::toInt($match[$i + 1] . '00')
+                    );
+                    $clouds_text[] = $match[$i] . Value::toInt($match[$i + 1]);
                     $tips[] = $match[$i] . ' ' . Value::toInt($match[$i + 1])
                         . '00ft AGL';
 
@@ -87,7 +91,7 @@ class DecodeCloud extends Decoder implements DecoderInterface
                 $decoded->setClouds($clouds);
 
                 $result = array(
-                    'text' => $clouds,
+                    'text' => $clouds_text,
                     'tip' => $tips
                 );
             }

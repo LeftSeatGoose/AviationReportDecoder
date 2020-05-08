@@ -60,16 +60,12 @@ class DecodeWind extends Decoder implements DecoderInterface
         } else {
             $decoded->setSurfaceWind(
                 new EntityWind(
-                    array(
-                        'text' => $match[0],
-                        'direction' => $match[1],
-                        'speed' => Value::toInt($match[3]),
-                        'gust' => Value::toInt($match[5]),
-                        'unit' => $match[6],
-                        'variable' => isset($match[7]),
-                        'var_from' => isset($match[7]) ? $match[8] : 0,
-                        'var_to' => isset($match[7]) ? $match[9] : 0
-                    )
+                    $match[1],
+                    Value::toInt($match[3]),
+                    Value::toInt($match[5]),
+                    $match[6],
+                    isset($match[7]) ? $match[8] : null,
+                    isset($match[7]) ? $match[9] : null
                 )
             );
 

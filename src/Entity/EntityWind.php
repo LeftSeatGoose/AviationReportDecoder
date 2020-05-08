@@ -25,41 +25,37 @@ namespace ReportDecoder\Entity;
  */
 class EntityWind
 {
-
-    private $_wind = null;
     private $_direction = null;
     private $_speed = null;
     private $_gust = null;
     private $_unit = null;
-    private $_variable = null;
     private $_var_from = null;
     private $_var_to = null;
 
     /**
      * Construct
      * 
-     * @param Array $wind Wind information
+     * @param Int|String $direction Wind direction
+     * @param Int        $speed     Wind speed
+     * @param Int        $gust      Wind gust
+     * @param String     $unit      Wind speed unit
+     * @param Int        $var_from  Direction variable start
+     * @param Int        $var_to    Direction variable end
      */
-    public function __construct($wind)
-    {
-        $this->_wind = $wind['text'];
-        $this->_direction = $wind['direction'];
-        $this->_speed = $wind['speed'];
-        $this->_gust = $wind['gust'];
-        $this->_unit = $wind['unit'];
-        $this->_variable = $wind['variable'];
-        $this->_var_from = $wind['var_from'];
-        $this->_var_to = $wind['var_to'];
-    }
-
-    /**
-     * Gets the wind text
-     * 
-     * @return String
-     */
-    public function value()
-    {
-        return $this->_wind;
+    public function __construct(
+        $direction,
+        $speed,
+        $gust,
+        $unit,
+        $var_from = null,
+        $var_to = null
+    ) {
+        $this->_direction = $direction;
+        $this->_speed = $speed;
+        $this->_gust = $gust;
+        $this->_unit = $unit;
+        $this->_var_from = $var_from;
+        $this->_var_to = $var_to;
     }
 
     /**
@@ -103,17 +99,7 @@ class EntityWind
     }
 
     /**
-     * Gets if the wind is variable
-     * 
-     * @return String
-     */
-    public function getVariable()
-    {
-        return $this->_variable;
-    }
-
-    /**
-     * Gets the start variable direction
+     * Gets the variable direction start
      * 
      * @return String
      */
@@ -123,7 +109,7 @@ class EntityWind
     }
 
     /**
-     * Gets the end variable direction
+     * Gets the variable direction end
      * 
      * @return String
      */

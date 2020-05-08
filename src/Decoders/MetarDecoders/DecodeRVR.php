@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DecodeDateTime.php
+ * DecodeRVR.php
  *
  * PHP version 7.2
  *
@@ -16,11 +16,11 @@ namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
+use ReportDecoder\Entity\EntityRVR;
 use ReportDecoder\Entity\Value;
-use ReportDecoder\Exceptions\DecoderException;
 
 /**
- * Decodes DateTime chunk
+ * Decodes RVR chunk
  *
  * @category Metar
  * @package  ReportDecoder\Decoders\MetarDecoders
@@ -59,23 +59,23 @@ class DecodeRVR extends Decoder implements DecoderInterface
             $result = null;
         } else {
             if (empty($match[2])) {
-                $result = array(
-                    'runway' => Value::toInt($match[5]),
-                    'unit' => $match[7],
-                    'trend' => $match[8]
+                $decoded->setRunwaysVisualRange(
+                    EntityRVR::initWithRunway(
+                        $match[7],
+                        $match[8],
+                        Value::toInt($match[5])
+                    )
                 );
             } else {
-                $result = array(
-                    'variable' => array(
-                        'from' => Value::toInt($match[3]),
-                        'to' => Value::toInt($match[5])
-                    ),
-                    'unit' => $match[7],
-                    'trend' => $match[8]
+                $decoded->setRunwaysVisualRange(
+                    EntityRVR::initWithVariable(
+                        $match[7],
+                        $match[8],
+                        Value::toInt($match[3]),
+                        Value::toInt($match[5])
+                    )
                 );
             }
-
-            $decoded->setRunwaysVisualRange($result);
 
             $result = array(
                 'text' => $match[0],

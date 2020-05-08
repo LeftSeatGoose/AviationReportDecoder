@@ -44,7 +44,17 @@ abstract class Value
         'PROB' => 'Probability'
     );
 
-    private const WEATHER_TEXT = array(
+    public const CLOUD_TEXT = array(
+        'VV' => 'Vertical visibility, indefinite ceiling',
+        'FEW' => 'Few',
+        'SCT' => 'Scattered',
+        'BKN' => 'Broken',
+        'OVC' => 'Overcast',
+        'CB' => 'Cumulonimbus',
+        'TCU' => 'Towering Cumulus'
+    );
+
+    public const WEATHER_TEXT = array(
         'P' => 'more than',
         'M' => 'less than',
         'B' => 'began',

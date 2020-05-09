@@ -53,7 +53,7 @@ class EntityDateTime
      * 
      * @return String
      */
-    public function value($format = 'Y-m-d H:i e')
+    public function value($format = 'Y-m-d H:ie')
     {
         return $this->_datetime->format($format);
     }

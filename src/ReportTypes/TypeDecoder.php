@@ -43,19 +43,17 @@ abstract class TypeDecoder
             try {
                 $parse_attempt = $chunk->parse($report, $this->decoded_report);
 
-                if (!($chunk instanceof TypeDecoder)) {
-                    if (is_null($parse_attempt['result'])) {
-                        continue;
-                    }
+                if (is_null($parse_attempt['result'])) {
+                    continue;
+                }
 
-                    $this->decoded_report->addReportChunk($parse_attempt['result']);
+                $this->decoded_report->addReportChunk($parse_attempt['result']);
 
+                $report = $parse_attempt['report'];
+                if (!empty($report)) {
                     $report = $parse_attempt['report'];
-                    if (!empty($report)) {
-                        $report = $parse_attempt['report'];
-                    } else {
-                        break;
-                    }
+                } else {
+                    break;
                 }
             } catch (DecoderException $ex) {
                 $this->decoded_report->addDecodingException($ex);

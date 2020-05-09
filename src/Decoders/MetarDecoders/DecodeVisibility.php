@@ -18,7 +18,6 @@ use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
 use ReportDecoder\Entity\EntityVisibility;
 use ReportDecoder\Entity\Value;
-use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes Visibility chunk
@@ -38,8 +37,15 @@ class DecodeVisibility extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        return '/^(CAVOK|([0-9]{4})(NDV)?|M?([0-9]{0,2}) ?(([1357])\/(2|4|8|16))?'
-            . '(SM)|( ([0-9]{4})(N|NE|E|SE|S|SW|W|NW)?)|([0-9][05])(KM)?(NDV)?)/';
+        $cavok = 'CAVOK';
+        $visibility = '([0-9]{4})(NDV)?';
+        $us_visibility = 'M?([0-9]{0,2}) ?(([1357])\/(2|4|8|16))?SM';
+        $minimum_visibility = '( ([0-9]{4})(N|NE|E|SE|S|SW|W|NW)?)?';
+        $km_visibility = '([0-9][05])(KM)?(NDV)?';
+        $no_info = '\/\/\/\/';
+
+        return "/^($cavok|$visibility$minimum_visibility|"
+            . "$us_visibility|$km_visibility|$no_info)( )/";
     }
 
     /**
@@ -61,26 +67,37 @@ class DecodeVisibility extends Decoder implements DecoderInterface
         } else {
             $cavok = false;
 
-            if (strtolower($match[0]) == 'cavok') {
+            if ($match[1] ==  'CAVOK') {
                 $decoded->setCavok(true);
+                $result = null;
+            } elseif ($match[1] == '////') {
+                $decoded->setCavok(false);
+                $result = null;
             } else {
                 $decoded->setCavok(false);
-                $unit = Value::UNIT_SM;
 
-                if (!isset($match[4])) {
-                    throw new DecoderException(
-                        $match[0],
-                        $report,
-                        'Bad format for deocoding visibility',
-                        $decoded
-                    );
-                }
-
-                $distance = $match[4];
-
-                if (isset($match[13])) {
+                if ($match[2] != null) {
+                    // ICAO Visibility
+                    $distance = $match[2];
+                    $unit = Value::UNIT_METRE;
+                } else if ($match[11] != null) {
+                    // KM Visibility
+                    $distance = $match[11];
                     $unit = Value::UNIT_KM;
-                    $distance = $match[12];
+                } else {
+                    // US Visibility
+                    $main = intval($match[7]);
+                    $frac_top = intval($match[9]);
+                    $frac_bot = intval($match[10]);
+
+                    if ($frac_bot != 0) {
+                        $vis_value = $main + $frac_top / $frac_bot;
+                    } else {
+                        $vis_value = $main;
+                    }
+
+                    $distance = $vis_value;
+                    $unit = Value::UNIT_SM;
                 }
 
                 $decoded->setVisibility(

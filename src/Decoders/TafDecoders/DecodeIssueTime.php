@@ -37,7 +37,7 @@ class DecodeIssueTime extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        return '/^([0-9]{2})([0-9]{2})([0-9]{2})Z/';
+        return '/^([0-9]{2})([0-9]{2})([0-9]{2})Z?/';
     }
 
     /**

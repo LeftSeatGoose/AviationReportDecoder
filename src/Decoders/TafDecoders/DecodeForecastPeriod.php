@@ -37,8 +37,8 @@ class DecodeForecastPeriod extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        return '/^(([0-9]{2})([0-9]{2})(\/)([0-9]{2})'
-            . '([0-9]{2}))|(([0-9]{2})([0-9]{2})([0-9]{2}))(?!Z)/';
+        return '/^((([0-9]{2})([0-9]{2})(\/)([0-9]{2})'
+            . '([0-9]{2}))|(([0-9]{2})([0-9]{2})([0-9]{2}))(?!Z))/';
     }
 
     /**
@@ -62,18 +62,18 @@ class DecodeForecastPeriod extends Decoder implements DecoderInterface
         } else {
             try {
                 // DateTime format 1
-                if (isset($match[4]) && $match[4] == '/') {
-                    $from = new EntityDateTime($match[2], $match[3] . ':00');
-                    $to = new EntityDateTime($match[5], $match[6] . ':00');
+                if (isset($match[5]) && $match[5] == '/') {
+                    $from = new EntityDateTime($match[3], $match[4] . ':00');
+                    $to = new EntityDateTime($match[6], $match[7] . ':00');
                 } else { // DateTime format 2
-                    $from = new EntityDateTime($match[8], $match[9] . ':00');
-                    $to = new EntityDateTime($match[8] + 1, $match[10] . ':00');
+                    $from = new EntityDateTime($match[9], $match[10] . ':00');
+                    $to = new EntityDateTime($match[9] + 1, $match[11] . ':00');
                 }
             } catch (\Exception $exception) {
                 throw new DecoderException(
                     $match[0],
                     $report,
-                    'Bad format for forecast period decoding.',
+                    $exception,
                     $decoded
                 );
             }
@@ -84,8 +84,8 @@ class DecodeForecastPeriod extends Decoder implements DecoderInterface
             $result = array(
                 'text' => $match[0],
                 'tip' => 'Report valid from '
-                    . $from->value() . 'UTC to '
-                    . $to->value() . 'UTC'
+                    . $from->value() . ' to '
+                    . $to->value()
             );
         }
 

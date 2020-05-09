@@ -27,7 +27,6 @@ abstract class Value
 {
     public const REPORT_METAR = 'metar';
     public const REPORT_TAF = 'taf';
-    public const REPORT_TYPES = array(self::REPORT_METAR, self::REPORT_TAF);
 
     public const UNIT_HPA = 'hPa';
     public const UNIT_INHG = 'inHg';
@@ -36,6 +35,7 @@ abstract class Value
     public const UNIT_KT = 'KT';
     public const UNIT_MPH = 'MPH';
     public const UNIT_KPH = 'KPH';
+    public const UNIT_METRE = 'M';
 
     public const EVOLUTION_TEXT = array(
         'BECMG' => 'Becoming',

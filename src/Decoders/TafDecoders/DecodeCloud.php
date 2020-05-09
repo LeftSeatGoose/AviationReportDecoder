@@ -69,6 +69,7 @@ class DecodeCloud extends Decoder implements DecoderInterface
                 );
             } else {
                 $clouds = array();
+                $clouds_text = array();
                 $tips = array();
 
                 for ($i = 4; $i <= sizeof($match); $i += 3) {

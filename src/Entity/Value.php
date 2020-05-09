@@ -55,10 +55,6 @@ abstract class Value
     );
 
     public const WEATHER_TEXT = array(
-        'P' => 'more than',
-        'M' => 'less than',
-        'B' => 'began',
-        'E' => 'ended',
         'TS' => 'thunderstorm',
         'FZ' => 'freezing',
         'SH' => 'showering',

@@ -39,12 +39,16 @@ Example:
 
 - Initiate decoder instance
 
-```$decoder = new ReportDecoder();```
+`$decoder = new ReportDecoder();`
 
 - Get the decoded report object
 
-```$decoded_metar = $decoder->getDecodedReport($metar_raw_text);```
+`$decoded = $decoder->getDecodedMetar($metar_raw_text);`
 
-- Output the wind speed for the given metar
+*OR*
 
-```echo $decoded_metar->getSurfaceWind()->getSpeed();```
+`$decoded = $decoder->getDecodedTaf($taf_raw_text);`
+
+- Example: Getting the wind speed from the decoded object.
+
+`echo $decoded->getSurfaceWind()->getSpeed();`

@@ -16,8 +16,8 @@ namespace ReportDecoder\Decoders\TafDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
+use ReportDecoder\Entity\EntityWeather;
 use ReportDecoder\Entity\Value;
-use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes Weather chunk
@@ -78,18 +78,20 @@ class DecodeWeather extends Decoder implements DecoderInterface
             $weather = trim($match[0]);
             $weather_components = explode(' ', $weather);
 
+            $weather_text = array();
+            $weather_tips = array();
             $decoded_weather = array();
-            foreach ($weather_components as $component) {
-                $decoded_weather[] = array(
-                    'code' => $component,
-                    'text' => Value::weatherCodeToText($component)
-                );
-            }
-            $decoded->setPresentWeather($decoded_weather);
 
+            foreach ($weather_components as $component) {
+                $weather_text[] = $component;
+                $weather_tips[] = Value::weatherCodeToText($component);
+                $decoded_weather[] = new EntityWeather($component);
+            }
+
+            $decoded->setPresentWeather($decoded_weather);
             $result = array(
-                'text' => $weather,
-                'tip' => Value::weatherCodeToText($weather)
+                'text' => $weather_text,
+                'tip' => $weather_tips
             );
         }
 

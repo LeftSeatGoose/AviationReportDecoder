@@ -81,7 +81,10 @@ class DecodeVisibility extends Decoder implements DecoderInterface
             $result = null;
         } elseif ($match[1] == '////') {
             $decoded->setCavok(false);
-            $result = null;
+            $result = array(
+                'text' => $match[0],
+                'tip' => 'Ground visibility not measured'
+            );
         } else {
             $decoded->setCavok(false);
 

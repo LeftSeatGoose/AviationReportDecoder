@@ -72,20 +72,20 @@ class DecodeWind extends Decoder implements DecoderInterface
             );
         }
 
-        $decoded->setSurfaceWind(
-            new EntityWind(
-                $match[1],
-                Value::toInt($match[2]),
-                Value::toInt($match[4]),
-                $match[5],
-                isset($match[6]) ? $match[7] : null,
-                isset($match[6]) ? $match[8] : null
-            )
-        );
-
         if ($match[1] == '///' && $match[2] == '//') {
-            $tip = 'No information measured for surface wind.';
+            $tip = 'No information measured for surface wind';
         } else {
+            $decoded->setSurfaceWind(
+                new EntityWind(
+                    $match[1],
+                    Value::toInt($match[2]),
+                    Value::toInt($match[4]),
+                    $match[5],
+                    isset($match[6]) ? $match[7] : null,
+                    isset($match[6]) ? $match[8] : null
+                )
+            );
+
             $tip = 'Wind direction: ' . trim($match[1]) . '°, ';
             if (isset($match[6])) {
                 $tip .= 'Variable from ' . $match[7] . '° to ' . $match[8] . '°, ';

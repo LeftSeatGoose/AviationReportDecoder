@@ -17,7 +17,6 @@ namespace ReportDecoder\Decoders\TafDecoders;
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
 use ReportDecoder\Entity\EntityDateTime;
-use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes Period chunk
@@ -52,7 +51,7 @@ class DecodePeriod extends Decoder implements DecoderInterface
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
-        $report = $result['report'];
+        $remaining_report = $result['report'];
 
         if (!$match) {
             $result = null;
@@ -73,7 +72,7 @@ class DecodePeriod extends Decoder implements DecoderInterface
         return array(
             'name' => 'period',
             'result' => $result,
-            'report' => $report
+            'report' => $remaining_report
         );
     }
 }

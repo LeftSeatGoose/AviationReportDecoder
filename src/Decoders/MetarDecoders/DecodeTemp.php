@@ -46,31 +46,38 @@ class DecodeTemp extends Decoder implements DecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
+     * @throws DecoderException
+     * 
      * @return Array
      */
     public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
-        $report = $result['report'];
+        $remaining_report = $result['report'];
 
         if (!$match) {
-            $result = null;
-        } else {
-            $decoded->setAirTemperature(Value::toInt($match[1]));
-            $decoded->setDewPointTemperature(Value::toInt($match[2]));
-
-            $result = array(
-                'text' => $match[0],
-                'tip' => 'Temperature is ' . Value::toInt($match[1])
-                    . '°C and dew point is ' . Value::toInt($match[2]) . '°C'
+            throw new DecoderException(
+                $report,
+                $remaining_report,
+                'Bad format for temperature information',
+                $this
             );
         }
+
+        $decoded->setAirTemperature(Value::toInt($match[1]));
+        $decoded->setDewPointTemperature(Value::toInt($match[2]));
+
+        $result = array(
+            'text' => $match[0],
+            'tip' => 'Temperature is ' . Value::toInt($match[1])
+                . '°C and dew point is ' . Value::toInt($match[2]) . '°C'
+        );
 
         return array(
             'name' => 'temp',
             'result' => $result,
-            'report' => $report,
+            'report' => $remaining_report
         );
     }
 }

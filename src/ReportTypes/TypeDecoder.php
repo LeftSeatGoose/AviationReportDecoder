@@ -57,6 +57,8 @@ abstract class TypeDecoder
                 }
             } catch (DecoderException $ex) {
                 $this->decoded_report->addDecodingException($ex);
+
+                $report = $ex->getRemaining();
             }
         }
 

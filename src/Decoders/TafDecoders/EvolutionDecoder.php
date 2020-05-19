@@ -110,7 +110,11 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
                     break;
                 }
             } catch (DecoderException $ex) {
-                $this->decoded_report->addDecodingException($ex);
+                // The exception is not added to the main decoded object
+                // because evolution formats are not strict
+                $this->_decoded_evolution->addDecodingException($ex);
+                // Chunk is not trimmed because it needs to continue
+                // searching for a match
             }
         }
 

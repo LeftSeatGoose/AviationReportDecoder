@@ -18,6 +18,7 @@ use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
 use ReportDecoder\Entity\EntityQNH;
 use ReportDecoder\Entity\Value;
+use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes QNH chunk
@@ -52,40 +53,47 @@ class DecodeQNH extends Decoder implements DecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
+     * @throws DecoderException
+     * 
      * @return Array
      */
     public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
-        $report = $result['report'];
+        $remaining_report = $result['report'];
 
         if (!$match) {
-            $result = null;
-        } else {
-            $pressure = $match[2];
-
-            if ($match[1] == 'A') {
-                $pressure = $pressure / 100;
-            }
-
-            $decoded->setPressure(
-                new EntityQNH(
-                    $pressure,
-                    self::$_units[$match[1]]
-                )
-            );
-
-            $result = array(
-                'text' => $match[0],
-                'tip' => 'Pressure is ' . $pressure . ' ' . self::$_units[$match[1]]
+            throw new DecoderException(
+                $report,
+                $remaining_report,
+                'Bad format for pressure information',
+                $this
             );
         }
+
+        $pressure = $match[2];
+
+        if ($match[1] == 'A') {
+            $pressure = $pressure / 100;
+        }
+
+        $decoded->setPressure(
+            new EntityQNH(
+                $pressure,
+                self::$_units[$match[1]]
+            )
+        );
+
+        $result = array(
+            'text' => $match[0],
+            'tip' => 'Pressure is ' . $pressure . ' ' . self::$_units[$match[1]]
+        );
 
         return array(
             'name' => 'pressure',
             'result' => $result,
-            'report' => $report,
+            'report' => $remaining_report
         );
     }
 }

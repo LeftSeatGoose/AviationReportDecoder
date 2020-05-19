@@ -46,34 +46,41 @@ class DecodeDateTime extends Decoder implements DecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
+     * @throws DecoderException
+     * 
      * @return Array
      */
     public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
-        $report = $result['report'];
+        $remaining_report = $result['report'];
 
         if (!$match) {
-            $result = null;
-        } else {
-            $datetime = new EntityDateTime(
-                $match[2],
-                $match[2] . ':' . $match[3]
-            );
-            $decoded->setDateTime($datetime);
-
-            $result = array(
-                'text' => $match[0],
-                'tip' => 'Weather observed '
-                    . $datetime->value() . ' UTC'
+            throw new DecoderException(
+                $report,
+                $remaining_report,
+                'Bad format for date time information',
+                $this
             );
         }
+
+        $datetime = new EntityDateTime(
+            $match[2],
+            $match[2] . ':' . $match[3]
+        );
+        $decoded->setDateTime($datetime);
+
+        $result = array(
+            'text' => $match[0],
+            'tip' => 'Weather observed '
+                . $datetime->value() . ' UTC'
+        );
 
         return array(
             'name' => 'datetime',
             'result' => $result,
-            'report' => $report
+            'report' => $remaining_report
         );
     }
 }

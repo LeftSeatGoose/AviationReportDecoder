@@ -18,6 +18,7 @@ use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
 use ReportDecoder\Entity\EntityCloud;
 use ReportDecoder\Entity\Value;
+use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes Cloud chunk
@@ -49,58 +50,65 @@ class DecodeCloud extends Decoder implements DecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
+     * @throws DecoderException
+     * 
      * @return Array
      */
     public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
-        $report = $result['report'];
+        $remaining_report = $result['report'];
 
         if (!$match) {
-            $result = null;
+            throw new DecoderException(
+                $report,
+                $remaining_report,
+                'Bad format for cloud information',
+                $this
+            );
+        }
+
+        $match = array_map('trim', $match);
+
+        if ($match[0] == 'SKC') {
+            $result = array(
+                'text' => 'SKC',
+                'tip' => 'Sky clear'
+            );
         } else {
-            $match = array_map('trim', $match);
+            $clouds = array();
+            $clouds_text = array();
+            $tips = array();
 
-            if ($match[0] == 'SKC') {
-                $result = array(
-                    'text' => 'SKC',
-                    'tip' => 'Sky clear'
-                );
-            } else {
-                $clouds = array();
-                $clouds_text = array();
-                $tips = array();
-
-                for ($i = 4; $i <= sizeof($match); $i += 3) {
-                    if (empty($match[$i])) {
-                        continue;
-                    }
-
-                    $clouds[] = new EntityCloud(
-                        $match[$i],
-                        Value::toInt($match[$i + 1] . '00')
-                    );
-                    $clouds_text[] = $match[$i] . Value::toInt($match[$i + 1]);
-                    $tips[] = $match[$i] . ' ' . Value::toInt($match[$i + 1])
-                        . '00ft AGL';
-
-                    ++$i;
+            for ($i = 4; $i <= sizeof($match); $i += 3) {
+                if (empty($match[$i])) {
+                    continue;
                 }
 
-                $decoded->setClouds($clouds);
-
-                $result = array(
-                    'text' => $clouds_text,
-                    'tip' => $tips
+                $clouds[] = new EntityCloud(
+                    $match[$i],
+                    Value::toInt($match[$i + 1] . '00')
                 );
+                $clouds_text[] = $match[$i] . Value::toInt($match[$i + 1]);
+                $tips[] = $match[$i] . ' ' . Value::toInt($match[$i + 1])
+                    . '00ft AGL';
+
+                ++$i;
             }
+
+            $decoded->setClouds($clouds);
+
+            $result = array(
+                'text' => $clouds_text,
+                'tip' => $tips
+            );
         }
 
         return array(
             'name' => 'clouds',
             'result' => $result,
-            'report' => $report,
+            'report' => $remaining_report
         );
     }
 }

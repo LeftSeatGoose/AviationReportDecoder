@@ -51,7 +51,7 @@ class DecodeEvolution extends Decoder implements DecoderInterface
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
-        $report = $result['report'];
+        $remaining_report = $result['report'];
 
         if (!$match) {
             $result = null;
@@ -74,7 +74,7 @@ class DecodeEvolution extends Decoder implements DecoderInterface
         return array(
             'name' => 'evolution',
             'result' => $result,
-            'report' => $report,
+            'report' => $remaining_report
         );
     }
 }

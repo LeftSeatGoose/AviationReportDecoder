@@ -70,7 +70,7 @@ class DecodeWeather extends Decoder implements DecoderInterface
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
-        $report = $result['report'];
+        $remaining_report = $result['report'];
 
         if (!$match || (isset($match[0]) && $match[0] == '')) {
             $result = null;
@@ -98,7 +98,7 @@ class DecodeWeather extends Decoder implements DecoderInterface
         return array(
             'name' => 'weather',
             'result' => $result,
-            'report' => $report,
+            'report' => $remaining_report
         );
     }
 }

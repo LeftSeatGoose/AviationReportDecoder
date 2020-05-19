@@ -50,11 +50,11 @@ abstract class Decoder
             $match = false;
         }
 
-        $report = trim(preg_replace($regex, '', $report, 1));
+        $remaining_report = trim(preg_replace($regex, '', $report, 1));
 
         return array(
             'match' => $match,
-            'report' => $report
+            'report' => $remaining_report
         );
     }
 }

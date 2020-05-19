@@ -55,7 +55,7 @@ class DecodeForecastPeriod extends Decoder implements DecoderInterface
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
-        $report = $result['report'];
+        $remaining_report = $result['report'];
 
         if (!$match) {
             $result = null;
@@ -92,7 +92,7 @@ class DecodeForecastPeriod extends Decoder implements DecoderInterface
         return array(
             'name' => 'forecast_period',
             'result' => $result,
-            'report' => $report
+            'report' => $remaining_report
         );
     }
 }

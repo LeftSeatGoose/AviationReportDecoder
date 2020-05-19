@@ -18,6 +18,7 @@ use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
 use ReportDecoder\Entity\EntityVisibility;
 use ReportDecoder\Entity\Value;
+use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes Visibility chunk
@@ -54,70 +55,77 @@ class DecodeVisibility extends Decoder implements DecoderInterface
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
      * 
+     * @throws DecoderException
+     * 
      * @return Array
      */
     public function parse($report, &$decoded)
     {
         $result = $this->matchChunk($report);
         $match = $result['match'];
-        $report = $result['report'];
+        $remaining_report = $result['report'];
 
         if (!$match) {
+            throw new DecoderException(
+                $report,
+                $remaining_report,
+                'Bad format for visibility information',
+                $this
+            );
+        }
+
+        $cavok = false;
+
+        if ($match[1] ==  'CAVOK') {
+            $decoded->setCavok(true);
+            $result = null;
+        } elseif ($match[1] == '////') {
+            $decoded->setCavok(false);
             $result = null;
         } else {
-            $cavok = false;
+            $decoded->setCavok(false);
 
-            if ($match[1] ==  'CAVOK') {
-                $decoded->setCavok(true);
-                $result = null;
-            } elseif ($match[1] == '////') {
-                $decoded->setCavok(false);
-                $result = null;
+            if ($match[2] != null) {
+                // ICAO Visibility
+                $distance = $match[2];
+                $unit = Value::UNIT_METRE;
+            } else if ($match[11] != null) {
+                // KM Visibility
+                $distance = $match[11];
+                $unit = Value::UNIT_KM;
             } else {
-                $decoded->setCavok(false);
+                // US Visibility
+                $main = intval($match[7]);
+                $frac_top = intval($match[9]);
+                $frac_bot = intval($match[10]);
 
-                if ($match[2] != null) {
-                    // ICAO Visibility
-                    $distance = $match[2];
-                    $unit = Value::UNIT_METRE;
-                } else if ($match[11] != null) {
-                    // KM Visibility
-                    $distance = $match[11];
-                    $unit = Value::UNIT_KM;
+                if ($frac_bot != 0) {
+                    $vis_value = $main + $frac_top / $frac_bot;
                 } else {
-                    // US Visibility
-                    $main = intval($match[7]);
-                    $frac_top = intval($match[9]);
-                    $frac_bot = intval($match[10]);
-
-                    if ($frac_bot != 0) {
-                        $vis_value = $main + $frac_top / $frac_bot;
-                    } else {
-                        $vis_value = $main;
-                    }
-
-                    $distance = $vis_value;
-                    $unit = Value::UNIT_SM;
+                    $vis_value = $main;
                 }
 
-                $decoded->setVisibility(
-                    new EntityVisibility(
-                        Value::toInt($distance),
-                        $unit
-                    )
-                );
-
-                $result = array(
-                    'text' => $match[0],
-                    'tip' => 'Ground visibility is ' . $match[0]
-                );
+                $distance = $vis_value;
+                $unit = Value::UNIT_SM;
             }
+
+            $decoded->setVisibility(
+                new EntityVisibility(
+                    Value::toInt($distance),
+                    $unit
+                )
+            );
+
+            $result = array(
+                'text' => $match[0],
+                'tip' => 'Ground visibility is ' . $match[0]
+            );
         }
 
         return array(
             'name' => 'visibility',
             'result' => $result,
-            'report' => $report,
+            'report' => $remaining_report
         );
     }
 }

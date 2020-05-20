@@ -67,7 +67,7 @@ class DecodeIssueTime extends Decoder implements DecoderInterface
 
         try {
             $datetime = new EntityDateTime(
-                $match[2],
+                $match[1],
                 $match[2] . ':' . $match[3]
             );
         } catch (\Exception $exception) {

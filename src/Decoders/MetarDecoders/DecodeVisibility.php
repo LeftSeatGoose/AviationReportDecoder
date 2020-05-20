@@ -40,13 +40,15 @@ class DecodeVisibility extends Decoder implements DecoderInterface
     {
         $cavok = 'CAVOK';
         $visibility = '([0-9]{4})(NDV)?';
-        $us_visibility = 'M?([0-9]{0,2}) ?(([1357])\/(2|4|8|16))?SM';
         $minimum_visibility = '( ([0-9]{4})(N|NE|E|SE|S|SW|W|NW)?)?';
+        $us_visibility = 'M?([0-9]{0,2}) ?(([1357])\/(2|4|8|16))?SM';
         $km_visibility = '([0-9][05])(KM)?(NDV)?';
         $no_info = '\/\/\/\/';
 
-        return "/^($cavok|$visibility$minimum_visibility|"
-            . "$us_visibility|$km_visibility|$no_info)( )/";
+        return "/^($cavok|$visibility$minimum_visibility"
+            . "$minimum_visibility$minimum_visibility"
+            . "$minimum_visibility|$us_visibility|"
+            . "$km_visibility|$no_info)( )/";
     }
 
     /**
@@ -90,17 +92,56 @@ class DecodeVisibility extends Decoder implements DecoderInterface
 
             if ($match[2] != null) {
                 // ICAO Visibility
-                $distance = $match[2];
-                $unit = Value::UNIT_METRE;
-            } else if ($match[11] != null) {
+                $visibility = new EntityVisibility(
+                    Value::toInt($match[2]),
+                    Value::UNIT_METRE
+                );
+
+                $visibility->setNDV($match[3] != null);
+
+                if ($match[4] != null) {
+                    $visibility->setSectorVisibility(
+                        Value::toInt($match[5]),
+                        Value::UNIT_METRE,
+                        $match[6]
+                    );
+                }
+                if ($match[7] != null) {
+                    $visibility->setSectorVisibility(
+                        Value::toInt($match[8]),
+                        Value::UNIT_METRE,
+                        $match[9]
+                    );
+                }
+                if ($match[10] != null) {
+                    $visibility->setSectorVisibility(
+                        Value::toInt($match[11]),
+                        Value::UNIT_METRE,
+                        $match[12]
+                    );
+                }
+                if ($match[13] != null) {
+                    $visibility->setSectorVisibility(
+                        Value::toInt($match[14]),
+                        Value::UNIT_METRE,
+                        $match[15]
+                    );
+                }
+
+                $decoded->setVisibility($visibility);
+            } else if ($match[20] != null) {
                 // KM Visibility
-                $distance = $match[11];
-                $unit = Value::UNIT_KM;
+                $decoded->setVisibility(
+                    new EntityVisibility(
+                        Value::toInt($match[20]),
+                        Value::UNIT_KM
+                    )
+                );
             } else {
                 // US Visibility
-                $main = intval($match[7]);
-                $frac_top = intval($match[9]);
-                $frac_bot = intval($match[10]);
+                $main = intval($match[16]);
+                $frac_top = intval($match[18]);
+                $frac_bot = intval($match[19]);
 
                 if ($frac_bot != 0) {
                     $vis_value = $main + $frac_top / $frac_bot;
@@ -108,16 +149,13 @@ class DecodeVisibility extends Decoder implements DecoderInterface
                     $vis_value = $main;
                 }
 
-                $distance = $vis_value;
-                $unit = Value::UNIT_SM;
+                $decoded->setVisibility(
+                    new EntityVisibility(
+                        Value::toInt($vis_value),
+                        Value::UNIT_SM
+                    )
+                );
             }
-
-            $decoded->setVisibility(
-                new EntityVisibility(
-                    Value::toInt($distance),
-                    $unit
-                )
-            );
 
             $result = array(
                 'text' => $match[0],

@@ -29,6 +29,8 @@ class EntityRVR
     private $_runway = null;
     private $_unit = null;
     private $_trend = null;
+    private $_range = null;
+    private $_range_variable = false;
     private $_variable_from = null;
     private $_variable_to = null;
 
@@ -61,6 +63,7 @@ class EntityRVR
         $variable_to
     ) {
         $obj = new EntityRVR($unit, $trend);
+        $obj->_range_variable = true;
         $obj->_variable_from = $variable_from;
         $obj->_variable_to = $variable_to;
         return $obj;
@@ -75,10 +78,11 @@ class EntityRVR
      * 
      * @return EntityRVR
      */
-    public static function initWithRunway($unit, $trend, $runway)
+    public static function initWithRunway($unit, $trend, $runway, $range)
     {
         $obj = new EntityRVR($unit, $trend);
         $obj->_runway = $runway;
+        $obj->_range = $range;
         return $obj;
     }
 
@@ -100,6 +104,26 @@ class EntityRVR
     public function getTrend()
     {
         return $this->_trend;
+    }
+
+    /**
+     * Gets of the range is variable
+     * 
+     * @return Boolean
+     */
+    public function getRangeVariable()
+    {
+        return $this->_range_variable;
+    }
+
+    /**
+     * Gets the visual range
+     * 
+     * @return Int
+     */
+    public function getRange()
+    {
+        return $this->_range;
     }
 
     /**

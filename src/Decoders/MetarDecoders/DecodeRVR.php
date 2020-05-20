@@ -18,6 +18,7 @@ use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
 use ReportDecoder\Entity\EntityRVR;
 use ReportDecoder\Entity\Value;
+use ReportDecoder\Exceptions\DecoderException;
 
 /**
  * Decodes RVR chunk
@@ -37,8 +38,10 @@ class DecodeRVR extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        return '/^R([0-9]{2}[LCR]?)\/(([PM]?([0-9]{4}))V)'
-            . '?([PM]?([0-9]{4}))(FT)?\/?([UDN]?)/';
+        $runway = 'R([0-9]{2}[LCR]?)\/([PM]?([0-9]{4})'
+            . 'V)?[PM]?([0-9]{4})(FT)?\/?([UDN]?)';
+
+        return "/^($runway)( $runway)?( $runway)?( $runway)?( )/";
     }
 
     /**
@@ -46,6 +49,8 @@ class DecodeRVR extends Decoder implements DecoderInterface
      * 
      * @param String        $report  Remaining report string
      * @param DecodedReport $decoded DecodedReport object
+     * 
+     * @throws DecoderException
      * 
      * @return Array
      */
@@ -58,23 +63,47 @@ class DecodeRVR extends Decoder implements DecoderInterface
         if (!$match) {
             $result = null;
         } else {
-            if (empty($match[2])) {
-                $decoded->setRunwaysVisualRange(
-                    EntityRVR::initWithRunway(
-                        $match[7],
-                        $match[8],
-                        Value::toInt($match[5])
-                    )
-                );
-            } else {
-                $decoded->setRunwaysVisualRange(
-                    EntityRVR::initWithVariable(
-                        $match[7],
-                        $match[8],
-                        Value::toInt($match[3]),
-                        Value::toInt($match[5])
-                    )
-                );
+            $runways = array();
+
+            for ($i = 1; $i <= 20; $i += 7) {
+                if ($match[$i] != null) {
+
+                    $qfu_as_int = Value::toInt($match[$i + 1]);
+                    if ($qfu_as_int > 36 || $qfu_as_int < 1) {
+                        throw new DecoderException(
+                            $report,
+                            $remaining_report,
+                            'Invalid runway QFU runway visual range information',
+                            $this
+                        );
+                    }
+
+                    if ($match[$i + 5] == 'FT') {
+                        $range_unit = Value::UNIT_FEET;
+                    } else {
+                        $range_unit = Value::UNIT_METRE;
+                    }
+
+                    if ($match[$i + 3] != null) {
+                        // RVR is variable
+                        $rvr_entity = EntityRVR::initWithVariable(
+                            $range_unit,
+                            $match[$i + 6],
+                            Value::toInt($match[$i + 3]),
+                            Value::toInt($match[$i + 4])
+                        );
+                    } else {
+                        // RVR has runway designation
+                        $rvr_entity = EntityRVR::initWithRunway(
+                            $range_unit,
+                            $match[$i + 6],
+                            $match[$i + 1],
+                            Value::toInt($match[$i + 4])
+                        );
+                    }
+
+                    $decoded->setRunwayVisualRange($rvr_entity);
+                }
             }
 
             $result = array(

@@ -38,11 +38,11 @@ class DecodedMetar extends DecodedReport
     private $_visibility;
     private $_cavok;
 
-    private $_runways_visual_range;
+    private $_runways_visual_range = array();
 
-    private $_present_weather;
+    private $_present_weather = array();
 
-    private $_clouds;
+    private $_clouds = array();
 
     private $_air_temperature;
     private $_dew_point_temperature;
@@ -184,21 +184,21 @@ class DecodedMetar extends DecodedReport
     }
 
     /**
-     * Sets the Runway Visual Range
+     * Sets a Runway Visual Range
      * 
-     * @param EntityRVR $rvr Runways Visual Range
+     * @param EntityRVR $rvr Runway Visual Range
      * 
      * @return Void
      */
-    public function setRunwaysVisualRange($rvr)
+    public function setRunwayVisualRange($rvr)
     {
-        $this->_runways_visual_range = $rvr;
+        $this->_runways_visual_range[] = $rvr;
     }
 
     /**
      * Gets the runways visual range
      * 
-     * @return EntityRVR
+     * @return EntityRVR[]
      */
     public function getRunwaysVisualRange()
     {

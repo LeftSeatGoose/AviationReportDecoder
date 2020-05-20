@@ -41,7 +41,7 @@ abstract class TypeDecoder
     {
         foreach ($this->decoder as $chunk) {
             try {
-                $parse_attempt = $chunk->parse($report, $this->decoded_report);
+                $parse_attempt = $this->_tryParsing($chunk, $report);
 
                 if (is_null($parse_attempt['result'])) {
                     continue;
@@ -63,5 +63,51 @@ abstract class TypeDecoder
         }
 
         return $this->decoded_report;
+    }
+
+    /**
+     * Attempt to parse the report
+     * 
+     * @param Decoder $chunk  Chunk to try on report
+     * @param String  $report The report to parse
+     * 
+     * @return Array 
+     */
+    private function _tryParsing($chunk, $report)
+    {
+        try {
+            $parse_attempt = $chunk->parse($report, $this->decoded_report);
+        } catch (DecoderException $primary_exception) {
+            //if ($strict) {
+            //    throw $primary_exception;
+            //}
+
+            try {
+                $alternative = self::consumeOneChunk($report);
+                $parse_attempt = $chunk->parse($alternative, $this->decoded_report);
+                $this->decoded_report->addDecodingException($primary_exception);
+            } catch (DecoderException $secondary_exception) {
+                throw $primary_exception;
+            }
+        }
+
+        return $parse_attempt;
+    }
+
+    /**
+     * Consume one chunk without parsing
+     * 
+     * @param String $report The report to consume
+     * 
+     * @return String
+     */
+    public static function consumeOneChunk($report)
+    {
+        $next_space = strpos($report, ' ');
+        if ($next_space > 0) {
+            return substr($report, $next_space + 1);
+        } else {
+            return $report;
+        }
     }
 }

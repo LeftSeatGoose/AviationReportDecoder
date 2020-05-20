@@ -36,6 +36,7 @@ abstract class Value
     public const UNIT_MPH = 'MPH';
     public const UNIT_KPH = 'KPH';
     public const UNIT_METRE = 'M';
+    public const UNIT_FEET = 'FT';
 
     public const EVOLUTION_TEXT = array(
         'BECMG' => 'Becoming',

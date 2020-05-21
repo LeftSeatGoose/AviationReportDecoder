@@ -102,6 +102,17 @@ class DecodeWind extends Decoder implements DecoderInterface
                     break;
             }
 
+            // Get gust factor
+            $gust_field = Value::toInt($match[4]);
+            if (!empty($gust_field)) {
+                $gust = new Value(
+                    $gust_field,
+                    $speed_unit
+                );
+            } else {
+                $gust = null;
+            }
+
             $decoded->setSurfaceWind(
                 new EntityWind(
                     new Value(
@@ -112,18 +123,7 @@ class DecodeWind extends Decoder implements DecoderInterface
                         Value::toInt($match[2]),
                         $speed_unit
                     ),
-                    new Value(
-                        Value::toInt($match[4]),
-                        $speed_unit
-                    ),
-                    new Value(
-                        Value::toInt($match[4]),
-                        Value::UNIT_DEGREE
-                    ),
-                    new Value(
-                        Value::toInt($match[4]),
-                        Value::UNIT_DEGREE
-                    ),
+                    $gust,
                     $var_from,
                     $var_to
                 )
@@ -134,8 +134,8 @@ class DecodeWind extends Decoder implements DecoderInterface
                 $tip .= 'Variable from ' . $match[7] . '° to ' . $match[8] . '°, ';
             }
             $tip .= 'Wind speed: ' . Value::toInt($match[2]) . $match[5];
-            if (!empty(Value::toInt($match[4]))) {
-                $tip .=  ', Wind gust: ' . Value::toInt($match[4]) . $match[5];
+            if (!empty($gust_field)) {
+                $tip .=  ', Wind gust: ' . $gust_field . $match[5];
             }
         }
 

@@ -45,7 +45,7 @@ class Value
 
     // Pressure Units
     public const UNIT_HECTOPASCAL = 'hPa';
-    public const UNIT_INCH_MERCURY = 'hPa';
+    public const UNIT_INCH_MERCURY = 'inHg';
 
     // Temperature Units
     public const UNIT_CELSIUS = 'C';

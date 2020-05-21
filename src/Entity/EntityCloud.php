@@ -28,18 +28,18 @@ class EntityCloud
 
     private $_cloud_abbv = null;
     private $_cloud_type = null;
-    private $_height = null;
+    private $_altitude = null;
 
     /**
      * Construct
      * 
      * @param String $cloud_abbv Abbreviation for the cloud type
-     * @param Value  $height     Cloud height in feet
+     * @param Value  $altitude   Cloud altitude in feet
      */
-    public function __construct($cloud_abbv, $height)
+    public function __construct($cloud_abbv, $altitude)
     {
         $this->_cloud_abbv = $cloud_abbv;
-        $this->_height = $height;
+        $this->_altitude = $altitude;
         if (isset(Value::CLOUD_TEXT[$cloud_abbv])) {
             $this->_cloud_type = Value::CLOUD_TEXT[$cloud_abbv];
         }
@@ -66,12 +66,12 @@ class EntityCloud
     }
 
     /**
-     * Gets the cloud height
+     * Gets the cloud altitude
      * 
      * @return Value
      */
-    public function getHeight()
+    public function getAltitude()
     {
-        return $this->_height;
+        return $this->_altitude;
     }
 }

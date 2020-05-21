@@ -87,14 +87,14 @@ class DecodeCloud extends Decoder implements DecoderInterface
                     continue;
                 }
 
-                $height_value = new Value(
+                $altitude_value = new Value(
                     Value::toInt($match[$i + 1] . '00'),
                     Value::UNIT_FEET
                 );
 
                 $clouds[] = new EntityCloud(
                     $match[$i],
-                    $height_value
+                    $altitude_value
                 );
                 $clouds_text[] = $match[$i] . Value::toInt($match[$i + 1]);
                 $tips[] = $match[$i] . ' ' . Value::toInt($match[$i + 1])

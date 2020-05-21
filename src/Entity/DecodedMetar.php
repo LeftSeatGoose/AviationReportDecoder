@@ -252,7 +252,7 @@ class DecodedMetar extends DecodedReport
     /**
      * Sets the Air temperature
      * 
-     * @param Int $temperature Temperature
+     * @param Value $temperature Temperature
      * 
      * @return Void
      */
@@ -264,7 +264,7 @@ class DecodedMetar extends DecodedReport
     /**
      * Gets the air temperature
      * 
-     * @return Int
+     * @return Value
      */
     public function getAirTemperature()
     {
@@ -274,7 +274,7 @@ class DecodedMetar extends DecodedReport
     /**
      * Sets the Dew Point
      * 
-     * @param Int $temperature Dew Point
+     * @param Value $temperature Dew Point
      * 
      * @return Void
      */
@@ -286,7 +286,7 @@ class DecodedMetar extends DecodedReport
     /**
      * Gets the dew point
      * 
-     * @return Int
+     * @return Value
      */
     public function getDewPointTemperature()
     {
@@ -296,7 +296,7 @@ class DecodedMetar extends DecodedReport
     /**
      * Sets the Pressure
      * 
-     * @param Double $pressure Pressure
+     * @param Value $pressure Pressure
      * 
      * @return Void
      */
@@ -308,7 +308,7 @@ class DecodedMetar extends DecodedReport
     /**
      * Gets the pressure
      * 
-     * @return Double
+     * @return Value
      */
     public function getPressure()
     {

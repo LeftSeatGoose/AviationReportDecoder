@@ -16,7 +16,6 @@ namespace ReportDecoder\Decoders\MetarDecoders;
 
 use ReportDecoder\Decoders\Decoder;
 use ReportDecoder\Decoders\DecoderInterface;
-use ReportDecoder\Entity\EntityQNH;
 use ReportDecoder\Entity\Value;
 use ReportDecoder\Exceptions\DecoderException;
 
@@ -33,8 +32,8 @@ class DecodeQNH extends Decoder implements DecoderInterface
 {
 
     private static $_units = array(
-        'A' => Value::UNIT_INHG,
-        'Q' => Value::UNIT_HPA
+        'A' => Value::UNIT_INCH_MERCURY,
+        'Q' => Value::UNIT_HECTOPASCAL
     );
 
     /**
@@ -72,18 +71,14 @@ class DecodeQNH extends Decoder implements DecoderInterface
             );
         }
 
-        $pressure = $match[2];
-
+        $pressure = Value::toInt($match[2]);
         if ($match[1] == 'A') {
             $pressure = $pressure / 100;
         }
 
-        $decoded->setPressure(
-            new EntityQNH(
-                $pressure,
-                self::$_units[$match[1]]
-            )
-        );
+
+        $pressure_value = new Value($pressure, self::$_units[$match[1]]);
+        $decoded->setPressure($pressure_value);
 
         $result = array(
             'text' => $match[0],

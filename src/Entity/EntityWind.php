@@ -28,32 +28,33 @@ class EntityWind
     private $_direction = null;
     private $_speed = null;
     private $_gust = null;
-    private $_unit = null;
+    private $_is_variable = false;
     private $_var_from = null;
     private $_var_to = null;
 
     /**
      * Construct
      * 
-     * @param Int|String $direction Wind direction
-     * @param Int        $speed     Wind speed
-     * @param Int        $gust      Wind gust
-     * @param String     $unit      Wind speed unit
-     * @param Int        $var_from  Direction variable start
-     * @param Int        $var_to    Direction variable end
+     * @param Value $direction Wind direction
+     * @param Value $speed     Wind speed
+     * @param Value $gust      Wind gust
+     * @param Value $var_from  Direction variable start
+     * @param Value $var_to    Direction variable end
      */
     public function __construct(
         $direction,
         $speed,
         $gust,
-        $unit,
         $var_from = null,
         $var_to = null
     ) {
         $this->_direction = $direction;
         $this->_speed = $speed;
         $this->_gust = $gust;
-        $this->_unit = $unit;
+
+        if (!is_null($var_from)) {
+            $this->_is_variable = true;
+        }
         $this->_var_from = $var_from;
         $this->_var_to = $var_to;
     }
@@ -61,7 +62,7 @@ class EntityWind
     /**
      * Gets the wind direction
      * 
-     * @return String
+     * @return Value
      */
     public function getDirection()
     {
@@ -71,7 +72,7 @@ class EntityWind
     /**
      * Gets the wind speed
      * 
-     * @return Int
+     * @return Value
      */
     public function getSpeed()
     {
@@ -81,7 +82,7 @@ class EntityWind
     /**
      * Gets the gust speed
      * 
-     * @return Int
+     * @return Value
      */
     public function getGust()
     {
@@ -89,19 +90,19 @@ class EntityWind
     }
 
     /**
-     * Gets the speed unit
+     * Gets if the wind is variable
      * 
-     * @return String
+     * @return Boolean
      */
-    public function getUnit()
+    public function getWindVariable()
     {
-        return $this->_unit;
+        return $this->_is_variable;
     }
 
     /**
      * Gets the variable direction start
      * 
-     * @return String
+     * @return Value
      */
     public function getVarFrom()
     {
@@ -111,7 +112,7 @@ class EntityWind
     /**
      * Gets the variable direction end
      * 
-     * @return String
+     * @return Value
      */
     public function getVarTo()
     {

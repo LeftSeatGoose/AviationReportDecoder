@@ -56,8 +56,18 @@ class DecodeTemp extends Decoder implements DecoderInterface
         if (!$match) {
             $result = null;
         } else {
-            $decoded->setAirTemperature(Value::toInt($match[1]));
-            $decoded->setDewPointTemperature(Value::toInt($match[2]));
+            $decoded->setAirTemperature(
+                new Value(
+                    Value::toInt($match[1]),
+                    Value::UNIT_CELSIUS
+                )
+            );
+            $decoded->setDewPointTemperature(
+                new Value(
+                    Value::toInt($match[2]),
+                    Value::UNIT_CELSIUS
+                )
+            );
 
             $result = array(
                 'text' => $match[0],

@@ -89,8 +89,10 @@ class DecodeVisibility extends Decoder implements DecoderInterface
                 // ICAO Visibility
                 $decoded->setVisibility(
                     new EntityVisibility(
-                        Value::toInt($match[2]),
-                        Value::UNIT_METRE
+                        new Value(
+                            Value::toInt($match[2]),
+                            Value::UNIT_METRE
+                        )
                     )
                 );
             } else {
@@ -107,8 +109,12 @@ class DecodeVisibility extends Decoder implements DecoderInterface
 
                 $decoded->setVisibility(
                     new EntityVisibility(
-                        Value::toInt($vis_value),
-                        Value::UNIT_SM
+                        new Value(
+                            Value::toInt($vis_value),
+                            Value::UNIT_STATUTE_MILE
+                        ),
+                        null,
+                        $is_greater
                     )
                 );
             }

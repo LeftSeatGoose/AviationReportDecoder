@@ -26,43 +26,33 @@ namespace ReportDecoder\Entity;
 class EntityVisibility
 {
     private $_distance = null;
-    private $_unit = null;
     private $_direction = null;
+    private $_is_greater = null;
     private $_ndv = null;
     private $_sector_visibilities = array();
 
     /**
      * Construct
      * 
-     * @param Int $distance  Distance
-     * @param Int $unit      Distance unit
-     * @param Int $direction Visibility direction
+     * @param Value   $distance   Distance
+     * @param Int     $direction  Visibility direction
+     * @param Boolean $is_greater If the visibility is greater than the value
      */
-    public function __construct($distance, $unit, $direction = null)
+    public function __construct($distance, $direction = null, $is_greater = false)
     {
         $this->_distance = $distance;
-        $this->_unit = $unit;
         $this->_direction = $direction;
+        $this->_is_greater = $is_greater;
     }
 
     /**
      * Gets the distance
      * 
-     * @return Int
+     * @return Value
      */
     public function getDistance()
     {
         return $this->_distance;
-    }
-
-    /**
-     * Gets the unit
-     * 
-     * @return String
-     */
-    public function getUnit()
-    {
-        return $this->_unit;
     }
 
     /**
@@ -73,6 +63,16 @@ class EntityVisibility
     public function getDirection()
     {
         return $this->_direction;
+    }
+
+    /**
+     * Gets if the visibility is greater than the value
+     * 
+     * @return Boolean
+     */
+    public function getIsGreater()
+    {
+        return $this->_is_greater;
     }
 
     /**
@@ -102,17 +102,15 @@ class EntityVisibility
     /**
      * Sets a sector visibility
      * 
-     * @param Int    $distance  Visibility distance
-     * @param String $unit      Unit
+     * @param Value  $distance  Visibility distance
      * @param String $direction Visibility direction
      * 
      * @return Void
      */
-    public function setSectorVisibility($distance, $unit, $direction)
+    public function setSectorVisibility($distance, $direction)
     {
         $this->_sector_visibilities[] = new EntityVisibility(
             $distance,
-            $unit,
             $direction
         );
     }

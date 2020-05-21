@@ -75,14 +75,59 @@ class DecodeWind extends Decoder implements DecoderInterface
         if ($match[1] == '///' && $match[2] == '//') {
             $tip = 'No information measured for surface wind';
         } else {
+            // Get variable direction
+            if (isset($match[6])) {
+                $var_from = new Value(
+                    Value::toInt($match[7]),
+                    Value::UNIT_DEGREE
+                );
+
+                $var_to = new Value(
+                    Value::toInt($match[8]),
+                    Value::UNIT_DEGREE
+                );
+            } else {
+                $var_from = null;
+                $var_to = null;
+            }
+
+            // Get wind unit
+            switch ($match[5]) {
+                case 'KT':
+                    $speed_unit = Value::UNIT_KNOT;
+                    break;
+                case 'KPH':
+                    $speed_unit = Value::UNIT_KILOMETRE_PER_HOUR;
+                    break;
+                case 'MPS':
+                    $speed_unit = Value::UNIT_METRE_PER_SECOND;
+                    break;
+            }
+
             $decoded->setSurfaceWind(
                 new EntityWind(
-                    $match[1],
-                    Value::toInt($match[2]),
-                    Value::toInt($match[4]),
-                    $match[5],
-                    isset($match[6]) ? $match[7] : null,
-                    isset($match[6]) ? $match[8] : null
+                    new Value(
+                        $match[1],
+                        Value::UNIT_DEGREE
+                    ),
+                    new Value(
+                        Value::toInt($match[2]),
+                        $speed_unit
+                    ),
+                    new Value(
+                        Value::toInt($match[4]),
+                        $speed_unit
+                    ),
+                    new Value(
+                        Value::toInt($match[4]),
+                        Value::UNIT_DEGREE
+                    ),
+                    new Value(
+                        Value::toInt($match[4]),
+                        Value::UNIT_DEGREE
+                    ),
+                    $var_from,
+                    $var_to
                 )
             );
 

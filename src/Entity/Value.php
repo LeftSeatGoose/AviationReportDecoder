@@ -23,20 +23,32 @@ namespace ReportDecoder\Entity;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-abstract class Value
+class Value
 {
-    public const REPORT_METAR = 'metar';
-    public const REPORT_TAF = 'taf';
+    private $_value = null;
+    private $_unit = null;
 
-    public const UNIT_HPA = 'hPa';
-    public const UNIT_INHG = 'inHg';
-    public const UNIT_SM = 'SM';
-    public const UNIT_KM = 'KM';
-    public const UNIT_KT = 'KT';
-    public const UNIT_MPH = 'MPH';
-    public const UNIT_KPH = 'KPH';
-    public const UNIT_METRE = 'M';
-    public const UNIT_FEET = 'FT';
+    // Trig Units
+    public const UNIT_DEGREE = 'deg';
+
+    // Length Units
+    public const UNIT_METRE = 'm';
+    public const UNIT_FEET = 'ft';
+    public const UNIT_STATUTE_MILE = 'SM';
+    public const UNIT_KILOMETRE = 'km';
+
+    // Velocity Units
+    public const UNIT_KNOT = 'kt';
+    public const UNIT_MILE_PER_HOUR = 'mph';
+    public const UNIT_KILOMETRE_PER_HOUR = 'km/h';
+    public const UNIT_METRE_PER_SECOND = 'm/s';
+
+    // Pressure Units
+    public const UNIT_HECTOPASCAL = 'hPa';
+    public const UNIT_INCH_MERCURY = 'hPa';
+
+    // Temperature Units
+    public const UNIT_CELSIUS = 'C';
 
     public const EVOLUTION_TEXT = array(
         'BECMG' => 'Becoming',
@@ -86,6 +98,38 @@ abstract class Value
         'FC' => 'funnel cloud',
         'DS' => 'sandstorm'
     );
+
+    /**
+     * Construct
+     * 
+     * @param Mixed  $value Value
+     * @param String $unit  Unit
+     */
+    public function __construct($value, $unit)
+    {
+        $this->_value = $value;
+        $this->_unit = $unit;
+    }
+
+    /**
+     * Gets the value
+     * 
+     * @return Mixed
+     */
+    public function getValue()
+    {
+        return $this->_value;
+    }
+
+    /**
+     * Gets the unit
+     * 
+     * @return String
+     */
+    public function getUnit()
+    {
+        return $this->_unit;
+    }
 
     /**
      * Formats a report int as a php int

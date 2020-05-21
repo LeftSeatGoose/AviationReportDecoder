@@ -101,29 +101,37 @@ class DecodeVisibility extends Decoder implements DecoderInterface
 
                 if ($match[4] != null) {
                     $visibility->setSectorVisibility(
-                        Value::toInt($match[5]),
-                        Value::UNIT_METRE,
+                        new Value(
+                            Value::toInt($match[5]),
+                            Value::UNIT_METRE
+                        ),
                         $match[6]
                     );
                 }
                 if ($match[7] != null) {
                     $visibility->setSectorVisibility(
-                        Value::toInt($match[8]),
-                        Value::UNIT_METRE,
+                        new Value(
+                            Value::toInt($match[8]),
+                            Value::UNIT_METRE
+                        ),
                         $match[9]
                     );
                 }
                 if ($match[10] != null) {
                     $visibility->setSectorVisibility(
-                        Value::toInt($match[11]),
-                        Value::UNIT_METRE,
+                        new Value(
+                            Value::toInt($match[11]),
+                            Value::UNIT_METRE
+                        ),
                         $match[12]
                     );
                 }
                 if ($match[13] != null) {
                     $visibility->setSectorVisibility(
-                        Value::toInt($match[14]),
-                        Value::UNIT_METRE,
+                        new Value(
+                            Value::toInt($match[14]),
+                            Value::UNIT_METRE
+                        ),
                         $match[15]
                     );
                 }
@@ -133,8 +141,10 @@ class DecodeVisibility extends Decoder implements DecoderInterface
                 // KM Visibility
                 $decoded->setVisibility(
                     new EntityVisibility(
-                        Value::toInt($match[20]),
-                        Value::UNIT_KM
+                        new Value(
+                            Value::toInt($match[20]),
+                            Value::UNIT_KILOMETRE
+                        )
                     )
                 );
             } else {
@@ -151,8 +161,10 @@ class DecodeVisibility extends Decoder implements DecoderInterface
 
                 $decoded->setVisibility(
                     new EntityVisibility(
-                        Value::toInt($vis_value),
-                        Value::UNIT_SM
+                        new Value(
+                            Value::toInt($vis_value),
+                            Value::UNIT_STATUTE_MILE
+                        )
                     )
                 );
             }

@@ -17,7 +17,6 @@ namespace ReportDecoder;
 
 use ReportDecoder\ReportTypes\MetarDecoder;
 use ReportDecoder\ReportTypes\TafDecoder;
-use ReportDecoder\Entity\Value;
 use ReportDecoder\Entity\DecodedMetar;
 use ReportDecoder\Entity\DecodedTaf;
 
@@ -32,6 +31,9 @@ use ReportDecoder\Entity\DecodedTaf;
  */
 class ReportDecoder
 {
+    public const REPORT_METAR = 'metar';
+    public const REPORT_TAF = 'taf';
+
     private $_decoded = null;
 
     /**
@@ -63,7 +65,7 @@ class ReportDecoder
     public function getDecodedMetar($report)
     {
         $this->_decoded = new DecodedMetar($report);
-        $this->_decoded->setType(Value::REPORT_METAR);
+        $this->_decoded->setType(self::REPORT_METAR);
         return $this->_getDecodedReport($report, new MetarDecoder($this->_decoded));
     }
 
@@ -77,7 +79,7 @@ class ReportDecoder
     public function getDecodedTaf($report)
     {
         $this->_decoded = new DecodedTaf($report);
-        $this->_decoded->setType(Value::REPORT_TAF);
+        $this->_decoded->setType(self::REPORT_TAF);
         return $this->_getDecodedReport($report, new TafDecoder($this->_decoded));
     }
 }

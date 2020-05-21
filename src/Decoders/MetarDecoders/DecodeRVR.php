@@ -63,8 +63,6 @@ class DecodeRVR extends Decoder implements DecoderInterface
         if (!$match) {
             $result = null;
         } else {
-            $runways = array();
-
             for ($i = 1; $i <= 20; $i += 7) {
                 if ($match[$i] != null) {
 
@@ -87,18 +85,16 @@ class DecodeRVR extends Decoder implements DecoderInterface
                     if ($match[$i + 3] != null) {
                         // RVR is variable
                         $rvr_entity = EntityRVR::initWithVariable(
-                            $range_unit,
                             $match[$i + 6],
-                            Value::toInt($match[$i + 3]),
-                            Value::toInt($match[$i + 4])
+                            new Value(Value::toInt($match[$i + 3]), $range_unit),
+                            new Value(Value::toInt($match[$i + 4]), $range_unit)
                         );
                     } else {
                         // RVR has runway designation
                         $rvr_entity = EntityRVR::initWithRunway(
-                            $range_unit,
                             $match[$i + 6],
                             $match[$i + 1],
-                            Value::toInt($match[$i + 4])
+                            new Value(Value::toInt($match[$i + 4]), $range_unit)
                         );
                     }
 

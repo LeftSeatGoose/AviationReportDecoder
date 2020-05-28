@@ -93,8 +93,10 @@ class DecodeVisibility extends Decoder implements DecoderInterface
             if ($match[2] != null) {
                 // ICAO Visibility
                 $visibility = new EntityVisibility(
-                    Value::toInt($match[2]),
-                    Value::UNIT_METRE
+                    new Value(
+                        Value::toInt($match[2]),
+                        Value::UNIT_METRE
+                    )
                 );
 
                 $visibility->setNDV($match[3] != null);

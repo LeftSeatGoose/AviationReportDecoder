@@ -118,7 +118,7 @@ class EntityVisibility
     /**
      * Gets the sector visibilities
      * 
-     * @return EntityVisibility
+     * @return EntityVisibility[]
      */
     public function getSectorVisibility()
     {

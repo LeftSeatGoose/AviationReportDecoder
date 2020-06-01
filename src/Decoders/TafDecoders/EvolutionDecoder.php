@@ -76,9 +76,7 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
             $report = $this->consume($report);
 
             // Add evolution entity to decoded report object
-            if ($this->_decoded_evolution->isValid()) {
-                $decoded->setEvolution($this->_decoded_evolution);
-            }
+            $decoded->setEvolution($this->_decoded_evolution);
 
             $this->_decoded_evolution = new EntityEvolution($report);
         }
@@ -95,7 +93,12 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
     {
         foreach ($this->decoder as $chunk) {
             try {
-                $parse_attempt = $chunk->parse($report, $this->_decoded_evolution);
+                //$parse_attempt = $chunk->parse($report, $this->_decoded_evolution);
+                $parse_attempt = $this->tryParsing(
+                    $chunk,
+                    $report,
+                    $this->_decoded_evolution
+                );
 
                 if (is_null($parse_attempt['result'])) {
                     continue;

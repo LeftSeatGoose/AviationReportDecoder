@@ -41,7 +41,11 @@ abstract class TypeDecoder
     {
         foreach ($this->decoder as $chunk) {
             try {
-                $parse_attempt = $this->_tryParsing($chunk, $report);
+                $parse_attempt = $this->tryParsing(
+                    $chunk,
+                    $report,
+                    $this->decoded_report
+                );
 
                 if (is_null($parse_attempt['result'])) {
                     continue;
@@ -68,24 +72,25 @@ abstract class TypeDecoder
     /**
      * Attempt to parse the report
      * 
-     * @param Decoder $chunk  Chunk to try on report
-     * @param String  $report The report to parse
+     * @param Decoder       $chunk   Chunk to try on report
+     * @param String        $report  The report to parse
+     * @param DecodedReport $decoded Report to add the decoded info to
      * 
      * @return Array 
      */
-    private function _tryParsing($chunk, $report)
+    protected function tryParsing($chunk, $report, &$decoded)
     {
         try {
-            $parse_attempt = $chunk->parse($report, $this->decoded_report);
+            $parse_attempt = $chunk->parse($report, $decoded);
         } catch (DecoderException $primary_exception) {
             //if ($strict) {
             //    throw $primary_exception;
             //}
 
             try {
-                $alternative = self::consumeOneChunk($report);
-                $parse_attempt = $chunk->parse($alternative, $this->decoded_report);
-                $this->decoded_report->addDecodingException($primary_exception);
+                $alternative = self::_consumeOneChunk($report);
+                $parse_attempt = $chunk->parse($alternative, $decoded);
+                $decoded->addDecodingException($primary_exception);
             } catch (DecoderException $secondary_exception) {
                 throw $primary_exception;
             }
@@ -101,7 +106,7 @@ abstract class TypeDecoder
      * 
      * @return String
      */
-    public static function consumeOneChunk($report)
+    private static function _consumeOneChunk($report)
     {
         $next_space = strpos($report, ' ');
         if ($next_space > 0) {

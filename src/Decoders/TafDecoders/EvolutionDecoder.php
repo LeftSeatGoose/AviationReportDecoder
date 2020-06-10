@@ -102,11 +102,9 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
                 }
 
                 $this->decoded_report->addReportChunk($parse_attempt['result']);
-
                 $report = $parse_attempt['report'];
-                if (!empty($report)) {
-                    $report = $parse_attempt['report'];
-                } else {
+
+                if (empty($report)) {
                     break;
                 }
             } catch (DecoderException $ex) {

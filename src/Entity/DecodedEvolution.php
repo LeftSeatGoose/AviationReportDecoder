@@ -27,7 +27,6 @@ use ReportDecoder\Entity\DecodedReport;
  */
 class DecodedEvolution extends DecodedReport
 {
-    private $_evolution_type;
     private $_issue_time;
     private $_validity_start;
     private $_validity_end;
@@ -36,28 +35,6 @@ class DecodedEvolution extends DecodedReport
     private $_cavok;
     private $_present_weather;
     private $_clouds;
-
-    /**
-     * Set the evolution type
-     * 
-     * @param String $evolution_type Evolution type
-     * 
-     * @return Void
-     */
-    public function setEvolutionType($evolution_type)
-    {
-        $this->_evolution_type = $evolution_type;
-    }
-
-    /**
-     * Get the evolution type
-     * 
-     * @return String
-     */
-    public function getEvolutionType()
-    {
-        return $this->_evolution_type;
-    }
 
     /**
      * Set the issue time

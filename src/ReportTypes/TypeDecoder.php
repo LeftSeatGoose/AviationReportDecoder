@@ -43,7 +43,8 @@ abstract class TypeDecoder
             try {
                 $parse_attempt = $this->tryParsing(
                     $chunk,
-                    $report
+                    $report,
+                    $this->decoded_report
                 );
 
                 if (is_null($parse_attempt['result'])) {
@@ -51,10 +52,9 @@ abstract class TypeDecoder
                 }
 
                 $this->decoded_report->addReportChunk($parse_attempt['result']);
+                $report = $parse_attempt['report'];
 
-                if (!empty($parse_attempt['report'])) {
-                    $report = $parse_attempt['report'];
-                } else {
+                if (empty($parse_attempt['report'])) {
                     break;
                 }
             } catch (DecoderException $ex) {
@@ -75,15 +75,15 @@ abstract class TypeDecoder
      * 
      * @return Array 
      */
-    protected function tryParsing($chunk, $report)
+    protected function tryParsing($chunk, $report, &$decoded)
     {
         try {
-            $parse_attempt = $chunk->parse($report, $this->decoded_report);
+            $parse_attempt = $chunk->parse($report, $decoded);
         } catch (DecoderException $primary_exception) {
             try {
                 $alternative = $this->_consumeOneChunk($report);
-                $parse_attempt = $chunk->parse($alternative, $this->decoded_report);
-                $this->decoded_report->addDecodingException($primary_exception);
+                $parse_attempt = $chunk->parse($alternative, $decoded);
+                $decoded->addDecodingException($primary_exception);
             } catch (DecoderException $secondary_exception) {
                 throw $primary_exception;
             }
@@ -99,7 +99,7 @@ abstract class TypeDecoder
      * 
      * @return String
      */
-    private function _consumeOneChunk($report)
+    private static function _consumeOneChunk($report)
     {
         $next_space = strpos($report, ' ');
         if ($next_space > 0) {

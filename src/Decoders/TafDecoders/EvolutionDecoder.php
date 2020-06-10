@@ -18,13 +18,12 @@ use ReportDecoder\ReportTypes\TypeDecoder;
 use ReportDecoder\Decoders\ChunkDecoderInterface;
 use ReportDecoder\Decoders\TafDecoders\DecodeEvolution;
 use ReportDecoder\Decoders\TafDecoders\DecodeIssueTime;
-use ReportDecoder\Decoders\TafDecoders\DecodeForecastPeriod;
 use ReportDecoder\Decoders\TafDecoders\DecodePeriod;
 use ReportDecoder\Decoders\TafDecoders\DecodeWind;
 use ReportDecoder\Decoders\TafDecoders\DecodeVisibility;
 use ReportDecoder\Decoders\TafDecoders\DecodeWeather;
 use ReportDecoder\Decoders\TafDecoders\DecodeCloud;
-use ReportDecoder\Entity\EntityEvolution;
+use ReportDecoder\Entity\DecodedEvolution;
 use ReportDecoder\Exceptions\DecoderException;
 
 /**
@@ -48,7 +47,6 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
         $this->decoder = array(
             new DecodeEvolution(),
             new DecodeIssueTime(),
-            new DecodeForecastPeriod(),
             new DecodePeriod(),
             new DecodeWind(),
             new DecodeVisibility(),
@@ -70,7 +68,7 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
         $this->decoded_report = $decoded;
 
         // Create evolution entity
-        $this->_decoded_evolution = new EntityEvolution($report);
+        $this->_decoded_evolution = new DecodedEvolution($report);
 
         while (!empty((new DecodeEvolution())->parse($report, $this->_decoded_evolution)['result'])) {
             $report = $this->consume($report);
@@ -78,7 +76,7 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
             // Add evolution entity to decoded report object
             $decoded->setEvolution($this->_decoded_evolution);
 
-            $this->_decoded_evolution = new EntityEvolution($report);
+            $this->_decoded_evolution = new DecodedEvolution($report);
         }
     }
 
@@ -93,7 +91,6 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
     {
         foreach ($this->decoder as $chunk) {
             try {
-                //$parse_attempt = $chunk->parse($report, $this->_decoded_evolution);
                 $parse_attempt = $this->tryParsing(
                     $chunk,
                     $report,

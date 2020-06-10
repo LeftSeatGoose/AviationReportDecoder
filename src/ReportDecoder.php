@@ -47,8 +47,9 @@ class ReportDecoder
     private function _getDecodedReport($report, $decoder)
     {
         $clean_report = trim(strtoupper($report));
-        $clean_report = preg_replace('#=$#', '', $clean_report);
-        $clean_report = preg_replace('#[ ]{2,}#', ' ', $clean_report) . ' ';
+        $clean_report = preg_replace('/=$/', '', $clean_report);
+        $clean_report = preg_replace('/[ ]{2,}/', ' ', $clean_report);
+        $clean_report = str_replace(array("\r\n", "\n", "\r"), ' ', $clean_report);
 
         $decoder->consume($clean_report);
 

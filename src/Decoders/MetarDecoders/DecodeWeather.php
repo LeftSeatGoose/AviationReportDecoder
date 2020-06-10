@@ -52,7 +52,7 @@ class DecodeWeather extends Decoder implements DecoderInterface
     {
         $carac_regexp = implode('|', self::$_carac_dic);
         $type_regexp = implode('|', self::$_type_dic);
-        $pw_regexp = "([-+]|VC)?($carac_regexp)?($type_regexp)"
+        $pw_regexp = "([-+]|VC)?(NSW)?($carac_regexp)?($type_regexp)"
             . "?($type_regexp)?($type_regexp)?";
 
         return "/^($pw_regexp )?($pw_regexp )?($pw_regexp )?/";

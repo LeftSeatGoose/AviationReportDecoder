@@ -17,7 +17,7 @@ namespace ReportDecoder\ReportTypes;
 use ReportDecoder\Decoders\DecodeType;
 use ReportDecoder\Decoders\TafDecoders\DecodeICAO;
 use ReportDecoder\Decoders\TafDecoders\DecodeIssueTime;
-use ReportDecoder\Decoders\TafDecoders\DecodeForecastPeriod;
+use ReportDecoder\Decoders\TafDecoders\DecodePeriod;
 use ReportDecoder\Decoders\TafDecoders\DecodeWind;
 use ReportDecoder\Decoders\TafDecoders\DecodeVisibility;
 use ReportDecoder\Decoders\TafDecoders\DecodeWeather;
@@ -49,7 +49,7 @@ class TafDecoder extends TypeDecoder implements TypeDecoderInterface
             new DecodeType(),
             new DecodeICAO(),
             new DecodeIssueTime(),
-            new DecodeForecastPeriod(),
+            new DecodePeriod(),
             new DecodeWind(),
             new DecodeVisibility(),
             new DecodeWeather(),

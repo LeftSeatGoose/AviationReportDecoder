@@ -249,11 +249,11 @@ class DecodedTaf extends DecodedReport
     /**
      * Sets an evolution
      * 
-     * @param EntityEvolution $evolution Evolution entity
+     * @param DecodedEvolution $evolution Evolution entity
      * 
      * @return Void
      */
-    public function setEvolution(EntityEvolution $evolution)
+    public function setEvolution(DecodedEvolution $evolution)
     {
         $this->_evolutions[] = $evolution;
     }

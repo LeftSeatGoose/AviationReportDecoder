@@ -1,7 +1,7 @@
 <?php
 
 /**
- * EntityEvolution.php
+ * DecodedEvolution.php
  *
  * PHP version 7.2
  *
@@ -25,7 +25,7 @@ use ReportDecoder\Entity\DecodedReport;
  * @license  https://www.gnu.org/licenses/gpl-3.0.en.html  GNU v3.0
  * @link     https://github.com/TipsyAviator/AviationReportDecoder
  */
-class EntityEvolution extends DecodedReport
+class DecodedEvolution extends DecodedReport
 {
     private $_evolution_type;
     private $_issue_time;
@@ -84,7 +84,7 @@ class EntityEvolution extends DecodedReport
     /**
      * Set the evolution validity start
      * 
-     * @param String $validity_start From date
+     * @param EntityDateTime $validity_start From date
      * 
      * @return Void
      */
@@ -96,7 +96,7 @@ class EntityEvolution extends DecodedReport
     /**
      * Get the evolution validity start
      * 
-     * @return String
+     * @return EntityDateTime
      */
     public function getValidityFrom()
     {
@@ -106,7 +106,7 @@ class EntityEvolution extends DecodedReport
     /**
      * Set the evolution validity end
      * 
-     * @param String $validity_end Validity end
+     * @param EntityDateTime $validity_end Validity end
      * 
      * @return Void
      */
@@ -118,7 +118,7 @@ class EntityEvolution extends DecodedReport
     /**
      * Get the evolution validity end
      * 
-     * @return String
+     * @return EntityDateTime
      */
     public function getValidityTo()
     {

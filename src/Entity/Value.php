@@ -96,7 +96,8 @@ class Value
         'PO' => 'well-developed dust/sand',
         'SQ' => 'squalls moderate',
         'FC' => 'funnel cloud',
-        'DS' => 'sandstorm'
+        'DS' => 'sandstorm',
+        'NSW' => 'no signifigant weather'
     );
 
     /**

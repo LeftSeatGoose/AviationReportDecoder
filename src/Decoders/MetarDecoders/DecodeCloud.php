@@ -38,11 +38,9 @@ class DecodeCloud extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        $no_cloud = '(NSC|NCD|CLR|SKC)';
-        $layer = '(VV|FEW|SCT|BKN|OVC)([0-9]{3})(CB|TCU)?';
-
-        return "/^($no_cloud|($layer)( $layer)?( $layer)?( "
-            . "$layer)?( $layer)?( $layer)?)( )/";
+        $no_cloud = "(NSC|NCD|CLR|SKC)";
+        $layer = "(VV|FEW|SCT|BKN|OVC|\/\/\/)([0-9]{2,3}|\/\/\/)(CB|TCU|\/\/\/)?";
+        return "/^($no_cloud|($layer)( $layer)?( $layer)?( $layer)?)( )/";
     }
 
     /**
@@ -96,7 +94,7 @@ class DecodeCloud extends Decoder implements DecoderInterface
                     $match[$i],
                     $altitude_value
                 );
-                $clouds_text[] = $match[$i] . Value::toInt($match[$i + 1]);
+                $clouds_text[] = $match[$i] . $match[$i + 1];
                 $tips[] = $match[$i] . ' ' . Value::toInt($match[$i + 1])
                     . '00ft AGL';
 

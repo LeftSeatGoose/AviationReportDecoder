@@ -36,7 +36,7 @@ class DecodePeriod extends Decoder implements DecoderInterface
      */
     public function getExpression()
     {
-        return '/^(([0-9]{2})([0-9]{2}))(?: )/';
+        return '/^([0-9]{4}\/[0-9]{4}\s?|[0-9]{6}\s?){1}Z?/';
     }
 
     /**
@@ -56,17 +56,40 @@ class DecodePeriod extends Decoder implements DecoderInterface
         if (!$match) {
             $result = null;
         } else {
+            if (strpos($match[1], '/') !== false) {
+                $periodArr = explode('/', $match[1]);
+                $decoded->setValidityFrom(
+                    new EntityDateTime(
+                        intval(mb_substr($periodArr[0], 0, 2)),
+                        mb_substr($periodArr[0], 2, 2) . ':00'
+                    )
+                );
+                $decoded->setValidityTo(
+                    new EntityDateTime(
+                        intval(mb_substr($periodArr[1], 0, 2)),
+                        mb_substr($periodArr[1], 2, 2) . ':00'
+                    )
+                );
+
+                $tip = 'Valid from ' . $decoded->getValidityFrom()->value('d H:ie')
+                    . ' to ' . $decoded->getValidityTo()->value('d H:ie');
+            } else {
+                $decoded->setValidityFrom(
+                    new EntityDateTime(
+                        intval(mb_substr($match[1], 0, 2)),
+                        mb_substr($match[1], 2, 2) . ':'
+                            . mb_substr($match[1], 4, 2)
+                    )
+                );
+
+                $tip = 'Valid from ' . $decoded->getValidityFrom()->value('d H:ie');
+            }
+
+
             $result = array(
                 'text' => $match[1],
-                'tip' => 'Valid from '
-                    . $match[2] . 'UTC to '
-                    . $match[3] . 'UTC'
+                'tip' => $tip
             );
-
-            $from = new EntityDateTime(null, $match[2]);
-            $to = new EntityDateTime(null, $match[3]);
-            $decoded->setValidityFrom($from);
-            $decoded->setValidityTo($to);
         }
 
         return array(

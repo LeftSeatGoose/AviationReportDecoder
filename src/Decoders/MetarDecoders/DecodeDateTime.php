@@ -71,16 +71,16 @@ class DecodeDateTime extends Decoder implements DecoderInterface
         );
         $decoded->setDateTime($datetime);
 
-        $result = array(
+        $result = [
             'text' => $match[0],
             'tip' => 'Weather observed '
                 . $datetime->value() . ' UTC'
-        );
+        ];
 
-        return array(
+        return [
             'name' => 'datetime',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

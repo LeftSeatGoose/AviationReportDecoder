@@ -102,16 +102,16 @@ class DecodeRVR extends Decoder implements DecoderInterface
                 }
             }
 
-            $result = array(
+            $result = [
                 'text' => $match[0],
                 'tip' => 'Runways visual range'
-            );
+            ];
         }
 
-        return array(
+        return [
             'name' => 'rvr',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

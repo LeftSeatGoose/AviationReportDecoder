@@ -124,16 +124,16 @@ class DecodeEvolution extends Decoder implements DecoderInterface
                 $tip .= ' ' . $decoded->getValidityFrom()->value('d H:ie');
             }
 
-            $result = array(
+            $result = [
                 'text' => $match[0],
                 'tip' => $tip
-            );
+            ];
         }
 
-        return array(
+        return [
             'name' => 'evolution',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

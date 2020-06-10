@@ -29,7 +29,7 @@ class EntityVisibility
     private $_direction = null;
     private $_is_greater = null;
     private $_ndv = null;
-    private $_sector_visibilities = array();
+    private $_sector_visibilities = [];
 
     /**
      * Construct

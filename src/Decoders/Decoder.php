@@ -52,9 +52,9 @@ abstract class Decoder
 
         $remaining_report = trim(preg_replace($regex, '', $report, 1));
 
-        return array(
+        return [
             'match' => $match,
             'report' => $remaining_report
-        );
+        ];
     }
 }

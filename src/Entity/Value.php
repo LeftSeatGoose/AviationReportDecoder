@@ -50,14 +50,14 @@ class Value
     // Temperature Units
     public const UNIT_CELSIUS = 'C';
 
-    public const EVOLUTION_TEXT = array(
+    public const EVOLUTION_TEXT = [
         'BECMG' => 'Becoming',
         'TEMPO' => 'Temporary',
         'FM' => 'From',
         'PROB' => 'Probability'
-    );
+    ];
 
-    public const CLOUD_TEXT = array(
+    public const CLOUD_TEXT = [
         'VV' => 'Vertical visibility, indefinite ceiling',
         'FEW' => 'Few',
         'SCT' => 'Scattered',
@@ -65,9 +65,9 @@ class Value
         'OVC' => 'Overcast',
         'CB' => 'Cumulonimbus',
         'TCU' => 'Towering Cumulus'
-    );
+    ];
 
-    public const WEATHER_TEXT = array(
+    public const WEATHER_TEXT = [
         'TS' => 'thunderstorm',
         'FZ' => 'freezing',
         'SH' => 'showering',
@@ -98,7 +98,7 @@ class Value
         'FC' => 'funnel cloud',
         'DS' => 'sandstorm',
         'NSW' => 'no signifigant weather'
-    );
+    ];
 
     /**
      * Construct
@@ -141,8 +141,8 @@ class Value
      */
     public static function toInt($value)
     {
-        $letter_signs = array('P', 'M');
-        $numeric_signs = array('', '-');
+        $letter_signs = ['P', 'M'];
+        $numeric_signs = ['', '-'];
 
         $value_numeric = str_replace($letter_signs, $numeric_signs, $value);
 

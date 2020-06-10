@@ -45,7 +45,7 @@ class TafDecoder extends TypeDecoder implements TypeDecoderInterface
     {
         $this->decoded_report = $decoded_report;
 
-        $this->decoder = array(
+        $this->decoder = [
             new DecodeType(),
             new DecodeICAO(),
             new DecodeIssueTime(),
@@ -56,6 +56,6 @@ class TafDecoder extends TypeDecoder implements TypeDecoderInterface
             new DecodeCloud(),
             new EvolutionDecoder(),
             new DecodeRemarks()
-        );
+        ];
     }
 }

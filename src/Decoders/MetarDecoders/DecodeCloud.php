@@ -71,14 +71,14 @@ class DecodeCloud extends Decoder implements DecoderInterface
         $match = array_map('trim', $match);
 
         if ($match[0] == 'SKC') {
-            $result = array(
+            $result = [
                 'text' => 'SKC',
                 'tip' => 'Sky clear'
-            );
+            ];
         } else {
-            $clouds = array();
-            $clouds_text = array();
-            $tips = array();
+            $clouds = [];
+            $clouds_text = [];
+            $tips = [];
 
             for ($i = 4; $i <= sizeof($match); $i += 3) {
                 if (empty($match[$i])) {
@@ -103,16 +103,16 @@ class DecodeCloud extends Decoder implements DecoderInterface
 
             $decoded->setClouds($clouds);
 
-            $result = array(
+            $result = [
                 'text' => $clouds_text,
                 'tip' => $tips
-            );
+            ];
         }
 
-        return array(
+        return [
             'name' => 'clouds',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

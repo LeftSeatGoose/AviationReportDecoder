@@ -78,10 +78,10 @@ class DecodeVisibility extends Decoder implements DecoderInterface
             $result = null;
         } elseif ($match[1] == '////') {
             $decoded->setCavok(false);
-            $result = array(
+            $result = [
                 'text' => $match[0],
                 'tip' => 'Ground visibility not measured'
-            );
+            ];
         } else {
             $decoded->setCavok(false);
 
@@ -119,16 +119,16 @@ class DecodeVisibility extends Decoder implements DecoderInterface
                 );
             }
 
-            $result = array(
+            $result = [
                 'text' => $match[0],
                 'tip' => 'Ground visibility is ' . $match[0]
-            );
+            ];
         }
 
-        return array(
+        return [
             'name' => 'visibility',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

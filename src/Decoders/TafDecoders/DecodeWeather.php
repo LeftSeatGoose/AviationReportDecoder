@@ -30,18 +30,18 @@ use ReportDecoder\Entity\Value;
  */
 class DecodeWeather extends Decoder implements DecoderInterface
 {
-    private static $_carac_dic = array(
+    private static $_carac_dic = [
         'TS', 'FZ', 'SH', 'BL', 'DR', 'MI', 'BC', 'PR',
-    );
+    ];
 
-    private static $_type_dic = array(
+    private static $_type_dic = [
         'DZ', 'RA', 'SN', 'SG',
         'PL', 'DS', 'GR', 'GS',
         'UP', 'IC', 'FG', 'BR',
         'SA', 'DU', 'HZ', 'FU',
         'VA', 'PY', 'DU', 'PO',
         'SQ', 'FC', 'DS', 'SS'
-    );
+    ];
 
     /**
      * Returns the expression for matching the chunk
@@ -78,9 +78,9 @@ class DecodeWeather extends Decoder implements DecoderInterface
             $weather = trim($match[0]);
             $weather_components = explode(' ', $weather);
 
-            $weather_text = array();
-            $weather_tips = array();
-            $decoded_weather = array();
+            $weather_text = [];
+            $weather_tips = [];
+            $decoded_weather = [];
 
             foreach ($weather_components as $component) {
                 $weather_text[] = $component;
@@ -89,16 +89,16 @@ class DecodeWeather extends Decoder implements DecoderInterface
             }
 
             $decoded->setPresentWeather($decoded_weather);
-            $result = array(
+            $result = [
                 'text' => $weather_text,
                 'tip' => $weather_tips
-            );
+            ];
         }
 
-        return array(
+        return [
             'name' => 'weather',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

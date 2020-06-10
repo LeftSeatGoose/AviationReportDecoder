@@ -38,11 +38,11 @@ class DecodedMetar extends DecodedReport
     private $_visibility;
     private $_cavok;
 
-    private $_runways_visual_range = array();
+    private $_runways_visual_range = [];
 
-    private $_present_weather = array();
+    private $_present_weather = [];
 
-    private $_clouds = array();
+    private $_clouds = [];
 
     private $_air_temperature;
     private $_dew_point_temperature;

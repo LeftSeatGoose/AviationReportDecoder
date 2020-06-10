@@ -44,7 +44,7 @@ class DecodedTaf extends DecodedReport
 
     private $_clouds;
 
-    private $_evolutions = array();
+    private $_evolutions = [];
 
     private $_remarks;
 

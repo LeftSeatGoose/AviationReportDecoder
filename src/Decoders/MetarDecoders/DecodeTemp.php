@@ -79,16 +79,16 @@ class DecodeTemp extends Decoder implements DecoderInterface
             )
         );
 
-        $result = array(
+        $result = [
             'text' => $match[0],
             'tip' => 'Temperature is ' . Value::toInt($match[1])
                 . '°C and dew point is ' . Value::toInt($match[2]) . '°C'
-        );
+        ];
 
-        return array(
+        return [
             'name' => 'temp',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

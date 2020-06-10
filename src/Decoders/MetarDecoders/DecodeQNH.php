@@ -31,10 +31,10 @@ use ReportDecoder\Exceptions\DecoderException;
 class DecodeQNH extends Decoder implements DecoderInterface
 {
 
-    private static $_units = array(
+    private static $_units = [
         'A' => Value::UNIT_INCH_MERCURY,
         'Q' => Value::UNIT_HECTOPASCAL
-    );
+    ];
 
     /**
      * Returns the expression for matching the chunk
@@ -80,15 +80,15 @@ class DecodeQNH extends Decoder implements DecoderInterface
         $pressure_value = new Value($pressure, self::$_units[$match[1]]);
         $decoded->setPressure($pressure_value);
 
-        $result = array(
+        $result = [
             'text' => $match[0],
             'tip' => 'Pressure is ' . $pressure . ' ' . self::$_units[$match[1]]
-        );
+        ];
 
-        return array(
+        return [
             'name' => 'pressure',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

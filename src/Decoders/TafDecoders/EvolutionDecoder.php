@@ -44,7 +44,7 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
      */
     public function __construct()
     {
-        $this->decoder = array(
+        $this->decoder = [
             new DecodeEvolution(),
             new DecodeIssueTime(),
             new DecodePeriod(),
@@ -52,7 +52,7 @@ class EvolutionDecoder extends TypeDecoder implements ChunkDecoderInterface
             new DecodeVisibility(),
             new DecodeWeather(),
             new DecodeCloud()
-        );
+        ];
     }
 
     /**

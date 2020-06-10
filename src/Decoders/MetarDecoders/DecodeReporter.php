@@ -57,16 +57,16 @@ class DecodeReporter extends Decoder implements DecoderInterface
         } else {
             $decoded->setReporter($match[0]);
 
-            $result = array(
+            $result = [
                 'text' => $match[0],
                 'tip' => 'Automated report'
-            );
+            ];
         }
 
-        return array(
+        return [
             'name' => 'reporter',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

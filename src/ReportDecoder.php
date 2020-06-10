@@ -15,10 +15,14 @@
 
 namespace ReportDecoder;
 
+require_once '../vendor/autoload.php';
+
 use ReportDecoder\ReportTypes\MetarDecoder;
 use ReportDecoder\ReportTypes\TafDecoder;
 use ReportDecoder\Entity\DecodedMetar;
 use ReportDecoder\Entity\DecodedTaf;
+
+var_dump((new ReportDecoder)->getDecodedTaf(' TAF CYYC 092338Z 1000/1024 28012KT P6SM FEW90 SCT250 FM 101700 32010KT P6SM SCT80 RMK NXT FCST BY 100300Z '));
 
 /**
  * Decodes a Report
@@ -49,7 +53,7 @@ class ReportDecoder
         $clean_report = trim(strtoupper($report));
         $clean_report = preg_replace('/=$/', '', $clean_report);
         $clean_report = preg_replace('/[ ]{2,}/', ' ', $clean_report);
-        $clean_report = str_replace(array("\r\n", "\n", "\r"), ' ', $clean_report);
+        $clean_report = str_replace(["\r\n", "\n", "\r"], ' ', $clean_report);
 
         $decoder->consume($clean_report);
 

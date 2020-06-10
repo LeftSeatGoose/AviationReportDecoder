@@ -27,11 +27,11 @@ use ReportDecoder\Exceptions\DecoderException;
  */
 abstract class DecodedReport
 {
-    private $_report_chunks = array();
+    private $_report_chunks = [];
 
     private $_raw_report;
 
-    private $_decoding_exceptions = array();
+    private $_decoding_exceptions = [];
 
     private $_type;
 
@@ -43,7 +43,7 @@ abstract class DecodedReport
     public function __construct($raw_report)
     {
         $this->_raw_report = $raw_report;
-        $this->_decoding_exceptions = array();
+        $this->_decoding_exceptions = [];
     }
 
     /**
@@ -107,7 +107,7 @@ abstract class DecodedReport
      */
     public function resetDecodingExceptions()
     {
-        $this->_decoding_exceptions = array();
+        $this->_decoding_exceptions = [];
     }
 
     /**

@@ -86,16 +86,16 @@ class DecodePeriod extends Decoder implements DecoderInterface
             }
 
 
-            $result = array(
+            $result = [
                 'text' => $match[1],
                 'tip' => $tip
-            );
+            ];
         }
 
-        return array(
+        return [
             'name' => 'period',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

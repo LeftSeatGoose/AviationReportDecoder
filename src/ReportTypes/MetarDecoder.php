@@ -52,7 +52,7 @@ class MetarDecoder extends TypeDecoder implements TypeDecoderInterface
     {
         $this->decoded_report = $decoded_report;
 
-        $this->decoder = array(
+        $this->decoder = [
             new DecodeType(),
             new DecodeICAO(),
             new DecodeDateTime(),
@@ -65,6 +65,6 @@ class MetarDecoder extends TypeDecoder implements TypeDecoderInterface
             new DecodeTemp(),
             new DecodeQNH(),
             new DecodeRemarks()
-        );
+        ];
     }
 }

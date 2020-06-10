@@ -57,16 +57,16 @@ class DecodeType extends Decoder implements DecoderInterface
         } else {
             $decoded->setType($match[0]);
 
-            $result = array(
+            $result = [
                 'text' => $match[0],
                 'tip' => 'Type of report'
-            );
+            ];
         }
 
-        return array(
+        return [
             'name' => 'type',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

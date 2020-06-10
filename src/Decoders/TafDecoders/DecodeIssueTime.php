@@ -81,16 +81,16 @@ class DecodeIssueTime extends Decoder implements DecoderInterface
 
         $decoded->setIssueTime($datetime);
 
-        $result = array(
+        $result = [
             'text' => $match[0],
             'tip' => 'Report issued at '
                 . $datetime->value() . ' UTC'
-        );
+        ];
 
-        return array(
+        return [
             'name' => 'issuetime',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

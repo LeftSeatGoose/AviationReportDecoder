@@ -65,16 +65,16 @@ class DecodeICAO extends Decoder implements DecoderInterface
         } else {
             $decoded->setIcao($match[0]);
 
-            $result = array(
+            $result = [
                 'text' => $match[0],
                 'tip' => 'The stations identifier'
-            );
+            ];
         }
 
-        return array(
+        return [
             'name' => 'icao',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

@@ -141,15 +141,15 @@ class DecodeWind extends Decoder implements DecoderInterface
             }
         }
 
-        $result = array(
+        $result = [
             'text' => $match[0],
             'tip' => $tip
-        );
+        ];
 
-        return array(
+        return [
             'name' => 'wind',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

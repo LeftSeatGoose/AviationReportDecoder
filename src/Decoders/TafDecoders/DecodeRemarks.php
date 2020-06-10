@@ -57,16 +57,16 @@ class DecodeRemarks extends Decoder implements DecoderInterface
         } else {
             $decoded->setRemarks($match[0]);
 
-            $result = array(
+            $result = [
                 'text' => $match[0],
                 'tip' => 'Remarks'
-            );
+            ];
         }
 
-        return array(
+        return [
             'name' => 'remarks',
             'result' => $result,
             'report' => $remaining_report
-        );
+        ];
     }
 }

@@ -70,7 +70,12 @@ class DecodeCloud extends Decoder implements DecoderInterface
 
         $match = array_map('trim', $match);
 
-        if ($match[0] == 'SKC') {
+        if (
+            $match[0] == 'SKC'
+            || $match[0] == 'CLR'
+            || $match[0] == 'NCD'
+            || $match[0] == 'NSC'
+        ) {
             $result = [
                 'text' => 'SKC',
                 'tip' => 'Sky clear'

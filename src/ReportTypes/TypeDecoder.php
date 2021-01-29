@@ -47,7 +47,7 @@ abstract class TypeDecoder
                     $this->decoded_report
                 );
 
-                if (is_null($parse_attempt['result'])) {
+                if (is_null($parse_attempt) || is_null($parse_attempt['result'])) {
                     continue;
                 }
 
